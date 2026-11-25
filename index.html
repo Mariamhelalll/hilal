@@ -132,10 +132,10 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .slidein{animation:rise .5s cubic-bezier(.2,.75,.2,1)}
 .opt:disabled{opacity:.4;cursor:not-allowed}
 .ladder button.rung{border:0;font:inherit;cursor:pointer}.rung.cur:not(.now){box-shadow:inset 0 0 0 1.5px var(--wine)}
-.mstage{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:16px;background:var(--soft)}.mstage h3{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.mstage .check{background:transparent}
+.mwk{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:16px;background:var(--soft)}.mwk h3{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.mwk .check{background:transparent}
 .mstart{display:flex;flex-direction:column;gap:6px}
 .mstart input[type=date]{flex:1;min-width:0;font:16px 'DM Sans',sans-serif;padding:11px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
-.mstage.done{background:color-mix(in srgb,var(--gold) 22%,var(--card))}
+.mwk.done{background:color-mix(in srgb,var(--gold) 22%,var(--card))}
 .mcal{display:flex;flex-direction:column;gap:4px}
 .mcw{all:unset;cursor:pointer;font-size:12.5px;color:var(--muted);padding:6px 4px 2px;display:block}
 .mcw b{color:var(--ink)}.mcw.cur b{color:var(--wine)}.mcw.sel{color:var(--wine)}.mcw.sel b{text-decoration:underline;text-underline-offset:4px}
@@ -239,6 +239,14 @@ quran-madina-html-aya-popup button.quran-madina-html-action{color:#fff!important
 .qcard{background:var(--wineBg);color:#fff;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:10px}
 .qcard p{font-size:19px;line-height:1.5;font-weight:500}
 .qcard small{color:#F4D7DC}
+.jtools{gap:8px}.jup{position:relative;display:inline-flex;align-items:center;overflow:hidden}.jup input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.opt.rec{background:var(--wine);color:#fff;border-color:var(--wine);animation:recp 1.4s ease-in-out infinite}
+@keyframes recp{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--wine) 25%,transparent)}}
+.jthumbs{display:flex;flex-wrap:wrap;gap:8px}.jthumbs:empty{display:none}
+.jth{position:relative}.jth img,.jimg{width:84px;height:84px;object-fit:cover;border-radius:12px;display:block;cursor:pointer;background:var(--soft)}
+.jth .del{position:absolute;top:-6px;inset-inline-end:-6px;width:26px;height:26px;font-size:16px;background:var(--card);box-shadow:0 1px 4px #0003}
+#jDate{font:16px 'DM Sans',sans-serif;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.jview{position:fixed;inset:0;z-index:30;background:#000d;display:grid;place-items:center;padding:16px;cursor:zoom-out}.jview img{max-width:100%;max-height:100%;border-radius:12px}
 .entry{border-radius:16px;background:var(--soft);padding:14px;display:flex;flex-direction:column;gap:6px}
 .entry .q{font-size:13px;color:var(--wine);font-weight:600}
 .entry .t{white-space:pre-wrap;overflow-wrap:anywhere}
@@ -898,7 +906,7 @@ function mg(){
 function newGoal(t,c,sug,done){
   c=GCAT.some(x=>x[0]===c)?c:'me';
   let st=sug?sug[2]:GSTR[c],link=sug?sug[3]:MCLINK[c];
-  if(st==='drive'){const pp=P[S.passion]||P.Fashion;st=pp[2].map(w=>w[0])}
+  if(st==='drive'){if(S.passion==='custom'&&S.dcustom&&Array.isArray(S.dcustom.plan))st=S.dcustom.plan.map(w=>w[0]+': '+(w[1][0]||''));else{const pp=P[S.passion]||P.Fashion;st=pp[2].map(w=>w[0])}}
   return{id:'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,c,st:st.map(x=>x),sd:[!!done,!!done,!!done,!!done],link};
 }
 function score(){
@@ -948,14 +956,14 @@ function monthHTML(){
   const st=mStart(),e=mElapsed(),cyc=m.cycle||1;
   const dateIn=(id,lbl,btn,bid)=>`<div class="mstart"><label class="note" for="${id}">${L(lbl)}</label><div class="row" style="flex-wrap:nowrap"><input type="date" id="${id}" value="${tk}"><button class="btn" type="button" id="${bid}">${L(btn)}</button></div></div>`;
   let head;
-  if(!st)head=`<div class="mstage"><h3>${L(['When do you want to start?','عايزة تبدأي إمتى؟'])}</h3><p class="muted">${L(['Pick any day. Your moon is 4 weeks from that day: prepare, plant, water and harvest.','اختاري أي يوم. قمرك ٤ أسابيع من اليوم ده: تجهيز، وزرع، وسقي، وحصاد.'])}</p>${dateIn('mDate',['Start day','يوم البداية'],['Start my moon','ابدأي قمري'],'mGo')}</div>`;
-  else if(e>=28)head=`<div class="mstage done"><h3>${L(['Your moon is full, ma sha Allah 🌕','قمرك كمل، ما شاء الله 🌕'])}</h3><p class="muted">${L([`You finished ${dn} of ${tot} steps. Rest, celebrate, then start your next moon whenever you are ready.`,`خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة. ارتاحي، واحتفلي بنفسك، وابدأي قمرك الجاي وقت ما تحبي.`])}</p>${dateIn('mDate',['Next moon starts on','القمر الجاي يبدأ يوم'],['Start a new moon','ابدأي قمر جديد'],'mNew')}<button class="check" type="button" id="mKeep" aria-pressed="${S.mKeep!==false}"><span class="box"></span><span class="lbl">${L(["Bring the goals I didn't finish","كمّلي بالأهداف اللي مخلصتهاش"])}</span></button></div>`;
+  if(!st)head=`<div class="mwk"><h3>${L(['When do you want to start?','عايزة تبدأي إمتى؟'])}</h3><p class="muted">${L(['Pick any day. Your moon is 4 weeks from that day: prepare, plant, water and harvest.','اختاري أي يوم. قمرك ٤ أسابيع من اليوم ده: تجهيز، وزرع، وسقي، وحصاد.'])}</p>${dateIn('mDate',['Start day','يوم البداية'],['Start my moon','ابدأي قمري'],'mGo')}</div>`;
+  else if(e>=28)head=`<div class="mwk done"><h3>${L(['Your moon is full, ma sha Allah 🌕','قمرك كمل، ما شاء الله 🌕'])}</h3><p class="muted">${L([`You finished ${dn} of ${tot} steps. Rest, celebrate, then start your next moon whenever you are ready.`,`خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة. ارتاحي، واحتفلي بنفسك، وابدأي قمرك الجاي وقت ما تحبي.`])}</p>${dateIn('mDate',['Next moon starts on','القمر الجاي يبدأ يوم'],['Start a new moon','ابدأي قمر جديد'],'mNew')}<button class="check" type="button" id="mKeep" aria-pressed="${S.mKeep!==false}"><span class="box"></span><span class="lbl">${L(["Bring the goals I didn't finish","كمّلي بالأهداف اللي مخلصتهاش"])}</span></button></div>`;
   else head=calHTML(st,e,vw)+(e<0?`<p class="note">${L([`Your moon starts on ${fmtD(st)}.`,`قمرك هيبدأ يوم ${fmtD(st)}.`])}</p>`:'');
   return `<div class="card">${ttl([`My moon${cyc>1?' '+cyc:''}`,`قمري${cyc>1?' '+toAr(cyc):''}`])}
    <p class="muted">${L(['Every moon is 4 weeks that start on the day you choose: prepare, plant, water and harvest. Add as many goals as you like, and Hilal splits each one across the 4 weeks.','كل قمر ٤ أسابيع بتبدأ من اليوم اللي انتي تختاريه: تجهيز، وزرع، وسقي، وحصاد. ضيفي أهداف من غير عدد، وهلال يقسّم كل هدف على الأسابيع الأربعة.'])}</p>
    ${head}
    ${st&&e<28?`<button class="opt sm" type="button" id="mChg" style="align-self:flex-start">📅 ${L(['Change start day','غيّري يوم البداية'])}</button>${mChg?dateIn('mDate',['New start day','يوم البداية الجديد'],['Save','احفظي'],'mGo'):''}`:''}
-   ${st&&e<28?`<div class="mstage"><h3>${L(STG[vw][1])}${vw===w?` <span class="chip">${L(['This week','الأسبوع ده'])}</span>`:''}</h3><p class="muted">${L(STG[vw][2])}</p>
+   ${st&&e<28?`<div class="mwk"><h3>${L(STG[vw][1])}${vw===w?` <span class="chip">${L(['This week','الأسبوع ده'])}</span>`:''}</h3><p class="muted">${L(STG[vw][2])}</p>
     ${gs.length?`<div>${gs.map(g=>chk(`data-mst="${g.id}-${vw}"`,g.sd[vw],esc(L(g.st[vw])),esc(L(g.t)))).join('')}</div>`:`<p class="note">${L(['Add your first goal below and its steps for each week will show up here.','ضيفي أول هدف تحت، وخطوات كل أسبوع هتظهر هنا.'])}</p>`}
     ${vw===3&&gs.length?`<p class="note">${L(['Harvest week: write in your journal about what changed, and choose what you want for your next moon.','أسبوع الحصاد: اكتبي في يومياتك إيه اللي اتغير، واختاري عايزة إيه للقمر الجاي.'])}</p>`:''}</div>`:''}
    ${gs.length?`<div class="bar" aria-hidden="true"><i style="width:${tot?dn/tot*100:0}%"></i></div><p class="note">${(st&&e>=0&&e<28?L([`Day ${e+1} of 28 · ${dn} of ${tot} steps done`,`اليوم ${toAr(e+1)} من ${toAr(28)} · خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة`]):L([`${dn} of ${tot} steps done`,`خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة`]))}</p><p class="lkt">${L(['My goals','أهدافي'])}</p><div class="mgl">${gs.map(goal).join('')}</div>`:''}
@@ -1214,17 +1222,64 @@ function onPhoto(e){
   img.src=url;
 }
 
+/* ---------- custom drive: any passion, generated plan, fully editable ---------- */
+const DDOM=[
+ [/code|coding|program|software|developer|web|app|\bai\b|data|python|java|tech|برمج|كود|تطبيق|ذكاء|بيانات|تكنولوج/i,[['Install the tools you need and set up a free account on a learning site','نزّلي الأدوات اللي محتاجاها واعملي حساب على موقع تعليمي مجاني'],['Code along with one beginner tutorial from start to finish','امشي مع tutorial للمبتدئين من الأول للآخر واكتبي الكود معاه'],['Upload your project to GitHub with a short description','ارفعي مشروعك على GitHub ومعاه وصف قصير'],['Add your project to your CV or LinkedIn','ضيفي المشروع للـ CV أو LinkedIn']]],
+ [/design|draw|art|illustrat|paint|graphic|canva|figma|رسم|تصميم|فن|جرافيك/i,[['Make a mood board of 20 pieces you love','اعملي mood board فيه ٢٠ حاجة بتحبيها'],['Copy one piece you admire to learn how it was made','قلّدي تصميم عاجبك عشان تفهمي اتعمل إزاي'],['Create 3 original pieces around one theme','اعملي ٣ تصميمات من عندك على فكرة واحدة'],['Post your best piece and start a simple portfolio','انشري أحسن حاجة وابدأي بورتفوليو بسيط']]],
+ [/writ|blog|poem|poetry|story|novel|journalis|كتاب|كتابة|شعر|قصة|رواية|مقال/i,[['Read 3 pieces you admire and note what makes them work','اقري ٣ حاجات عجبوكي واكتبي إيه اللي مخليهم حلوين'],['Write for 15 minutes every day this week','اكتبي ١٥ دقيقة كل يوم الأسبوع ده'],['Finish one complete piece and edit it twice','خلّصي حاجة كاملة وراجعيها مرتين'],['Publish it on a blog, newsletter or Instagram','انشريها في بلوج أو نيوزليتر أو انستجرام']]],
+ [/business|startup|brand|shop|sell|market|entrepreneur|بيزنس|مشروع|براند|بيع|تسويق|شركة/i,[['Write who your customer is and what problem you solve','اكتبي مين العميل بتاعك وبتحلّي له مشكلة إيه'],['Talk to 5 possible customers and note what they say','اتكلمي مع ٥ عملاء محتملين واكتبي قالوا إيه'],['Make a simple first version: a post, a sample or a landing page','اعملي أول نسخة بسيطة: بوست، أو عينة، أو صفحة'],['Get your first order, sign-up or honest feedback','وصلي لأول طلب، أو تسجيل، أو رأي صريح']]],
+ [/photo|camera|video|film|edit|تصوير|كاميرا|فيديو|مونتاج/i,[['Learn the basics of light and framing','اتعلمي أساسيات الإضاءة والكادر'],['Take 10 photos or clips every day this week','صوري ١٠ صور أو كليبات كل يوم الأسبوع ده'],['Edit your best 5 into one set or short video','عدّلي أحسن ٥ واعملي منهم مجموعة أو فيديو قصير'],['Share it and ask one creator for feedback','انشريها واسألي صانعة محتوى عن رأيها']]],
+ [/cook|bak|food|recipe|chef|طبخ|أكل|اكل|حلويات|وصف/i,[['Pick 4 recipes, one for each week, from easy to harder','اختاري ٤ وصفات، واحدة لكل أسبوع، من السهل للأصعب'],['Cook the first recipe and note what to change','اعملي أول وصفة واكتبي هتغيري إيه'],['Cook for family or friends and ask for honest feedback','اطبخي للعيلة أو صحابك وخدي رأيهم بصراحة'],['Photograph your dishes and start a small recipe collection','صوري أكلك وابدأي مجموعة وصفات صغيرة']]],
+ [/language|english|french|spanish|german|arabic|turkish|korean|japanese|لغة|انجليزي|إنجليزي|فرنساوي|فرنسي|ألماني|تركي|كوري|عربي/i,[['Learn the 100 most common words','اتعلمي أكتر ١٠٠ كلمة بتتقال'],['Practise 15 minutes a day with an app or videos','اتمرني ١٥ دقيقة كل يوم بأبلكيشن أو فيديوهات'],['Have a 5 minute conversation with someone, or record yourself speaking','اتكلمي ٥ دقايق مع حد، أو سجّلي نفسك وانتي بتتكلمي'],['Watch something in the language and write 10 new words','اتفرجي على حاجة باللغة واكتبي ١٠ كلمات جديدة']]],
+ [/content|youtube|tiktok|instagram|influenc|creator|podcast|محتوى|يوتيوب|تيك|انستا|بودكاست/i,[['Study 5 creators you like: topics, length and style','ادرسي ٥ صناع محتوى بتحبيهم: المواضيع، والطول، والستايل'],['Plan 8 post ideas around one theme','خططي ٨ أفكار بوستات على فكرة واحدة'],['Film and post your first 2 pieces','صوري وانشري أول حاجتين'],['Look at what worked and plan next month','شوفي إيه اللي نجح وخططي للشهر الجاي']]],
+ [/teach|tutor|mentor|educat|تدريس|تعليم|مدرس/i,[['Choose what you will teach and to whom','حددي هتعلّمي إيه ولمين'],['Prepare one short lesson with an example and a mini quiz','حضّري درس قصير فيه مثال واختبار صغير'],['Teach it to one person and ask what was unclear','علّميه لحد واسأليه إيه اللي مكانش واضح'],['Improve it and offer it to a small group','حسّنيه واعرضيه على مجموعة صغيرة']]],
+ [/medic|doctor|nurs|pharm|dent|health|طب|دكتور|تمريض|صيدل|أسنان|صحة/i,[['Read about 3 paths in this field and what each needs','اقري عن ٣ طرق في المجال ده وكل واحد محتاج إيه'],['Take a free intro course or watch a lecture series','خدي كورس مجاني أو اتفرجي على سلسلة محاضرات'],['Ask about shadowing or volunteering somewhere local','اسألي عن تدريب أو تطوع في مكان قريب'],['Write down the exams or applications you need and their dates','اكتبي الامتحانات أو التقديمات اللي محتاجاها ومواعيدها']]],
+ [/quran|islam|deen|arabic grammar|tajw|qur|قرآن|قران|تجويد|دين|شريعة|حديث|سيرة/i,[['Choose a trusted teacher, course or book','اختاري شيخة أو كورس أو كتاب موثوق'],['Study 15 minutes a day this week','ذاكري ١٥ دقيقة كل يوم الأسبوع ده'],['Revise everything you learned and test yourself','راجعي كل اللي اتعلمتيه واختبري نفسك'],['Share one benefit with a friend or your family','شاركي فايدة واحدة مع صاحبتك أو عيلتك']]]
+];
+function genDrive(topic,lvl){
+  const X=topic.trim(),q=`«${X}»`;
+  const dom=(DDOM.find(d=>d[0].test(X))||[null,null])[1];
+  const exp=lvl==='some';
+  const W1=[exp?[`List what you already know about ${q} and where your gaps are`,`اكتبي إيه اللي تعرفيه عن ${q} وإيه اللي ناقصك`]:[`Write in one sentence what ${q} means to you and why you want it`,`اكتبي في جملة واحدة ${q} يعني إيه بالنسبالك وليه عايزاه`],[`Find 3 people who are great at ${q} and see how they started`,`دوري على ٣ ناس شاطرين في ${q} وشوفي بدأوا إزاي`],[`Save 5 free resources for ${q}: videos, courses or books`,`احفظي ٥ مصادر مجانية عن ${q}: فيديوهات أو كورسات أو كتب`],['Decide your finish line: one thing you will make or reach in 4 weeks','حددي خط النهاية: حاجة واحدة هتعمليها أو توصليلها في ٤ أسابيع']];
+  const W2=[[`3 focused sessions of 25 minutes on ${exp?'the next level of':'the basics of'} ${q}`,`٣ قعدات مركزة، كل واحدة ٢٥ دقيقة، على ${exp?'المستوى اللي بعده في':'أساسيات'} ${q}`],['Write down the 5 most important things you learned','اكتبي أهم ٥ حاجات اتعلمتيها'],['Try a small first practice or exercise','جربي أول تمرين أو تطبيق صغير']];
+  const W3=[[exp?`Make something real in ${q} that is bigger than before`:`Make your first small real project in ${q}`,exp?`اعملي حاجة حقيقية في ${q} أكبر من اللي قبلها`:`اعملي أول مشروع حقيقي صغير في ${q}`],['Ask 2 people for honest feedback','اسألي اتنين عن رأيهم بصراحة'],['Improve it using what they said','حسّنيه بناءً على كلامهم']];
+  const W4=[['Share what you made: online, with a friend or a mentor','شاركي اللي عملتيه: أونلاين، أو مع صاحبتك، أو مع حد خبرة'],[`Message one person in ${q} with a thoughtful question`,`ابعتي لحد شغال في ${q} سؤال واحد مدروس`],['Write your next 3 steps for your next moon','اكتبي أول ٣ خطوات لقمرك الجاي']];
+  if(dom){W1.splice(2,0,dom[0]);W2.splice(1,0,dom[1]);W3.splice(1,0,dom[2]);W4.splice(1,0,dom[3])}
+  const T=[['Week 1 · Discover','الأسبوع ١ · اكتشفي'],['Week 2 · Learn','الأسبوع ٢ · اتعلمي'],['Week 3 · Make','الأسبوع ٣ · اعملي'],['Week 4 · Share','الأسبوع ٤ · شاركي']];
+  return [W1,W2,W3,W4].map((w,i)=>[L(T[i]),w.map(x=>L(x))]);
+}
+let dEdit=false;
+function customDriveHTML(){
+  const c=S.dcustom;
+  if(!c||!Array.isArray(c.plan)||dEdit==='new')return `<div class="card">${ttl(['Your own passion','شغفك انتي'])}
+   <p class="muted">${L(['Write anything you want to grow in, in your own words. Hilal turns it into a 4-week plan with real steps, and you can change every step.','اكتبي أي حاجة عايزة تكبري فيها، بكلامك انتي. هلال يحوّلها لخطة ٤ أسابيع بخطوات حقيقية، وتقدري تغيّري أي خطوة.'])}</p>
+   <input type="search" id="dTopic" maxlength="80" value="${c&&c.topic?esc(c.topic):''}" placeholder="${L(['e.g. UX design, starting a bakery, learning Turkish','مثلاً: تصميم UX، أبدأ مشروع حلويات، أتعلم تركي'])}" aria-label="${L(['Your passion','شغفك'])}">
+   <div class="lkrow"><p class="lkt">${L(['Where are you now?','انتي فين دلوقتي؟'])}</p><div class="row">${[['new',['Completely new','لسه جديدة خالص']],['some',['I know a bit','عارفة شوية']]].map(x=>`<button class="opt sm" type="button" data-dlv="${x[0]}" aria-pressed="${(S.dlv||'new')===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
+   <button class="btn" type="button" id="dGen">✨ ${L(['Make my plan','اعمليلي الخطة'])}</button>
+   ${c&&Array.isArray(c.plan)?`<button class="btn ghost" type="button" id="dCancel">${L(['Cancel','إلغاء'])}</button>`:''}</div>`;
+  const st=(S.drive.custom&&typeof S.drive.custom==='object')?S.drive.custom:{};let total=0,done=0;
+  const weeks=c.plan.map((w,wi)=>`<div class="week">${dEdit?`<input type="search" class="dwt" data-dw="${wi}" value="${esc(w[0])}" maxlength="60">`:`<h4>${esc(w[0])}</h4>`}${w[1].map((s,si)=>{total++;const id=wi+'-'+si;if(st[id])done++;
+     return dEdit?`<div class="goalrow"><input type="search" class="dti" data-dt="${id}" value="${esc(s)}" maxlength="160"><button class="del" type="button" data-dx="${id}" aria-label="${L(['Remove','امسحي'])}">×</button></div>`:chk(`data-dc="${id}"`,st[id],esc(s))}).join('')}
+     ${dEdit?`<button class="opt sm" type="button" data-dadd="${wi}">+ ${L(['Add a step','ضيفي خطوة'])}</button>`:''}</div>`).join('');
+  return `<div class="card">${ttl([`My plan: ${c.topic}`,`خطتي: ${c.topic}`])}
+   <div class="bar" aria-hidden="true"><i style="width:${total?done/total*100:0}%"></i></div>
+   <p class="note">${L([`${done} of ${total} steps done`,`خلصتي ${toAr(done)} من ${toAr(total)} خطوة`])}</p>
+   <div style="display:flex;flex-direction:column;gap:10px">${weeks}</div>
+   <div class="row">${dEdit?`<button class="btn" type="button" id="dSave">${L(['Save my changes','احفظي التعديلات'])}</button>`:`<button class="opt sm" type="button" id="dEditB">✎ ${L(['Edit my plan','عدّلي خطتي'])}</button><button class="opt sm" type="button" id="dNew">✨ ${L(['New passion','شغف جديد'])}</button>`}</div>
+   <p class="note">${L(['Made from your words with a simple plan builder. Every step is yours to change.','معمولة من كلامك بطريقة بسيطة، وكل خطوة تقدري تغيّريها.'])}</p></div>`;
+}
+function dCollect(){const c=S.dcustom;if(!c)return;document.querySelectorAll('[data-dw]').forEach(i=>{const v=i.value.trim();if(v)c.plan[+i.dataset.dw][0]=v});document.querySelectorAll('[data-dt]').forEach(i=>{const [w,t]=i.dataset.dt.split('-').map(Number);c.plan[w][1][t]=i.value.trim()})}
 function renderDrive(){
-  const cur=P[S.passion]?S.passion:'Fashion';const x=P[cur];
+  const isC=S.passion==='custom';const cur=P[S.passion]?S.passion:'Fashion';const x=P[cur];
   const st=(S.drive[cur]&&typeof S.drive[cur]==='object')?S.drive[cur]:{};let total=0,done=0;
   const weeks=x[2].map((w,wi)=>`<div class="week"><h4>${L(w[0])}</h4>${w[1].map((s,si)=>{total++;const id=wi+'-'+si;if(st[id])done++;return chk(`data-ds="${id}"`,st[id],L(s))}).join('')}</div>`).join('');
   setView('v-drive',`
   <div style="margin-top:8px">${ttl(['Drive','الطموح'],'h1')}</div>
   <p class="muted" style="margin-top:6px">${L(['Bridge what you love with what you could become. Pick your passion for a full four-week walkthrough this month.','اربطي اللي بتحبيه باللي ممكن تبقيه. اختاري شغفك وخدي خطة كاملة لأربع أسابيع الشهر ده.'])}</p>
-  <div class="card"><div class="row">${Object.entries(P).map(([k,v])=>`<button class="opt" type="button" data-pa="${k}" aria-pressed="${k===cur}">${L(v[0])}</button>`).join('')}</div>
-   <p class="muted">${L(x[1])}</p><div class="bar" aria-hidden="true"><i style="width:${done/total*100}%"></i></div>
+  <div class="card"><div class="row">${Object.entries(P).map(([k,v])=>`<button class="opt" type="button" data-pa="${k}" aria-pressed="${!isC&&k===cur}">${L(v[0])}</button>`).join('')}<button class="opt" type="button" data-pa="custom" aria-pressed="${isC}">✨ ${L(['Something else','حاجة تانية'])}</button></div>
+   ${isC?`<p class="muted">${L(['Your own passion, your own plan.','شغفك انتي، وخطتك انتي.'])}</p></div>${customDriveHTML()}`:`<p class="muted">${L(x[1])}</p><div class="bar" aria-hidden="true"><i style="width:${done/total*100}%"></i></div>
    <p class="note">${L([`${done} of ${total} steps done this month`,`خلصتي ${toAr(done)} من ${toAr(total)} خطوة الشهر ده`])}</p>
-   <div style="display:flex;flex-direction:column;gap:10px">${weeks}</div></div>`);
+   <div style="display:flex;flex-direction:column;gap:10px">${weeks}</div></div>`}`);
 }
 
 const DAYS=[['Mon','الإتنين'],['Tue','التلات'],['Wed','الأربع'],['Thu','الخميس'],['Fri','الجمعة'],['Sat','السبت'],['Sun','الحد']];
@@ -1317,6 +1372,30 @@ function renderHealth(){
   ${fold(['What to wear','ألبس إيه؟'],`<ul>${[['Sports or jersey hijab that tucks in, so nothing shifts when you move','طرحة سبور أو جيرسيه بتدخل كويس عشان متتحركش'],['Long, loose long-sleeve top, ideally past the hips','بلوزة واسعة بكم طويل، ويا ريت نازلة تحت الوسط'],['Wide-leg joggers or loose training trousers','بنطلون رياضي واسع'],['Supportive trainers you can walk and lift in','كوتشي مريح تمشي وترفعي بيه']].map(x=>`<li>${L(x)}</li>`).join('')}</ul>`)}`);
 }
 
+/* ---------- journal photos (IndexedDB) and voice typing ---------- */
+const IMGDB=(()=>{let p=null;const open=()=>p||(p=new Promise((res,rej)=>{try{const r=indexedDB.open('hilal-img',1);r.onupgradeneeded=()=>r.result.createObjectStore('img');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}));
+  const tx=(mode,fn)=>open().then(db=>new Promise((res,rej)=>{const t=db.transaction('img',mode),st=t.objectStore('img');const out=fn(st);t.oncomplete=()=>res(out&&out.result);t.onerror=()=>rej(t.error)}));
+  return{put:(k,b)=>tx('readwrite',s=>s.put(b,k)),get:k=>tx('readonly',s=>s.get(k)),del:k=>tx('readwrite',s=>s.delete(k))}})();
+function shrinkImg(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const m=1400,sc=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?res(b):rej(),'image/jpeg',.78)};im.onerror=()=>{URL.revokeObjectURL(u);rej()};im.src=u})}
+let jImgs=[],jDate=null,recog=null,recOn=false;
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function drawJThumbs(){const el=$('jThumbs');if(!el)return;el.innerHTML=jImgs.map((x,i)=>`<div class="jth"><img src="${x.url}" alt=""><button type="button" class="del" data-jrm="${i}" aria-label="${L(['Remove photo','شيلي الصورة'])}">×</button></div>`).join('')}
+function addJPhotos(files){
+  const st=$('jPhotoMsg');if(st)st.textContent=L(['Adding…','بنضيف…']);
+  Promise.all([...files].slice(0,6).map(f=>shrinkImg(f).then(b=>({blob:b,url:URL.createObjectURL(b)})).catch(()=>null))).then(arr=>{for(const a of arr)if(a&&jImgs.length<6)jImgs.push(a);drawJThumbs();if(st)st.textContent=jImgs.length>=6?L(['Up to 6 photos per entry','لحد ٦ صور في الكتابة الواحدة']):''});
+}
+function toggleVoice(){
+  const msg=$('jVoiceMsg');
+  if(!SR){msg.textContent=L(["Voice typing isn't available in this browser. Tap the microphone on your keyboard instead, it works the same way.",'الكتابة بالصوت مش متاحة في المتصفح ده. دوسي على المايك اللي في الكيبورد بتاعك، وهيعمل نفس الحاجة.']);return}
+  if(recOn&&recog){recog.stop();return}
+  recog=new SR();recog.lang=A()?'ar-EG':'en-GB';recog.continuous=true;recog.interimResults=true;
+  const ta=$('jText'),base=jDraft?jDraft.replace(/\s*$/,' '):'';let fin='';
+  recog.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript+' ';else interim+=r[0].transcript}jDraft=base+fin+interim;if(ta)ta.value=jDraft};
+  recog.onerror=e=>{msg.textContent=e.error==='not-allowed'?L(['Please allow the microphone to use voice typing.','اسمحي للمايك عشان تكتبي بالصوت.']):L(["Couldn't hear you clearly. Try again.",'مسمعناكيش كويس، جربي تاني.'])};
+  recog.onend=()=>{recOn=false;jDraft=base+fin;if(ta)ta.value=jDraft;const b=$('jVoice');if(b){b.classList.remove('rec');b.innerHTML='🎙 '+L(['Speak','اتكلمي'])}if(!msg.textContent.includes('!'))msg.textContent=''};
+  try{recog.start();recOn=true;const b=$('jVoice');b.classList.add('rec');b.innerHTML='⏹ '+L(['Listening… tap to stop','بسمعك… دوسي عشان توقفي']);msg.textContent=L(['Speak naturally, your words will appear in the box.','اتكلمي عادي، وكلامك هيظهر في المربع.'])}catch(e){recOn=false}
+}
+function openPhoto(url){const v=document.createElement('div');v.className='jview';v.innerHTML=`<img src="${url}" alt="">`;v.addEventListener('click',()=>v.remove());document.body.append(v)}
 function renderJournal(){
   const q=JT[jT][1][jQ];
   const entries=Array.isArray(S.journal)?S.journal:[];
@@ -1328,7 +1407,12 @@ function renderJournal(){
    <div class="qcard"><small>${L(JT[jT][0])} · ${N(jQ+1)} / ${N(5)}</small><p>${L(q)}</p></div>
    <div class="row"><button class="btn ghost" id="jNext" type="button">${L(['Another question','سؤال تاني'])}</button></div>
    <label for="jText" class="note">${L(['Your answer','إجابتك'])}</label>
-   <textarea id="jText" placeholder="${L(['Write freely. Nobody else will read this.','اكتبي براحتك. محدش هيقرا ده غيرك.'])}">${esc(jDraft)}</textarea>
+   <textarea id="jText" placeholder="${L(['Write freely, or tap Speak and just talk. Nobody else will read this.','اكتبي براحتك، أو دوسي «اتكلمي» واتكلمي عادي. محدش هيقرا ده غيرك.'])}">${esc(jDraft)}</textarea>
+   <div class="row jtools"><button class="opt sm${recOn?' rec':''}" type="button" id="jVoice">🎙 ${L(['Speak','اتكلمي'])}</button><label class="opt sm jup">📷 ${L(['Add photos','ضيفي صور'])}<input type="file" id="jFile" accept="image/*" multiple></label></div>
+   <p class="note" id="jVoiceMsg" role="status"></p>
+   <div class="jthumbs" id="jThumbs"></div><p class="note" id="jPhotoMsg" role="status"></p>
+   <p class="note">${L(['Photos of paper notes, pages from your notebook or moments from your day. They stay on this phone only.','صور ورق كتبتيه، أو صفحات من النوتبوك، أو لحظات من يومك. بيتحفظوا على الموبايل ده بس.'])}</p>
+   <div class="lkrow"><p class="lkt">${L(['Save to day','احفظيها ليوم'])}</p><input type="date" id="jDate" value="${jDate||tk}" max="${tk}"></div>
    <button class="btn" id="jSave" type="button">${L(['Save','احفظي'])}</button>
    ${jT===4?`<p class="note">${L(["If things feel too heavy, please talk to someone you trust or a professional. You don't have to carry it alone.",'لو الدنيا تقيلة أوي، اتكلمي مع حد بتثقي فيه أو مع متخصص. مش لازم تشيلي ده لوحدك.'])}</p>`:''}
   </div>
@@ -1345,15 +1429,27 @@ function renderJournal(){
     const qe=document.createElement('span');qe.className='q';qe.textContent=L(qq);
     const te=document.createElement('p');te.className='t';te.textContent=String(en.t||'');
     const del=document.createElement('button');del.className='del';del.type='button';del.dataset.jdel=idx;del.textContent=L(['Delete','امسحي']);
-    box.append(dt,qe,te,del);list.append(box);
+    const ims=document.createElement('div');ims.className='jthumbs';
+    if(Array.isArray(en.img))for(const k of en.img){const im=document.createElement('img');im.alt='';im.className='jimg';ims.append(im);IMGDB.get(k).then(bl=>{if(bl){const u=URL.createObjectURL(bl);im.src=u;im.addEventListener('click',()=>openPhoto(u))}else im.remove()}).catch(()=>im.remove())}
+    box.append(dt,qe);if(en.t)box.append(te);if(ims.childNodes.length)box.append(ims);box.append(del);list.append(box);
   });
   $('jText').addEventListener('input',e=>{jDraft=e.target.value});
   $('jNext').addEventListener('click',()=>{jQ=(jQ+1)%5;renderJournal()});
-  $('jSave').addEventListener('click',()=>{
-    const t=jDraft.trim();if(!t)return;
+  drawJThumbs();
+  $('jVoice').addEventListener('click',toggleVoice);
+  $('jFile').addEventListener('change',e=>{if(e.target.files&&e.target.files.length)addJPhotos(e.target.files);e.target.value=''});
+  $('jThumbs').addEventListener('click',e=>{const r=e.target.closest('[data-jrm]');if(r){const x=jImgs.splice(+r.dataset.jrm,1)[0];if(x)URL.revokeObjectURL(x.url);drawJThumbs()}});
+  $('jDate').addEventListener('change',e=>{jDate=/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)&&e.target.value<=tk?e.target.value:null});
+  $('jSave').addEventListener('click',async()=>{
+    if(recOn&&recog)recog.stop();
+    const t=jDraft.trim();if(!t&&!jImgs.length)return;
+    const d=jDate||tk,ids=[];
+    for(const x of jImgs){const k='j'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);try{await IMGDB.put(k,x.blob);ids.push(k)}catch(e){}}
     if(!Array.isArray(S.journal))S.journal=[];
-    S.journal.push({d:tk,th:jT,q:jQ,t:t.slice(0,4000)});if(S.journal.length>300)S.journal=S.journal.slice(-300);
-    day().journal=true;jDraft='';renderJournal();renderToday();save();
+    const en={d,th:jT,q:jQ,t:t.slice(0,4000)};if(ids.length)en.img=ids;
+    S.journal.push(en);S.journal.sort((a,b)=>String(a.d)<String(b.d)?-1:String(a.d)>String(b.d)?1:0);if(S.journal.length>300)S.journal=S.journal.slice(-300);
+    if(d===tk)day().journal=true;else{const o=S.days[d]=S.days[d]||{};o.journal=true}
+    jImgs.forEach(x=>URL.revokeObjectURL(x.url));jImgs=[];jDraft='';jDate=null;renderJournal();renderToday();save();
   });
 }
 
@@ -1449,13 +1545,22 @@ document.addEventListener('click',e=>{
   else if(ds.th){tryOn=Object.assign({},tryOn,{h:ds.th});for(const x of document.querySelectorAll('[data-th]'))x.setAttribute('aria-pressed',x.dataset.th===ds.th);paintGirl(tryOn);changed=false}
   else if(ds.tp){const c=ds.tp.split(',').filter(x=>/^#[0-9a-f]{6}$/i.test(x));if(c.length>=4){tryOn=Object.assign({},tryOn,{h:c[0],t:c[1],b:c[2],g:c[3]});paintGirl(tryOn);const g=document.querySelector('.tryon');if(g&&g.scrollIntoView)g.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}changed=false}
   else if(ds.cown){if(!S.capOwn||typeof S.capOwn!=='object')S.capOwn={};S.capOwn[ds.cown]=!S.capOwn[ds.cown];renderStyle()}
-  else if(ds.pa){S.passion=ds.pa;renderDrive()}
+  else if(ds.pa){S.passion=ds.pa;dEdit=false;renderDrive()}
+  else if(ds.dlv){S.dlv=ds.dlv;for(const x of document.querySelectorAll('[data-dlv]'))x.setAttribute('aria-pressed',x.dataset.dlv===S.dlv)}
+  else if(b.id==='dGen'){const t=$('dTopic').value.replace(/\s+/g,' ').trim().slice(0,80);if(t){S.dcustom={topic:t,plan:genDrive(t,S.dlv||'new')};S.drive.custom={};dEdit=false;renderDrive();replay()}else{$('dTopic').focus();changed=false}}
+  else if(b.id==='dCancel'){dEdit=false;renderDrive();changed=false}
+  else if(b.id==='dNew'){dEdit='new';renderDrive();changed=false}
+  else if(b.id==='dEditB'){dEdit=true;renderDrive();changed=false}
+  else if(b.id==='dSave'){dCollect();const c=S.dcustom;c.plan.forEach(w=>{w[1]=w[1].filter(Boolean)});dEdit=false;renderDrive()}
+  else if(ds.dadd!==undefined){dCollect();S.dcustom.plan[+ds.dadd][1].push('');renderDrive();const ins=document.querySelectorAll(`[data-dt^="${ds.dadd}-"]`);if(ins.length)ins[ins.length-1].focus();changed=false}
+  else if(ds.dx){dCollect();const [w,t]=ds.dx.split('-').map(Number);S.dcustom.plan[w][1].splice(t,1);renderDrive();changed=false}
+  else if(ds.dc){if(!S.drive.custom||typeof S.drive.custom!=='object')S.drive.custom={};const o=S.drive.custom;o[ds.dc]=!o[ds.dc];renderDrive()}
   else if(ds.ds){if(!S.drive[S.passion]||typeof S.drive[S.passion]!=='object')S.drive[S.passion]={};const o=S.drive[S.passion];o[ds.ds]=!o[ds.ds];renderDrive()}
   else if(ds.ftrack){S.ftrack=ds.ftrack;const p=planState();if(ds.ftrack==='hyrox')p.goal='hyrox';else if(p.goal==='hyrox')p.goal='strong';renderHealth()}
   else if(ds.lv){S.level=ds.lv;renderHealth()}
   else if(ds.wk){S.wk[ds.wk]=!S.wk[ds.wk];renderHealth()}
   else if(ds.jt!==undefined){jT=+ds.jt;jQ=0;renderJournal();changed=false}
-  else if(ds.jdel!==undefined){if(Array.isArray(S.journal)){S.journal.splice(+ds.jdel,1);renderJournal()}}
+  else if(ds.jdel!==undefined){if(Array.isArray(S.journal)){const en=S.journal.splice(+ds.jdel,1)[0];if(en&&Array.isArray(en.img))en.img.forEach(k=>IMGDB.del(k).catch(()=>{}));renderJournal()}}
   else changed=false;
   if(changed)save();
   const at=[...b.attributes].find(a=>a.name.startsWith('data-')&&a.name!=='data-go');
@@ -1628,7 +1733,7 @@ function merge(x){
   S=Object.assign(S,x);S.colour=safeHex(S.colour);
   if(S.surahs&&typeof S.surahs==='object'){for(const k of Object.keys(S.surahs)){if(!/^\d+$/.test(k)){const norm=k.toLowerCase().replace(/[^a-z]/g,'');const i=SEN.findIndex(n=>n.toLowerCase().replace(/[^a-z]/g,'')===norm);if(i>=0&&S.surahs[k])S.surahs[i+1]=true;delete S.surahs[k]}}}else S.surahs={};
   if(!Array.isArray(S.journal))S.journal=[];
-  if(!P[S.passion])S.passion='Fashion';
+  if(!P[S.passion]&&S.passion!=='custom')S.passion='Fashion';
   if(typeof S.name!=='string')S.name='';
   if((S.lang==='ar'||S.lang==='en')&&S.name&&(S.askName===false||framed()))$('ob').hidden=true;
 }
