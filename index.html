@@ -126,6 +126,16 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .lang{display:inline-flex;align-items:center;gap:6px}
 .steps{margin:0;padding-inline-start:22px}.steps li{margin:5px 0}
 .pinl{display:inline-flex;align-items:center;text-decoration:none}
+.dots{display:flex;gap:8px;justify-content:center}.dots i{width:8px;height:8px;border-radius:50%;background:#ffffff40}.dots i.on{background:var(--gold);width:22px;border-radius:4px}
+.ilist{display:flex;flex-direction:column;gap:10px;text-align:start}.ilist div{background:#ffffff12;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column}.ilist b{color:var(--gold)}.ilist span{color:#D9D6F2}
+.slidein{animation:rise .5s cubic-bezier(.2,.75,.2,1)}
+.goalrow{display:flex;align-items:center;gap:6px}.goalrow .check{flex:1}
+.del{flex:none;width:36px;height:36px;border-radius:50%;border:0;background:var(--soft);color:var(--muted);font-size:20px;line-height:1;cursor:pointer}
+.ttable{display:flex;flex-direction:column;gap:8px}
+.tday{border-radius:16px;border:1.5px solid var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.tday.today{border-color:var(--wine)}
+.tdh{display:flex;justify-content:space-between;align-items:center}
+.cust{background:var(--soft);border-radius:12px;padding:8px 12px;flex:1;overflow-wrap:anywhere}
 .lk{display:flex;flex-direction:column;gap:10px}
 .lkt{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
 .opt.sm{min-height:40px;padding:0 13px;font-size:13px}
@@ -227,6 +237,13 @@ nav.tabs a[aria-current=page] svg{animation:pop .4s ease}
     <p style="font-weight:600;color:#fff">Choose your language · اختاري اللغة</p>
     <div class="choose"><button type="button" data-lang="en">English</button><button type="button" class="ar" data-lang="ar">العربية</button></div>
   </div>
+  <div class="in" id="obI" hidden>
+    <svg class="obmoon" viewBox="0 0 120 120" width="80" height="80" aria-hidden="true"><circle cx="60" cy="60" r="46" fill="#D8B46A"/><circle id="obIm" cx="82" cy="52" r="44" fill="#232650"/></svg>
+    <div id="obIbody" style="display:flex;flex-direction:column;gap:12px;width:100%"></div>
+    <div class="dots" id="obIdots"></div>
+    <button type="button" class="obgo" id="obInext"></button>
+    <button type="button" class="obback" id="obIback"></button>
+  </div>
   <div class="in" id="ob2" hidden>
     <svg class="obmoon" viewBox="0 0 120 120" width="90" height="90" aria-hidden="true"><circle cx="60" cy="60" r="46" fill="#D8B46A"/><circle cx="82" cy="52" r="44" fill="#232650"/></svg>
     <h1 id="ob2t"></h1>
@@ -256,6 +273,7 @@ nav.tabs a[aria-current=page] svg{animation:pop .4s ease}
   <p class="toast" id="saveNote" role="status"></p>
 </div>
 <nav class="tabs" aria-label="Main"><div id="tabs"></div></nav>
+<form name="goal-suggestions" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="goal"><input name="category"><input name="lang"><input name="bot-field"></form>
 <canvas id="cv" width="80" height="80" hidden></canvas>
 
 <script>
@@ -643,6 +661,34 @@ function ramadanHTML(){
    <div class="soon"><b>${L(['Coming soon','قريباً'])}</b><span>${L(['A special Ramadan space is coming to Hilal before Ramadan, in sha Allah: daily goals, Quran plans, iftar-friendly workouts and more. Keep building your journey until then.','مساحة خاصة برمضان جاية على هلال قبل رمضان إن شاء الله: أهداف يومية، وخطط للقرآن، وتمارين تناسب بعد الفطار، وحاجات تانية. كمّلي رحلتك لحد ما تيجي.'])}</span></div>
    <p class="note">${L(['Dates may differ by a day depending on your local moon sighting.','المواعيد ممكن تفرق يوم حسب رؤية الهلال عندك.'])}</p></div>`;
 }
+const GCAT=[['deen',['Deen','الدين']],['style',['Style','الأناقة']],['drive',['Drive','الطموح']],['health',['Health','صحتك']],['me',['Me','أنا']]];
+const GIDEAS=[['deen',['Pray Duha twice a week','صلّي الضحى مرتين في الأسبوع']],['deen',['Learn the meaning of Surah Al-Mulk','اتعلمي معنى سورة الملك']],['style',['Build one outfit from my capsule each week','اعملي لبسة من الكابسول كل أسبوع']],['drive',['Finish one free online course','خلّصي كورس أونلاين مجاني']],['drive',['Read 10 pages of a book every day','اقري ١٠ صفحات من كتاب كل يوم']],['health',['Drink 8 glasses of water a day','اشربي ٨ كوبايات مية في اليوم']],['health',['Walk 7,000 steps a day','امشي ٧٠٠٠ خطوة في اليوم']],['me',['One hour without my phone every evening','ساعة من غير موبايل كل يوم بالليل']]];
+let gCat='deen';
+const onNetlify=()=>/netlify\.app$/.test(location.hostname)||(!framed()&&location.protocol==='https:'&&!/claude/.test(location.hostname));
+function shareGoal(text,cat){
+  if(!onNetlify())return Promise.resolve(false);
+  return fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({'form-name':'goal-suggestions',goal:text,category:cat,lang:S.lang||'en'}).toString()}).then(r=>r.ok).catch(()=>false);
+}
+function goalsHTML(){
+  const gs=Array.isArray(S.goals)?S.goals:[];const done=gs.filter(g=>g.d).length;
+  return `<div class="card">${ttl(['My goals','أهدافي'])}
+   <p class="muted">${L(['Your own goals, in your own words. Add anything you want to grow in.','أهدافك انتي، بكلامك انتي. ضيفي أي حاجة عايزة تكبري فيها.'])}</p>
+   ${gs.length?`<div class="bar" aria-hidden="true"><i style="width:${done/gs.length*100}%"></i></div><p class="note">${L([`${done} of ${gs.length} done`,`خلصتي ${toAr(done)} من ${toAr(gs.length)}`])}</p>`:''}
+   <div>${gs.length?gs.map((g,i)=>`<div class="goalrow">${chk(`data-gd="${i}"`,g.d,esc(g.t),L((GCAT.find(c=>c[0]===g.c)||GCAT[4])[1]))}<button class="del" type="button" data-gx="${i}" aria-label="${L(['Remove','امسحي'])}">×</button></div>`).join(''):`<p class="note">${L(['No goals yet. Write your first one below, or pick an idea.','لسه مفيش أهداف. اكتبي أول هدف تحت، أو اختاري فكرة.'])}</p>`}</div>
+   <div class="row">${GCAT.map(c=>`<button class="opt sm" type="button" data-gc="${c[0]}" aria-pressed="${c[0]===gCat}">${L(c[1])}</button>`).join('')}</div>
+   <div class="row" style="flex-wrap:nowrap"><input type="search" id="gIn" maxlength="120" placeholder="${L(['Write a goal, any language is fine','اكتبي هدف، بأي لغة عادي'])}" aria-label="${L(['New goal','هدف جديد'])}"><button class="btn" type="button" id="gAdd">${L(['Add','ضيفي'])}</button></div>
+   <button class="check" type="button" id="gShare" aria-pressed="${S.gShare!==false}"><span class="box"></span><span class="lbl">${L(['Share it anonymously as an idea for other girls','شاركيه من غير اسم كفكرة لبنات تانيين'])}<small>${L(['Only the goal text is shared, never your name.','بيتشارك نص الهدف بس، من غير اسمك أبداً.'])}</small></span></button>
+   <p class="note" id="gMsg" role="status"></p>
+   <p style="font-weight:600">${L(['Goal ideas','أفكار أهداف'])}</p>
+   <div class="row">${GIDEAS.map((g,i)=>`<button class="opt sm" type="button" data-gi="${i}">+ ${L(g[1])}</button>`).join('')}</div>
+   <p class="note">${L(['Ideas shared by the girlies will show up here as Hilal grows.','الأفكار اللي البنات بيشاركوها هتظهر هنا مع الوقت.'])}</p></div>`;
+}
+function addGoal(t,c,share){
+  t=String(t||'').replace(/\s+/g,' ').trim().slice(0,120);if(!t)return false;
+  if(!Array.isArray(S.goals))S.goals=[];S.goals.push({t,c,d:false});
+  if(share)shareGoal(t,c);
+  return true;
+}
 function journeyHTML(){
   const j=journey(),full=j.stage>=4,cur=full?null:STG[j.stage],dn=full?[]:(Array.isArray(j.done[jKey(j)])?j.done[jKey(j)]:[]);
   return `<div class="card">${ttl(['Your journey','رحلتك'])}
@@ -665,6 +711,7 @@ function renderToday(){
   <div class="hero"><div style="display:flex;flex-direction:column;gap:8px"><h2>${line}</h2><p>${L([`${n} of ${t} done today. Every good deed lights it up a little more.`,`خلصتي ${toAr(n)} من ${toAr(t)} النهارده. كل حاجة حلوة بتعمليها بتنوّره أكتر.`])}</p></div>${moonSVG(f)}</div>
   ${ramadanHTML()}
   ${journeyHTML()}
+  ${goalsHTML()}
   <div class="card">${ttl(['Today','النهارده'])}${prayersHTML()}
    <div>${TODO.map(x=>chk(`data-t="${x[0]}"`,d[x[0]],L(x[1]))).join('')}${chk(`data-go="deen"`,dhDone(),A()?`<span class="ar" style="font-size:18px">${GEN[dayDh][0]}</span>`:GEN[dayDh][1],L([`Dhikr of the day: ${d.dh['g-'+dayDh]||0} of ${GEN[dayDh][3]}`,`ذكر اليوم: ${toAr(d.dh['g-'+dayDh]||0)} من ${toAr(GEN[dayDh][3])}`]))}</div></div>
   ${installHTML()}`);
@@ -806,6 +853,60 @@ function renderDrive(){
    <div style="display:flex;flex-direction:column;gap:10px">${weeks}</div></div>`);
 }
 
+const DAYS=[['Mon','الإتنين'],['Tue','التلات'],['Wed','الأربع'],['Thu','الخميس'],['Fri','الجمعة'],['Sat','السبت'],['Sun','الحد']];
+const PGOAL=[['start',['Get started','أبدأ']],['strong',['Get stronger','أبقى أقوى']],['run',['Run better','أجري أحسن']],['hyrox',['Train for Hyrox','أتمرن لهايروكس']]];
+const HOME={
+ full:[W('Home full body','جسم كامل في البيت'),[W('Bodyweight squats 3 × 12',`${B('Bodyweight squats')}: ٣ × ١٢`),W('Glute bridges 3 × 12',`${B('Glute bridges')}: ٣ × ١٢`),W('Incline push-ups 3 × 10',`${B('Incline push-ups')}: ٣ × ١٠`),W('Reverse lunges 3 × 10 each leg',`${B('Reverse lunges')}: ٣ × ١٠ لكل رجل`),W('Plank 3 × 20 seconds',`${B('Plank')}: ٣ × ٢٠ ثانية`)]],
+ cardio:[W('Home cardio','كارديو في البيت'),[W('5 minutes marching on the spot to warm up','٥ دقايق مشي في المكان تسخين'),W('6 rounds: 40 seconds jumping jacks (or step jacks), 20 seconds rest',`٦ جولات: ٤٠ ثانية ${B('Jumping jacks')} (أو ${B('Step jacks')})، و٢٠ ثانية راحة`),W('6 rounds: 40 seconds high knees, 20 seconds rest',`٦ جولات: ٤٠ ثانية ${B('High knees')}، و٢٠ ثانية راحة`),W('5 minutes stretching','٥ دقايق استرتش')]],
+ hyrox:[W('Home Hyrox style','هايروكس في البيت'),[W('4 rounds:','٤ جولات:'),W('400 m run or 2 minutes jog on the spot','جري ٤٠٠ متر أو دقيقتين جري في المكان'),W('10 burpees (step back if needed)',`${B('Burpees')}: ١٠ (ممكن ترجعي رجل رجل)`),W('20 walking lunges',`${B('Walking lunges')}: ٢٠`),W('15 squat to press with a backpack or water bottles',`${B('Squat to press')}: ١٥ بشنطة أو إزايز مية`)]]
+};
+const MOB=[W('Mobility and stretch','مرونة واسترتش'),[W('Cat-cow 10 times',`${B('Cat-cow')}: ١٠ مرات`),W('Hip flexor stretch 30 seconds each side',`${B('Hip flexor stretch')}: ٣٠ ثانية لكل جنب`),W('Hamstring stretch 30 seconds each side',`${B('Hamstring stretch')}: ٣٠ ثانية لكل جنب`),W("Child's pose 1 minute",`${B("Child's pose")}: دقيقة`)]];
+const WALK=[W('Brisk walk','مشي سريع'),[W('30 minutes brisk walk outside, or on a treadmill','٣٠ دقيقة مشي سريع بره، أو على المشاية')]];
+function planState(){
+  if(!S.gplan||typeof S.gplan!=='object')S.gplan={};
+  const p=S.gplan;if(!PGOAL.some(x=>x[0]===p.goal))p.goal='start';
+  if(!Array.isArray(p.days)||!p.days.length)p.days=[0,2,4];
+  if(![20,30,45,60].includes(p.mins))p.mins=30;
+  if(p.place!=='gym'&&p.place!=='home')p.place='gym';
+  if(!p.custom||typeof p.custom!=='object')p.custom={};
+  if(!p.done||typeof p.done!=='object')p.done={};
+  return p;
+}
+function buildPlan(){
+  const p=planState(),lv=LV[S.level]?S.level:'Beginner',w=LV[lv][3],gym=p.place==='gym';
+  const g=w,A0=g[0],A1=g[1],A2=g[2],A3=g[3]||g[0];
+  let rot;
+  if(!gym){rot={start:[HOME.full,WALK,MOB],strong:[HOME.full,HOME.cardio,HOME.full,MOB],run:[WALK,HOME.cardio,HOME.full,WALK],hyrox:[HOME.hyrox,HOME.full,HOME.cardio,HOME.hyrox]}[p.goal]}
+  else if(lv==='Beginner')rot={start:[A0,A1,MOB],strong:[A0,A1,A0,MOB],run:[A1,A0,A1,MOB],hyrox:[A0,A1,A2,A1]}[p.goal];
+  else if(lv==='Intermediate')rot={start:[A0,A1,MOB],strong:[A0,A1,A0,MOB],run:[A1,A0,A1,WALK],hyrox:[A0,A1,A2,A1]}[p.goal];
+  else rot={start:[A3,A2,MOB],strong:[A3,A2,A3,MOB],run:[A2,A0,A2,A3],hyrox:[A0,A3,A1,A2]}[p.goal];
+  const days=[...p.days].sort((a,b)=>a-b);const out={};
+  days.forEach((d,i)=>{out[d]=rot[i%rot.length]});
+  return out;
+}
+function weekKey(){const d=new Date(today);const wd=(d.getDay()+6)%7;d.setDate(d.getDate()-wd);return key(d)}
+function timetableHTML(){
+  const p=planState(),plan=buildPlan(),wk=weekKey(),todayIdx=(today.getDay()+6)%7;
+  const short=p.mins<=20?L(['Short on time: do 2 sets or rounds instead of 3 or 4.','وقتك قليل: اعملي مجموعتين أو جولتين بدل ٣ أو ٤.']):p.mins>=60?L(['Extra time: add a 10 minute walk or stretch at the end.','عندك وقت زيادة: زوّدي ١٠ دقايق مشي أو استرتش في الآخر.']):'';
+  const days=DAYS.map((dn,d)=>{
+    const s=plan[d],cu=Array.isArray(p.custom[d])?p.custom[d]:[];const dk=wk+'-'+d;
+    return `<div class="tday ${d===todayIdx?'today':''}"><div class="tdh"><b>${L(dn)}</b>${d===todayIdx?`<span class="chip">${L(['Today','النهارده'])}</span>`:''}</div>
+     ${s?`<div class="wk">${chk(`data-pd="${dk}"`,p.done[dk],`<b>${L(s[0])}</b>`,L([`About ${p.mins} minutes`,`حوالي ${toAr(p.mins)} دقيقة`]))}<ul>${s[1].map(x=>`<li>${L(x)}</li>`).join('')}</ul></div>`:(cu.length?'':`<p class="note">${L(['Rest, or a gentle walk','راحة، أو مشي خفيف'])}</p>`)}
+     ${cu.map((c,i)=>`<div class="goalrow"><p class="cust">${esc(c)}</p><button class="del" type="button" data-cx="${d}-${i}" aria-label="${L(['Remove','امسحي'])}">×</button></div>`).join('')}</div>`;
+  }).join('');
+  return `<div class="card">${ttl(['My gym timetable','جدول تماريني'])}
+   <p class="muted">${L(['Tell us what you want and Hilal builds your week. Change anything, and add your own sessions.','قوليلنا عايزة إيه وهلال يعملك جدول الأسبوع. غيّري اللي انتي عايزاه، وضيفي تمارينك انتي كمان.'])}</p>
+   <div class="lkrow"><p class="lkt">${L(['My goal','هدفي'])}</p><div class="row">${PGOAL.map(x=>`<button class="opt sm" type="button" data-pg="${x[0]}" aria-pressed="${p.goal===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
+   <div class="lkrow"><p class="lkt">${L(['Where','فين'])}</p><div class="row">${[['gym',['Gym','الجيم']],['home',['Home','البيت']]].map(x=>`<button class="opt sm" type="button" data-pp="${x[0]}" aria-pressed="${p.place===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
+   <div class="lkrow"><p class="lkt">${L(['My training days','أيام التمرين'])}</p><div class="row">${DAYS.map((dn,d)=>`<button class="opt sm" type="button" data-pday="${d}" aria-pressed="${p.days.includes(d)}">${L(dn)}</button>`).join('')}</div></div>
+   <div class="lkrow"><p class="lkt">${L(['Time per session','وقت التمرين'])}</p><div class="row">${[20,30,45,60].map(m=>`<button class="opt sm" type="button" data-pm="${m}" aria-pressed="${p.mins===m}">${L([`${m} min`,`${toAr(m)} دقيقة`])}</button>`).join('')}</div></div>
+   <p class="note">${L([`Built for your level: ${L(LV[S.level]?LV[S.level][0]:LV.Beginner[0])}. Change your level above.`,`معمول على مستواكي: ${L(LV[S.level]?LV[S.level][0]:LV.Beginner[0])}. تقدري تغيّري المستوى فوق.`])}${short?' '+short:''}</p>
+   <div class="ttable">${days}</div>
+   <p style="font-weight:600">${L(['Add your own session','ضيفي تمرينك'])}</p>
+   <div class="row">${DAYS.map((dn,d)=>`<button class="opt sm" type="button" data-cd="${d}" aria-pressed="${cDay===d}">${L(dn)}</button>`).join('')}</div>
+   <div class="row" style="flex-wrap:nowrap"><input type="search" id="cIn" maxlength="120" placeholder="${L(['e.g. Pilates class 7pm, or 5 km run','مثلاً: Pilates class الساعة ٧، أو 5 km run'])}" aria-label="${L(['Your session','تمرينك'])}"><button class="btn" type="button" id="cAdd">${L(['Add','ضيفي'])}</button></div></div>`;
+}
+let cDay=(today.getDay()+6)%7;
 function renderHealth(){
   const cur=LV[S.level]?S.level:'Beginner';const x=LV[cur];
   const st=[['SkiErg 1000 m',`${B('SkiErg')} ١٠٠٠ متر`],['Sled push',B('Sled push')],['Sled pull',B('Sled pull')],['Burpee broad jumps',B('Burpee broad jumps')],['Row 1000 m',`${B('Row')} ١٠٠٠ متر`],['Farmers carry',B('Farmers carry')],['Sandbag lunges',B('Sandbag lunges')],['Wall balls',B('Wall balls')]];
@@ -817,6 +918,7 @@ function renderHealth(){
    <p><b>${L(x[1])}</b></p><p class="muted">${L(x[2])}</p>
    <div style="display:flex;flex-direction:column;gap:10px">${x[3].map((w,i)=>{const id=cur+i+'-'+tk;return `<div class="wk">${chk(`data-wk="${id}"`,S.wk[id],`<b>${L(w[0])}</b>`,S.wk[id]?L(['Done today, well done','خلصتيه النهارده، برافو عليكي']):L(['Tick when you finish it today','علّمي عليه لما تخلّصيه النهارده']))}<ul>${w[1].map(s=>`<li>${L(s)}</li>`).join('')}</ul></div>`}).join('')}</div>
    <p class="note">${L(['Warm up before every session, go at your own pace, and stop if something hurts. If you have a health condition, check with a professional first.','سخّني قبل كل تمرين، امشي على قد طاقتك، ووقفي لو حاجة وجعتك. لو عندك أي مشكلة صحية، اسألي متخصص الأول.'])}</p></div>
+  ${timetableHTML()}
   <div class="card">${ttl(['What is Hyrox?','يعني إيه هايروكس؟'])}
    <p class="muted">${L(['A fitness race: 8 rounds of a 1 km run, each followed by one workout station, in this order.','سباق لياقة: ٨ جولات، كل جولة ١ كم جري وبعدها محطة تمرين، بالترتيب ده.'])}</p>
    <div class="stations">${st.map((s,i)=>`<span>${N(i+1)}. ${L(s)}</span>`).join('')}</div></div>
@@ -870,12 +972,29 @@ function renderJournal(){
 document.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   const ds=b.dataset;let changed=true;
-  if(ds.lang){S.lang=ds.lang;applyLang();showName()}
+  if(ds.lang){S.lang=ds.lang;applyLang();if(S.introSeen)showName();else showIntro()}
+  else if(ds.pg){planState().goal=ds.pg;renderHealth()}
+  else if(ds.pp){planState().place=ds.pp;renderHealth()}
+  else if(ds.pday!==undefined){const p=planState(),d=+ds.pday;if(p.days.includes(d)){if(p.days.length>1)p.days=p.days.filter(x=>x!==d)}else if(p.days.length<6)p.days.push(d);renderHealth()}
+  else if(ds.pm){planState().mins=+ds.pm;renderHealth()}
+  else if(ds.pd){const p=planState();p.done[ds.pd]=!p.done[ds.pd];renderHealth()}
+  else if(ds.cd!==undefined){cDay=+ds.cd;for(const x of document.querySelectorAll('[data-cd]'))x.setAttribute('aria-pressed',+x.dataset.cd===cDay);changed=false}
+  else if(b.id==='cAdd'){const t=$('cIn').value.replace(/\s+/g,' ').trim().slice(0,120);if(t){const p=planState();if(!Array.isArray(p.custom[cDay]))p.custom[cDay]=[];p.custom[cDay].push(t);renderHealth()}else changed=false}
+  else if(ds.cx){const [d,i]=ds.cx.split('-').map(Number);const p=planState();if(Array.isArray(p.custom[d])){p.custom[d].splice(i,1);renderHealth()}}
+  else if(ds.gd!==undefined){const g=S.goals&&S.goals[+ds.gd];if(g){g.d=!g.d;renderToday()}}
+  else if(ds.gx!==undefined){if(Array.isArray(S.goals)){S.goals.splice(+ds.gx,1);renderToday()}}
+  else if(ds.gc){gCat=ds.gc;for(const x of document.querySelectorAll('[data-gc]'))x.setAttribute('aria-pressed',x.dataset.gc===gCat);changed=false}
+  else if(b.id==='gShare'){S.gShare=S.gShare===false;b.setAttribute('aria-pressed',S.gShare!==false)}
+  else if(b.id==='gAdd'){const sh=S.gShare!==false;if(addGoal($('gIn').value,gCat,sh)){renderToday();$('gMsg').textContent=sh&&onNetlify()?L(['Added, and shared as an idea. Thank you!','اتضاف، واتشارك كفكرة. شكراً ليكي!']):L(['Added','اتضاف'])}else changed=false}
+  else if(ds.gi!==undefined){const g=GIDEAS[+ds.gi];addGoal(L(g[1]),g[0],false);renderToday();$('gMsg').textContent=L(['Added to your goals','اتضاف لأهدافك'])}
+  else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else showName()}}
+  else if(b.id==='obIback'){if(introI>0){introI--;drawIntro()}else if(introAgain){$('obI').hidden=true;$('ob').hidden=true}else{$('obI').hidden=true;$('ob1').hidden=false}changed=false}
+  else if(b.id==='setIntro'){$('sheet').hidden=true;showIntro(true);changed=false}
   else if(b.id==='nameBtn'){showName(true)}
   else if(b.id==='installBtn'){if(installEvt){installEvt.prompt();installEvt.userChoice.then(()=>{installEvt=null;renderToday()}).catch(()=>{})}changed=false}
   else if(b.id==='installHide'){S.installHide=true;renderToday()}
   else if(b.id==='obGo'){submitName()}
-  else if(b.id==='obBack'){if(S.name){$('ob').hidden=true;replay()}else{$('ob2').hidden=true;$('ob1').hidden=false}changed=false}
+  else if(b.id==='obBack'){if(S.name){$('ob').hidden=true;replay()}else{$('ob2').hidden=true;if(S.introSeen)$('ob1').hidden=false;else{$('obI').hidden=false;introI=INTRO_S.length-1;drawIntro()}}changed=false}
   else if(b.id==='setBtn'){openSettings()}
   else if(b.id==='setClose'){$('sheet').hidden=true;changed=false}
   else if(ds.setlang){S.lang=ds.setlang;applyLang();openSettings()}
@@ -883,7 +1002,7 @@ document.addEventListener('click',e=>{
   else if(b.id==='setAsk'){S.askName=S.askName===false;openSettings()}
   else if(b.id==='setReset'){$('resetBox').hidden=false;changed=false}
   else if(b.id==='resetNo'){$('resetBox').hidden=true;changed=false}
-  else if(b.id==='resetYes'){const keep={lang:S.lang,name:S.name,askName:S.askName};S={lang:keep.lang,name:keep.name,askName:keep.askName,days:{},surahs:{},challenge:{},drive:{},passion:'Fashion',level:'Beginner',wk:{},budget:1,colour:'#1b1b1b',journal:[]};$('sheet').hidden=true;renderAll();replay()}
+  else if(b.id==='resetYes'){const keep={lang:S.lang,name:S.name,askName:S.askName};S={introSeen:true,lang:keep.lang,name:keep.name,askName:keep.askName,days:{},surahs:{},challenge:{},drive:{},passion:'Fashion',level:'Beginner',wk:{},budget:1,colour:'#1b1b1b',journal:[]};$('sheet').hidden=true;renderAll();replay()}
   else if(b.id==='obKeep'){$('ob').hidden=true;replay();changed=false}
   else if(b.id==='obChange'){$('obName').hidden=false;$('obGo').hidden=false;$('obKeep').hidden=true;$('obChange').hidden=true;$('obName').value='';$('obName').focus();changed=false}
   else if(ds.p!==undefined){const d=day();d.p[+ds.p]=!d.p[+ds.p];renderToday();if(curView()==='deen')renderDeen()}
@@ -951,13 +1070,31 @@ function openSettings(){
    <div class="card"><h3>${L(['Your progress','تقدّمك'])}</h3><p class="note">${L(['Your progress and journal are saved on this phone only.','تقدّمك ويومياتك محفوظين على الموبايل ده بس.'])}</p>
     <button class="btn ghost" type="button" id="setReset">${L(['Start fresh','ابدأي من جديد'])}</button>
     <div id="resetBox" hidden class="week"><p>${L(['This clears your prayers, adhkar, hifz, journey, journal and choices on this phone. Are you sure?','ده هيمسح صلواتك وأذكارك وحفظك ورحلتك ويومياتك واختياراتك على الموبايل ده. متأكدة؟'])}</p><div class="row" style="margin-top:8px"><button class="btn" type="button" id="resetYes">${L(['Yes, clear it','أيوه، امسحي'])}</button><button class="btn ghost" type="button" id="resetNo">${L(['Cancel','إلغاء'])}</button></div></div></div>
-   <div class="card"><h3>${L(['About Hilal','عن هلال'])}</h3><p class="muted">${L(INTRO)}</p></div>`;
+   <div class="card"><h3>${L(['About Hilal','عن هلال'])}</h3><p class="muted">${L(INTRO)}</p><button class="btn ghost" type="button" id="setIntro">${L(['Show the intro again','اعرضي المقدمة تاني'])}</button></div>`;
   $('sheet').hidden=false;
+}
+
+/* ---------- intro ---------- */
+const INTRO_S=[
+ [['What is Hilal?','يعني إيه هلال؟'],['Hilal is a little space made by a girl, for girls. A place where we help each other become a bit better every day, without pressure and without comparing ourselves to anyone.','هلال مساحة صغيرة معمولة من بنت لكل البنات. مكان بنساعد فيه بعض نبقى أحسن كل يوم شوية، من غير ضغط ومن غير ما نقارن نفسنا بحد.'],null],
+ [['Four spaces, one you','أربع مساحات، وانتي واحدة'],null,[[['Deen','الدين'],['your prayers, adhkar and hifz','صلواتك وأذكارك وحفظك']],[['Style','الأناقة'],['ideas, colours and finding your own style','أفكار وألوان وإزاي تلاقي ستايلك']],[['Drive','الطموح'],['a step-by-step plan towards what you love','خطة خطوة بخطوة للي بتحبيه']],[['Health','صحتك'],['workouts and a timetable made for you','تمارين وجدول معمول على مقاسك']]]],
+ [['Our aim','هدفنا'],['Like the crescent that grows into a full moon, every small step counts. Start any day, go at your own pace and set your own goals. Your progress stays private on your phone.','زي الهلال اللي بيكبر لحد ما يبقى قمر، كل خطوة صغيرة بتفرق. ابدأي في أي يوم، وامشي على راحتك، وحطي أهدافك بنفسك. وتقدّمك بيفضل خاص بيكي على موبايلك.'],null]
+];
+let introI=0,introAgain=false;
+function showIntro(again){introAgain=!!again;introI=0;$('ob').hidden=false;$('ob1').hidden=true;$('ob2').hidden=true;$('obI').hidden=false;drawIntro()}
+function drawIntro(){
+  const x=INTRO_S[introI];
+  $('obIbody').innerHTML=`<h1 style="font-size:32px">${L(x[0])}</h1>${x[1]?`<p style="font-size:17px;line-height:1.7">${L(x[1])}</p>`:''}${x[2]?`<div class="ilist">${x[2].map(i=>`<div><b>${L(i[0])}</b><span>${L(i[1])}</span></div>`).join('')}</div>`:''}`;
+  $('obIdots').innerHTML=INTRO_S.map((_,i)=>`<i class="${i===introI?'on':''}"></i>`).join('');
+  $('obInext').textContent=introI<INTRO_S.length-1?L(['Next','التالي']):(introAgain?L(['Done','تمام']):L(["Let's begin",'يلا نبدأ']));
+  $('obIback').textContent=introI>0?L(['Back','رجوع']):(introAgain?L(['Close','قفلي']):L(['Change language','غيّري اللغة']));
+  const m=$('obIm');if(m)m.setAttribute('cx',82+introI*14);
+  const b=$('obIbody');b.style.animation='none';void b.offsetWidth;b.style.animation='';b.classList.add('slidein');
 }
 
 /* ---------- welcome ---------- */
 function showName(edit){
-  $('ob').hidden=false;$('ob1').hidden=true;$('ob2').hidden=false;
+  $('ob').hidden=false;$('ob1').hidden=true;$('obI').hidden=true;$('ob2').hidden=false;
   $('ob2t').textContent=edit?L(['Change your name','غيّري اسمك']):L(['Welcome to Hilal','أهلاً بيكي في هلال']);
   $('ob2p').textContent=L(['What should we call you?','نناديكي بإيه؟']);
   $('ob2l').textContent=L(['Your name','اسمك']);
