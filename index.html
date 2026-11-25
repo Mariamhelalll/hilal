@@ -136,6 +136,18 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .tday.today{border-color:var(--wine)}
 .tdh{display:flex;justify-content:space-between;align-items:center}
 .cust{background:var(--soft);border-radius:12px;padding:8px 12px;flex:1;overflow-wrap:anywhere}
+details.fold{padding:0;gap:0}
+details.fold>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px;cursor:pointer;font-family:Fraunces,serif;font-weight:600;font-size:18px;min-height:56px}
+html[lang=ar] details.fold>summary{font-family:Tajawal,sans-serif;font-weight:700}
+details.fold>summary::-webkit-details-marker,details.sub>summary::-webkit-details-marker{display:none}
+details.fold>summary svg{transition:transform .3s ease;color:var(--wine);flex:none}
+details.fold[open]>summary svg{transform:rotate(180deg)}
+.foldin{padding:0 18px 18px;display:flex;flex-direction:column;gap:12px;animation:rise .35s ease}
+details.sub{background:var(--soft);border-radius:14px;padding:0 14px}
+details.sub>summary{list-style:none;cursor:pointer;padding:12px 0;font-weight:600;color:var(--wine);display:flex;justify-content:space-between}
+details.sub>summary::after{content:"+";font-size:20px;line-height:1}
+details.sub[open]>summary::after{content:"−"}
+details.sub[open]{padding-bottom:12px}
 .lk{display:flex;flex-direction:column;gap:10px}
 .lkt{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
 .opt.sm{min-height:40px;padding:0 13px;font-size:13px}
@@ -293,6 +305,7 @@ const A=()=>S.lang==='ar';
 const L=p=>Array.isArray(p)?(A()?p[1]:p[0]):p;
 const N=x=>A()?toAr(x):String(x);
 const ttl=(p,tag)=>{tag=tag||'h3';return `<div class="ttl"><${tag}>${L(p)}</${tag}></div>`};
+const fold=(p,inner,open)=>`<details class="card fold"${open?' open':''}><summary><span>${L(p)}</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="foldin">${inner}</div></details>`;
 const chk=(attr,on,main,small)=>`<button class="check" type="button" ${attr} aria-pressed="${!!on}"><span class="box"></span><span class="lbl">${main}${small?`<small>${small}</small>`:''}</span></button>`;
 
 /* ---------- hijri ---------- */
@@ -428,7 +441,7 @@ const F={
  rain:[['Rainy day','الشتا'],['Cosy on rainy days','دافية في الشتا'],[['A jersey hijab with an underscarf','طرحة جيرسيه مع بونيه'],['A padded or waterproof jacket','جاكيت منفوخ أو ووتربروف'],['Wide trousers','بنطلون واسع'],['Chunky boots','بوت تقيل']]],
  eid:[['Eid','العيد'],['Soft glam','جلام ناعم'],[['A satin or chiffon hijab','طرحة ساتان أو شيفون'],['A flowy dress you feel beautiful in','فستان واسع بتحسي إنك حلوة فيه'],['A pretty bag or jewellery as the statement','شنطة حلوة أو إكسسوار يلفت النظر'],['Comfortable heels or flats','كعب مريح أو فلات']]]
 };
-let fCur='gym';
+let fCur='gym',fOpen=false,bOpen=false;
 const CAPS={
  classic:[['Classic','كلاسيك'],['#1b1b1b','#c19a6b','#efe6d6','#7a1f3a']],
  earth:[['Warm earth','ألوان ترابية'],['#6b4430','#d9c4a5','#efe6d6','#6e6b3c']],
@@ -737,8 +750,7 @@ function renderDeen(){
    <div class="row">${[['30',['Juz Amma','جزء عمّ']],['29',['Juz Tabarak','جزء تبارك']],['all',['All 114','كل السور']],['done',['Memorised','اللي حفظتيه']]].map(o=>`<button class="opt" type="button" data-hf="${o[0]}" aria-pressed="${o[0]===hf}">${L(o[1])}</button>`).join('')}</div>
    <input type="search" id="hq" placeholder="${L(['Search a surah','دوّري على سورة'])}" aria-label="${L(['Search a surah','دوّري على سورة'])}" value="${esc(hq)}">
    <div id="surahs"></div></div>
-  <div class="card">${ttl(['A simple hifz method','طريقة الحفظ'])}
-   <ul>${[['Listen to the surah a few times from a reciter you love.','اسمعي السورة كذا مرة من قارئ بتحبيه.'],['Learn one ayah at a time, repeating it until you can say it without looking.','احفظي آية آية، وكرريها لحد ما تقوليها من غير ما تبصي.'],['Join it to the ayah before, then recite the whole part together.','اربطي كل آية باللي قبلها، وبعدين اقري الجزء كله مع بعض.'],["Revise yesterday's portion before starting something new.",'راجعي حفظ امبارح قبل ما تبدأي جديد.'],["Recite what you've learned in your prayers that day.",'صلّي باللي حفظتيه في نفس اليوم.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul></div>`);
+  ${fold(['A simple hifz method','طريقة الحفظ'],`<ul>${[['Listen to the surah a few times from a reciter you love.','اسمعي السورة كذا مرة من قارئ بتحبيه.'],['Learn one ayah at a time, repeating it until you can say it without looking.','احفظي آية آية، وكرريها لحد ما تقوليها من غير ما تبصي.'],['Join it to the ayah before, then recite the whole part together.','اربطي كل آية باللي قبلها، وبعدين اقري الجزء كله مع بعض.'],["Revise yesterday's portion before starting something new.",'راجعي حفظ امبارح قبل ما تبدأي جديد.'],["Recite what you've learned in your prayers that day.",'صلّي باللي حفظتيه في نفس اليوم.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul>`)}`);
   updateTap();renderSurahs();
   $('hq').addEventListener('input',e=>{hq=e.target.value;renderSurahs()});
 }
@@ -787,14 +799,12 @@ function renderStyle(){
    <div class="row">${[['all',['For my colour','على لوني']],['n',['Nature','الطبيعة']],['t',['Trending','ترند']]].map(o=>`<button class="opt" type="button" data-pf="${o[0]}" aria-pressed="${o[0]===pf}">${L(o[1])}</button>`).join('')}</div>
    <div style="display:flex;flex-direction:column;gap:10px">${list.map((p,pi)=>`<button type="button" class="pal tryb" data-tp="${p[2].join(',')}" style="border:0;padding:0;text-align:start;font:inherit;color:inherit;cursor:pointer;width:100%"><div class="strip" style="grid-template-columns:repeat(${p[2].length},1fr)">${p[2].map(c=>`<i style="background:${c}"></i>`).join('')}</div><div class="meta"><b>${L(p[0])}</b><small>${p[2].map(cname).join(A()?'، ':', ')}</small></div></button>`).join('')}</div>
    <button class="btn ghost" id="shuffle" type="button">${L(['Generate a new combo','اعملي تنسيق جديد'])}</button></div>
-  <div class="card">${ttl(['Outfit ideas','أفكار لبس'])}
-   <p class="muted">${L(["Just ideas to spark some inspiration. Every girl has her own journey and her own style, so take what feels right for you.",'دي مجرد أفكار تلهمك. كل بنت ليها رحلتها وستايلها، فخدي اللي يريّحك.'])}</p>
+  ${fold(['Outfit ideas','أفكار لبس'],`<p class="muted">${L(["Just ideas to spark some inspiration. Every girl has her own journey and her own style, so take what feels right for you.",'دي مجرد أفكار تلهمك. كل بنت ليها رحلتها وستايلها، فخدي اللي يريّحك.'])}</p>
    <div class="row">${Object.entries(F).map(([k,v])=>`<button class="opt" type="button" data-f="${k}" aria-pressed="${k===fCur}">${L(v[0])}</button>`).join('')}</div>
-   <div class="week"><h4>${L(x[1])}</h4><ul>${x[2].map(i=>`<li>${L(i)}</li>`).join('')}</ul></div></div>
+   <div class="week"><h4>${L(x[1])}</h4><ul>${x[2].map(i=>`<li>${L(i)}</li>`).join('')}</ul></div>`,fOpen)}
   ${capsuleHTML()}
-  <div class="card">${ttl(['The budget ladder','سلّم التوفير'])}
-   <p class="muted">${L(["Start where you are. Tap your step, and climb when you're ready.",'ابدأي من مكانك. دوسي على خطوتك، واطلعي لما تكوني جاهزة.'])}</p>
-   <div style="display:flex;flex-direction:column;gap:8px">${BL.map((b,i)=>`<button class="lvl" type="button" data-bl="${i+1}" aria-pressed="${S.budget===i+1}"><b class="n">${N(i+1)}</b><span><b>${L(b[0])}</b><span class="body">${L(b[1])}</span></span></button>`).join('')}</div></div>`);
+  ${fold(['The budget ladder','سلّم التوفير'],`<p class="muted">${L(["Start where you are. Tap your step, and climb when you're ready.",'ابدأي من مكانك. دوسي على خطوتك، واطلعي لما تكوني جاهزة.'])}</p>
+   <div style="display:flex;flex-direction:column;gap:8px">${BL.map((b,i)=>`<button class="lvl" type="button" data-bl="${i+1}" aria-pressed="${S.budget===i+1}"><b class="n">${N(i+1)}</b><span><b>${L(b[0])}</b><span class="body">${L(b[1])}</span></span></button>`).join('')}</div>`,bOpen)}`);
   $('photo').addEventListener('change',onPhoto);
   $('shuffle').addEventListener('click',()=>{genPal=genCombo();const c=genPal[2];tryOn=Object.assign({},tryOn,{h:c[0],t:c[1],b:c[2],g:c[3]});renderStyle()});
   const target=tryOn;requestAnimationFrame(()=>requestAnimationFrame(()=>paintGirl(target)));
@@ -804,7 +814,7 @@ function styleFinderHTML(){
   const base=safeHex(S.colour),cn=nearest(base)[0].toLowerCase();
   const links=[[['Modest outfit ideas','أفكار لبس محتشم'],'modest outfit ideas hijab'],[['Hijab styles','ربطات طرح'],'hijab styles tutorial'],[[`${nearest(base)[0]} outfits`,`لبس ${nearest(base)[1]}`],`${cn} modest outfit hijab`],[['Modest capsule wardrobe','كابسول محتشم'],'modest capsule wardrobe'],[['Modest gym wear','لبس جيم محتشم'],'modest activewear hijab gym'],[['Eid and occasion looks','لبس العيد والمناسبات'],'modest eid outfit']];
   return `<div class="card">${ttl(['Find your own style','لاقي ستايلك'])}
-   <ol class="steps">${[['Save 20 looks you love on Pinterest, without overthinking.','احفظي ٢٠ لوك بتحبيهم على بنترست من غير تفكير كتير.'],['Look at them together: which colours, shapes and hijab styles keep repeating?','بصّي عليهم مع بعض: أنهي ألوان وقصّات وربطات بتتكرر؟'],['Pick three words for your style, like soft, classic and sporty.','اختاري تلات كلمات لستايلك، زي ناعم، وكلاسيك، وسبور.'],['Try one look this week with what you already own.','جربي لوك واحد الأسبوع ده من اللي عندك.']].map(x=>`<li>${L(x)}</li>`).join('')}</ol>
+   <details class="sub"><summary>${L(['How to find your style','إزاي تلاقي ستايلك'])}</summary><ol class="steps">${[['Save 20 looks you love on Pinterest, without overthinking.','احفظي ٢٠ لوك بتحبيهم على بنترست من غير تفكير كتير.'],['Look at them together: which colours, shapes and hijab styles keep repeating?','بصّي عليهم مع بعض: أنهي ألوان وقصّات وربطات بتتكرر؟'],['Pick three words for your style, like soft, classic and sporty.','اختاري تلات كلمات لستايلك، زي ناعم، وكلاسيك، وسبور.'],['Try one look this week with what you already own.','جربي لوك واحد الأسبوع ده من اللي عندك.']].map(x=>`<li>${L(x)}</li>`).join('')}</ol></details>
    <p style="font-weight:600">${L(['Get inspired on Pinterest','اتلهمي من بنترست'])}</p>
    <div class="row">${links.map(x=>`<a class="opt pinl" href="${pin(x[1])}" target="_blank" rel="noopener">${L(x[0])} ↗</a>`).join('')}</div></div>`;
 }
@@ -816,7 +826,7 @@ function capsuleHTML(){
     return chk(`data-cown="${k}"`,own[k],`<span style="display:flex;align-items:center;gap:8px"><i class="dot" style="background:${sw(it[0])}"></i>${name}</span>`)}).join('')}</div>`).join('');
   return `<div class="card">${ttl(['Capsule wardrobe','دولاب الكابسول'])}
    <p class="muted">${L(['A capsule wardrobe is a small set of pieces in a few colours that all go together. Fewer clothes, less stress, more outfits, and much kinder on your wallet.','الكابسول وارد روب يعني دولاب صغير فيه قطع قليلة بألوان معدودة، وكلهم بيتنسقوا مع بعض. هدوم أقل، توتر أقل، لبسات أكتر، وفلوس أقل.'])}</p>
-   <ul>${[['Pick 2 neutrals, 1 light shade and 1 accent colour.','اختاري لونين محايدين، ولون فاتح، ولون مميز واحد.'],['Every top should work with every bottom.','كل بلوزة لازم تمشي مع كل بنطلون أو جيبة.'],['Let your hijabs carry the colour and the prints.','خلّي الطرح هي اللي فيها الألوان والطبعات.'],['Tick what you already own, and only buy the gaps, slowly.','علّمي على اللي عندك، واشتري الناقص بس، بالراحة.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul>
+   <details class="sub"><summary>${L(['How it works','بيشتغل إزاي'])}</summary><ul>${[['Pick 2 neutrals, 1 light shade and 1 accent colour.','اختاري لونين محايدين، ولون فاتح، ولون مميز واحد.'],['Every top should work with every bottom.','كل بلوزة لازم تمشي مع كل بنطلون أو جيبة.'],['Let your hijabs carry the colour and the prints.','خلّي الطرح هي اللي فيها الألوان والطبعات.'],['Tick what you already own, and only buy the gaps, slowly.','علّمي على اللي عندك، واشتري الناقص بس، بالراحة.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul></details>
    <p style="font-weight:600">${L(['Choose your capsule colours','اختاري ألوان الكابسول'])}</p>
    <div class="row">${Object.entries(CAPS).map(([k,v])=>`<button class="opt" type="button" data-cp="${k}" aria-pressed="${k===ck}"><span style="display:inline-flex;gap:3px;margin-inline-end:8px;vertical-align:middle">${v[1].map(c=>`<i class="dot" style="width:12px;height:12px;background:${c}"></i>`).join('')}</span>${L(v[0])}</button>`).join('')}</div>
    <div class="sugg">${cols.map((c,i)=>`<div class="sg"><i style="background:${c}"></i><span>${cname(c)}<small>${L([['Main neutral','لون أساسي محايد'],['Second neutral','لون محايد تاني'],['Light shade','لون فاتح'],['Accent','اللون المميز']][i])}</small></span></div>`).join('')}</div>
@@ -919,13 +929,10 @@ function renderHealth(){
    <div style="display:flex;flex-direction:column;gap:10px">${x[3].map((w,i)=>{const id=cur+i+'-'+tk;return `<div class="wk">${chk(`data-wk="${id}"`,S.wk[id],`<b>${L(w[0])}</b>`,S.wk[id]?L(['Done today, well done','خلصتيه النهارده، برافو عليكي']):L(['Tick when you finish it today','علّمي عليه لما تخلّصيه النهارده']))}<ul>${w[1].map(s=>`<li>${L(s)}</li>`).join('')}</ul></div>`}).join('')}</div>
    <p class="note">${L(['Warm up before every session, go at your own pace, and stop if something hurts. If you have a health condition, check with a professional first.','سخّني قبل كل تمرين، امشي على قد طاقتك، ووقفي لو حاجة وجعتك. لو عندك أي مشكلة صحية، اسألي متخصص الأول.'])}</p></div>
   ${timetableHTML()}
-  <div class="card">${ttl(['What is Hyrox?','يعني إيه هايروكس؟'])}
-   <p class="muted">${L(['A fitness race: 8 rounds of a 1 km run, each followed by one workout station, in this order.','سباق لياقة: ٨ جولات، كل جولة ١ كم جري وبعدها محطة تمرين، بالترتيب ده.'])}</p>
-   <div class="stations">${st.map((s,i)=>`<span>${N(i+1)}. ${L(s)}</span>`).join('')}</div></div>
-  <div class="card">${ttl(['Your first gym visit','أول مرة في الجيم'])}
-   <ul>${[['Go at a quieter time, like mid-morning or early afternoon, or ask about women-only hours.','روحي في وقت هادي، زي الصبح متأخر أو بعد الضهر، أو اسألي لو فيه مواعيد للبنات بس.'],['Write your plan in your notes before you go so you always know your next move.','اكتبي خطتك في النوتس قبل ما تروحي عشان دايماً تعرفي هتعملي إيه بعدها.'],["A water bottle and a small towel are all you need. Headphones can help you feel settled on your first visits, then slowly try training without them and find your own focus and rhythm.",'إزازة مية وفوطة صغيرة، وده كفاية. السماعات ممكن تساعدك تحسي براحة في أول كام مرة، وبعدين جربي بالراحة تتمرني من غيرها وتلاقي تركيزك وإيقاعك الخاص.'],['Start on machines: they guide the movement and feel less exposed than free weights.','ابدأي بالأجهزة: بتوجّه الحركة وبتحسسك براحة أكتر من الأوزان الحرة.'],["Ask the staff for a quick induction. It's usually free and it's their job.",'اطلبي من حد من الجيم يعرّفك على الأجهزة. غالباً ببلاش وده شغلهم.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul></div>
-  <div class="card">${ttl(['What to wear','ألبس إيه؟'])}
-   <ul>${[['Sports or jersey hijab that tucks in, so nothing shifts when you move','طرحة سبور أو جيرسيه بتدخل كويس عشان متتحركش'],['Long, loose long-sleeve top, ideally past the hips','بلوزة واسعة بكم طويل، ويا ريت نازلة تحت الوسط'],['Wide-leg joggers or loose training trousers','بنطلون رياضي واسع'],['Supportive trainers you can walk and lift in','كوتشي مريح تمشي وترفعي بيه']].map(x=>`<li>${L(x)}</li>`).join('')}</ul></div>`);
+  ${fold(['What is Hyrox?','يعني إيه هايروكس؟'],`<p class="muted">${L(['A fitness race: 8 rounds of a 1 km run, each followed by one workout station, in this order.','سباق لياقة: ٨ جولات، كل جولة ١ كم جري وبعدها محطة تمرين، بالترتيب ده.'])}</p>
+   <div class="stations">${st.map((s,i)=>`<span>${N(i+1)}. ${L(s)}</span>`).join('')}</div>`)}
+  ${fold(['Your first gym visit','أول مرة في الجيم'],`<ul>${[['Go at a quieter time, like mid-morning or early afternoon, or ask about women-only hours.','روحي في وقت هادي، زي الصبح متأخر أو بعد الضهر، أو اسألي لو فيه مواعيد للبنات بس.'],['Write your plan in your notes before you go so you always know your next move.','اكتبي خطتك في النوتس قبل ما تروحي عشان دايماً تعرفي هتعملي إيه بعدها.'],["A water bottle and a small towel are all you need. Headphones can help you feel settled on your first visits, then slowly try training without them and find your own focus and rhythm.",'إزازة مية وفوطة صغيرة، وده كفاية. السماعات ممكن تساعدك تحسي براحة في أول كام مرة، وبعدين جربي بالراحة تتمرني من غيرها وتلاقي تركيزك وإيقاعك الخاص.'],['Start on machines: they guide the movement and feel less exposed than free weights.','ابدأي بالأجهزة: بتوجّه الحركة وبتحسسك براحة أكتر من الأوزان الحرة.'],["Ask the staff for a quick induction. It's usually free and it's their job.",'اطلبي من حد من الجيم يعرّفك على الأجهزة. غالباً ببلاش وده شغلهم.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul>`)}
+  ${fold(['What to wear','ألبس إيه؟'],`<ul>${[['Sports or jersey hijab that tucks in, so nothing shifts when you move','طرحة سبور أو جيرسيه بتدخل كويس عشان متتحركش'],['Long, loose long-sleeve top, ideally past the hips','بلوزة واسعة بكم طويل، ويا ريت نازلة تحت الوسط'],['Wide-leg joggers or loose training trousers','بنطلون رياضي واسع'],['Supportive trainers you can walk and lift in','كوتشي مريح تمشي وترفعي بيه']].map(x=>`<li>${L(x)}</li>`).join('')}</ul>`)}`);
 }
 
 function renderJournal(){
@@ -987,7 +994,7 @@ document.addEventListener('click',e=>{
   else if(b.id==='gShare'){S.gShare=S.gShare===false;b.setAttribute('aria-pressed',S.gShare!==false)}
   else if(b.id==='gAdd'){const sh=S.gShare!==false;if(addGoal($('gIn').value,gCat,sh)){renderToday();$('gMsg').textContent=sh&&onNetlify()?L(['Added, and shared as an idea. Thank you!','اتضاف، واتشارك كفكرة. شكراً ليكي!']):L(['Added','اتضاف'])}else changed=false}
   else if(ds.gi!==undefined){const g=GIDEAS[+ds.gi];addGoal(L(g[1]),g[0],false);renderToday();$('gMsg').textContent=L(['Added to your goals','اتضاف لأهدافك'])}
-  else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else showName()}}
+  else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else if(S.name)welcomeBack();else showName()}}
   else if(b.id==='obIback'){if(introI>0){introI--;drawIntro()}else if(introAgain){$('obI').hidden=true;$('ob').hidden=true}else{$('obI').hidden=true;$('ob1').hidden=false}changed=false}
   else if(b.id==='setIntro'){$('sheet').hidden=true;showIntro(true);changed=false}
   else if(b.id==='nameBtn'){showName(true)}
@@ -1021,8 +1028,8 @@ document.addEventListener('click',e=>{
   else if(ds.s){S.surahs[ds.s]=!S.surahs[ds.s];renderSurahs()}
   else if(ds.col){S.colour=ds.col;genPal=null;photoMsg='';renderStyle()}
   else if(ds.pf){pf=ds.pf;genPal=null;renderStyle();changed=false}
-  else if(ds.f){fCur=ds.f;renderStyle();changed=false}
-  else if(ds.bl){S.budget=+ds.bl;renderStyle()}
+  else if(ds.f){fCur=ds.f;fOpen=true;renderStyle();changed=false}
+  else if(ds.bl){S.budget=+ds.bl;bOpen=true;renderStyle()}
   else if(ds.cp){S.cap=ds.cp;renderStyle()}
   else if(ds.lk){const [kk,vv]=ds.lk.split(':');const k=lookState();k[kk]=kk==='skin'?+vv:vv;for(const x of document.querySelectorAll('[data-lk^="'+kk+':"]'))x.setAttribute('aria-pressed',x.dataset.lk===ds.lk);redrawGirl()}
   else if(ds.acc){const k=lookState();k.acc[ds.acc]=!k.acc[ds.acc];if(ds.acc==='tote'&&k.acc.tote)k.acc.cross=false;if(ds.acc==='cross'&&k.acc.cross)k.acc.tote=false;for(const x of document.querySelectorAll('[data-acc]'))x.setAttribute('aria-pressed',!!k.acc[x.dataset.acc]);redrawGirl()}
@@ -1163,6 +1170,7 @@ function merge(x){
 try{const l=localStorage.getItem('hilal');if(l)merge(JSON.parse(l))}catch(e){}
 applyLang();
 if(!(S.lang==='ar'||S.lang==='en')){$('ob').hidden=false;$('ob1').hidden=false;$('ob2').hidden=true}
+else if(!S.introSeen)showIntro();
 else if(!S.name)showName();
 else if(S.askName!==false&&!framed())welcomeBack();
 if(window.claude&&typeof window.claude.use==='function'){
