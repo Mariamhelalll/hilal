@@ -112,6 +112,13 @@ textarea{min-height:150px;resize:vertical;line-height:1.6}
 .mark{width:34px;height:34px;flex:none;border-radius:9px;box-shadow:0 6px 16px -8px #5A1830}
 .mark.big{width:52px;height:52px;border-radius:13px}
 .install{border:1.5px dashed var(--gold)}
+.ramadan{background:linear-gradient(135deg,#232650,#3B3A78);color:#fff}
+.ramadan .ttl h3{color:#fff}.ramadan .note{color:#C9C6EA}.ramadan .muted{color:#D9D6F2}
+.ramrow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ramn{font-family:Fraunces,serif;font-size:40px;line-height:1;color:var(--gold);font-weight:600}
+html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
+.soon{display:flex;flex-direction:column;gap:4px;background:#ffffff14;border:1px dashed var(--gold);border-radius:16px;padding:12px 14px;font-size:15px;color:#ECEAF8}
+.soon b{color:var(--gold);font-size:13px}
 .lk{display:flex;flex-direction:column;gap:10px}
 .lkt{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
 .opt.sm{min-height:40px;padding:0 13px;font-size:13px}
@@ -625,11 +632,18 @@ function score(){const d=day();return{n:d.p.filter(Boolean).length+TODO.filter(t
 function prayersHTML(){const d=day();return `<div class="prayers">${PR.map((p,i)=>`<button class="pr" type="button" data-p="${i}" aria-pressed="${d.p[i]}">${A()?`<span class="ar">${p[0]}</span>`:`<b style="font-size:13px">${p[1]}</b>`}</button>`).join('')}</div>`}
 function streak(){let s=0;const d=new Date(today);for(let i=0;i<365;i++){const x=S.days[key(d)];if(x&&Array.isArray(x.p)&&x.p.every(Boolean))s++;else if(i>0)break;d.setDate(d.getDate()-1)}return s}
 
+function ramadanHTML(){
+  const inR=H&&H.m===9;
+  const big=inR?L(['Ramadan Mubarak','رمضان كريم']):daysToRam!=null?L([`${daysToRam} days`,`${toAr(daysToRam)} يوم`]):'';
+  return `<div class="card ramadan">${ttl(['Road to Ramadan','الطريق لرمضان'])}
+   ${big?`<div class="ramrow"><span class="ramn">${big}</span>${inR?'':`<span class="muted">${L(['until Ramadan, in sha Allah','على رمضان، إن شاء الله'])}</span>`}</div>`:''}
+   <div class="soon"><b>${L(['Coming soon','قريباً'])}</b><span>${L(['A special Ramadan space is coming to Hilal before Ramadan, in sha Allah: daily goals, Quran plans, iftar-friendly workouts and more. Keep building your journey until then.','مساحة خاصة برمضان جاية على هلال قبل رمضان إن شاء الله: أهداف يومية، وخطط للقرآن، وتمارين تناسب بعد الفطار، وحاجات تانية. كمّلي رحلتك لحد ما تيجي.'])}</span></div>
+   <p class="note">${L(['Dates may differ by a day depending on your local moon sighting.','المواعيد ممكن تفرق يوم حسب رؤية الهلال عندك.'])}</p></div>`;
+}
 function journeyHTML(){
   const j=journey(),full=j.stage>=4,cur=full?null:STG[j.stage],dn=full?[]:(Array.isArray(j.done[jKey(j)])?j.done[jKey(j)]:[]);
-  const ram=(H&&H.m===9)?L(['Ramadan Mubarak','رمضان كريم']):(daysToRam!=null&&daysToRam<=120)?L([`Ramadan is in ${daysToRam} days, in sha Allah`,`رمضان بعد ${toAr(daysToRam)} يوم إن شاء الله`]):'';
   return `<div class="card">${ttl(['Your journey','رحلتك'])}
-   <div class="row"><span class="chip">${L([`Day ${jDay(j)}`,`اليوم ${toAr(jDay(j))}`])}</span><span class="chip">${L([`Moon ${j.cycle}`,`القمر ${toAr(j.cycle)}`])}</span>${ram?`<span class="chip">${ram}</span>`:''}</div>
+   <div class="row"><span class="chip">${L([`Day ${jDay(j)}`,`اليوم ${toAr(jDay(j))}`])}</span><span class="chip">${L([`Moon ${j.cycle}`,`القمر ${toAr(j.cycle)}`])}</span></div>
    <div class="ladder">${STG.map((st,i)=>`<div class="rung ${i===j.stage?'now':(i<j.stage?'done':'')}"><b style="color:inherit;font-size:14px">${N(i+1)}</b>${L(st[0])}</div>`).join('')}</div>
    ${full?`<h3>${L(['Your moon is full, ma sha Allah','قمرك كمل، ما شاء الله'])}</h3><p class="muted">${L(['You finished all four stages. Rest, celebrate, then begin a new moon whenever you are ready.','خلّصتي المراحل الأربعة. ارتاحي، واحتفلي بنفسك، وابدأي قمر جديد وقت ما تكوني جاهزة.'])}</p><button class="btn" type="button" id="newMoon">${L(['Start a new moon','ابدأي قمر جديد'])}</button>`
    :`<h3>${L(cur[1])}</h3><p class="muted">${L(cur[2])}</p><div>${cur[3].map((x,i)=>chk(`data-js="${i}"`,dn[i],L(x))).join('')}</div>`}
@@ -647,6 +661,7 @@ function renderToday(){
    <button class="namebtn" type="button" id="nameBtn">${L(['Change your name','غيّري اسمك'])}</button>
    <div class="row pillars">${PILL.map(p=>`<a href="#${p[0]}">${L(p[1])}</a>`).join('')}</div></div>
   <div class="hero"><div style="display:flex;flex-direction:column;gap:8px"><h2>${line}</h2><p>${L([`${n} of ${t} done today. Every good deed lights it up a little more.`,`خلصتي ${toAr(n)} من ${toAr(t)} النهارده. كل حاجة حلوة بتعمليها بتنوّره أكتر.`])}</p></div>${moonSVG(f)}</div>
+  ${ramadanHTML()}
   ${journeyHTML()}
   <div class="card">${ttl(['Today','النهارده'])}${prayersHTML()}
    <div>${TODO.map(x=>chk(`data-t="${x[0]}"`,d[x[0]],L(x[1]))).join('')}${chk(`data-go="deen"`,dhDone(),A()?`<span class="ar" style="font-size:18px">${GEN[dayDh][0]}</span>`:GEN[dayDh][1],L([`Dhikr of the day: ${d.dh['g-'+dayDh]||0} of ${GEN[dayDh][3]}`,`ذكر اليوم: ${toAr(d.dh['g-'+dayDh]||0)} من ${toAr(GEN[dayDh][3])}`]))}</div></div>
