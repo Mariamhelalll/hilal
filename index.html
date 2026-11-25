@@ -177,6 +177,11 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .ptr{display:flex;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}.ptr:first-child{border-top:0}
 .ptr.sunr{color:var(--muted);font-size:14px}.ptr.nx{background:var(--soft);color:var(--wine);font-weight:700}
 .ntl{display:flex;flex-direction:column}.ntr{display:flex;align-items:center;gap:8px}.ntr .check{flex:1}.ntr input[type=time]{font:15px 'DM Sans',sans-serif;padding:8px 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}.check:disabled{opacity:.5}
+.vtabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px;margin:14px 0 2px;border-radius:18px;background:var(--soft);-webkit-overflow-scrolling:touch}
+.vtabs::-webkit-scrollbar{display:none}
+.vtabs button{flex:1 0 auto;border:0;background:transparent;border-radius:14px;padding:10px 14px;font:600 14px 'DM Sans',Tajawal,sans-serif;color:var(--muted);cursor:pointer;white-space:nowrap;min-height:42px}
+.vtabs button[aria-selected=true]{background:var(--card);color:var(--wine);box-shadow:0 1px 4px #3c0a1922}
+.vthide{display:none!important}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -846,9 +851,38 @@ function reveal(el,fresh){
     x.classList.remove('in','instant');x.style.transitionDelay=Math.min(i,4)*80+'ms';
     if(io)io.observe(x);else x.classList.add('in')});
 }
+/* ---------- section sub-tabs: one thing at a time ---------- */
+const VTM=[
+ ['v-today','today',['Today','النهارده'],['Today','النهارده']],['v-today','moon',['My moon','قمري'],['My moon','قمري']],['v-today','ram',['Ramadan','رمضان'],['Road to Ramadan','الطريق لرمضان']],
+ ['v-deen','pray',['Prayer','الصلاة'],['Prayer times','مواعيد الصلاة','Prayers today','صلوات النهارده']],['v-deen','quran',['Mushaf','المصحف'],['The Holy Quran','المصحف الشريف']],['v-deen','adhkar',['Adhkar','الأذكار'],['Adhkar','الأذكار']],['v-deen','hifz',['Hifz','الحفظ'],['Hifz','الحفظ','A simple hifz method','طريقة الحفظ']],
+ ['v-style','insp',['Inspiration','إلهام'],['Find your own style','لاقي ستايلك']],['v-style','col',['Colours','الألوان'],['Hijab colour matcher','منسّق ألوان الطرحة']],['v-style','combo',['Combos','تنسيقات'],['Colour combos','تنسيقات ألوان']],['v-style','outfit',['Outfits','أفكار لبس'],['Outfit ideas','أفكار لبس']],['v-style','caps',['Capsule','الكابسول'],['Capsule wardrobe','دولاب الكابسول']],['v-style','budget',['Budget','التوفير'],['The budget ladder','سلّم التوفير']],
+ ['v-health','work',['Workouts','التمارين'],['What are you training for?','بتتمرني عشان إيه؟','Choose your level','اختاري مستواكي']],['v-health','plan',['Timetable','الجدول'],['My gym timetable','جدول تماريني']],['v-health','tips',['Tips','نصايح'],['Your first gym visit','أول مرة في الجيم','What to wear','ألبس إيه؟']],
+ ['v-journal','write',['Write','اكتبي'],['#jText']],['v-journal','list',['My entries','كتاباتك'],['Your entries','كتاباتك']]
+];
+const VT={};
+function cardTitle(c){if(c.querySelector('#jText'))return'#jText';const t=c.querySelector(':scope>.ttl, :scope>summary');return t?t.textContent.trim():''}
+function autoTabs(id){
+  const el=$(id);if(!el)return;const defs=VTM.filter(d=>d[0]===id);if(!defs.length)return;
+  const blocks=[...el.children].filter(c=>c.matches('.card,details.fold'));
+  const groups=[];
+  for(const c of blocks){const t=cardTitle(c);const d=defs.find(x=>x[3].includes(t));const g=d?d[1]:'x'+groups.length;let gr=groups.find(x=>x.g===g);
+    if(!gr){gr={g,label:d?d[2]:[t,t],els:[],o:d?defs.indexOf(d):99};groups.push(gr)}gr.els.push(c)}
+  if(groups.length<2)return;
+  groups.sort((a,b)=>a.o-b.o);
+  if(!groups.some(x=>x.g===VT[id]))VT[id]=groups[0].g;
+  const bar=document.createElement('div');bar.className='vtabs';bar.setAttribute('role','tablist');
+  bar.innerHTML=groups.map(x=>`<button type="button" role="tab" data-vtab="${x.g}" aria-selected="${x.g===VT[id]}">${L(x.label)}</button>`).join('');
+  blocks[0].before(bar);
+  const show=()=>{for(const x of groups)for(const c of x.els){const on=x.g===VT[id];c.classList.toggle('vthide',!on);if(on){c.classList.add('in');if(c.matches('details.fold'))c.open=true}}
+    for(const b of bar.children)b.setAttribute('aria-selected',b.dataset.vtab===VT[id]);
+    const s=bar.querySelector('[aria-selected=true]');if(s&&s.scrollIntoView)s.scrollIntoView({block:'nearest',inline:'center'})};
+  show();
+  bar.addEventListener('click',e=>{const b=e.target.closest('[data-vtab]');if(!b)return;VT[id]=b.dataset.vtab;show();
+    const r=bar.getBoundingClientRect();if(r.top<70||r.top>innerHeight*.6)window.scrollTo({top:window.scrollY+r.top-80,behavior:'smooth'})});
+}
 function setView(id,html){
   const el=$(id),fresh=!el.classList.contains('on')||!el._shown;
-  el.innerHTML=html;reveal(el,fresh&&el.classList.contains('on'));
+  el.innerHTML=html;autoTabs(id);reveal(el,fresh&&el.classList.contains('on'));
   if(!el.classList.contains('on'))el._shown=false;
   if(id==='v-today')animateMoon();
 }
@@ -910,7 +944,7 @@ function prayerTimesCard(){
 document.addEventListener('change',e=>{const t=e.target;if(t&&t.dataset&&t.dataset.ntt&&/^\d{2}:\d{2}$/.test(t.value)){ntPrefs()[t.dataset.ntt]=t.value;save();ntLater()}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='ptQ'){e.preventDefault();cityFind(e.target.value)}});
 setInterval(()=>{const e=document.querySelectorAll('.pnext');if(e.length){const t=nextLine();e.forEach(x=>x.textContent=t)}},60000);
-function prayersHTML(inD){const d=day(),t=ptimes(),n=t&&nextPrayer();return `${t?`<p class="pnext">${nextLine()}</p>`:''}<div class="prayers">${PR.map((p,i)=>`<button class="pr${n&&!n.tom&&n.i===i?' nx':''}" type="button" data-p="${i}" aria-pressed="${d.p[i]}">${A()?`<span class="ar">${p[0]}</span>`:`<b style="font-size:13px">${p[1]}</b>`}${t?`<small class="pt">${fmtT(t[PKEYS[i]])}</small>`:''}</button>`).join('')}</div>${t||inD?'':`<button class="opt sm" type="button" data-go="deen" style="align-self:flex-start">🕌 ${L(['Add prayer times for my location','ضيفي مواعيد الصلاة على حسب مكاني'])}</button>`}`}
+function prayersHTML(inD){const d=day(),t=ptimes(),n=t&&nextPrayer();return `${t?`<p class="pnext">${nextLine()}</p>`:''}<div class="prayers">${PR.map((p,i)=>`<button class="pr${n&&!n.tom&&n.i===i?' nx':''}" type="button" data-p="${i}" aria-pressed="${d.p[i]}">${A()?`<span class="ar">${p[0]}</span>`:`<b style="font-size:13px">${p[1]}</b>`}${t?`<small class="pt">${fmtT(t[PKEYS[i]])}</small>`:''}</button>`).join('')}</div>${t||inD?'':`<button class="opt sm" type="button" data-go="deen:pray" style="align-self:flex-start">🕌 ${L(['Add prayer times for my location','ضيفي مواعيد الصلاة على حسب مكاني'])}</button>`}`}
 function streak(){let s=0;const d=new Date(today);for(let i=0;i<365;i++){const x=S.days[key(d)];if(x&&Array.isArray(x.p)&&x.p.every(Boolean))s++;else if(i>0)break;d.setDate(d.getDate()-1)}return s}
 
 function ramadanHTML(){
@@ -1003,7 +1037,7 @@ function todayListHTML(){
   const d=day(),hs=habits(),gs=mg().goals,w=mWeek();
   const row=(h,i)=>{const cat=L((GCAT.find(c=>c[0]===(h.k?(h.k==='dhikr'?'deen':HPRE[h.k][0]):h.c))||GCAT[4])[1]);
     let b;
-    if(h.k==='dhikr')b=chk(`data-go="deen"`,dhDone(),A()?`<span class="ar" style="font-size:18px">${GEN[dayDh][0]}</span>`:GEN[dayDh][1],L([`Dhikr of the day: ${d.dh['g-'+dayDh]||0} of ${GEN[dayDh][3]}`,`ذكر اليوم: ${toAr(d.dh['g-'+dayDh]||0)} من ${toAr(GEN[dayDh][3])}`]));
+    if(h.k==='dhikr')b=chk(`data-go="deen:adhkar"`,dhDone(),A()?`<span class="ar" style="font-size:18px">${GEN[dayDh][0]}</span>`:GEN[dayDh][1],L([`Dhikr of the day: ${d.dh['g-'+dayDh]||0} of ${GEN[dayDh][3]}`,`ذكر اليوم: ${toAr(d.dh['g-'+dayDh]||0)} من ${toAr(GEN[dayDh][3])}`]));
     else if(h.k)b=chk(`data-t="${h.k}"`,d[h.k],L(HPRE[h.k][1]),cat);
     else b=chk(`data-ht="${h.id}"`,d.h&&d.h[h.id],esc(L(h.t)),cat);
     return hEdit?`<div class="goalrow">${b}<button class="del" type="button" data-hx="${i}" aria-label="${L(['Remove','امسحي'])}">×</button></div>`:b};
@@ -1392,7 +1426,8 @@ function genDrive(topic,lvl){
   const T=[['Week 1 · Discover','الأسبوع ١ · اكتشفي'],['Week 2 · Learn','الأسبوع ٢ · اتعلمي'],['Week 3 · Make','الأسبوع ٣ · اعملي'],['Week 4 · Share','الأسبوع ٤ · شاركي']];
   return [W1,W2,W3,W4].map((w,i)=>[L(T[i]),w.map(x=>L(x))]);
 }
-let dEdit=false;
+let dEdit=false,dWk=0;
+function wkBar(labels,counts){return `<div class="mwks">${labels.map((l,i)=>{const m=String(l).match(/^(.*?)\s*[·:]\s*(.+)$/);return `<button type="button" class="mwb${i===dWk?' sel':''}" data-dwk="${i}"><small>${L([`Week ${i+1}`,`الأسبوع ${toAr(i+1)}`])}</small>${esc(m?m[2]:l).slice(0,18)}<i>${N(counts[i][0])}/${N(counts[i][1])}</i></button>`}).join('')}</div>`}
 function customDriveHTML(){
   const c=S.dcustom;
   if(!c||!Array.isArray(c.plan)||dEdit==='new')return `<div class="card">${ttl(['Your own passion','شغفك انتي'])}
@@ -1402,7 +1437,9 @@ function customDriveHTML(){
    <button class="btn" type="button" id="dGen">✨ ${L(['Make my plan','اعمليلي الخطة'])}</button>
    ${c&&Array.isArray(c.plan)?`<button class="btn ghost" type="button" id="dCancel">${L(['Cancel','إلغاء'])}</button>`:''}</div>`;
   const st=(S.drive.custom&&typeof S.drive.custom==='object')?S.drive.custom:{};let total=0,done=0;
-  const weeks=c.plan.map((w,wi)=>`<div class="week">${dEdit?`<input type="search" class="dwt" data-dw="${wi}" value="${esc(w[0])}" maxlength="60">`:`<h4>${esc(w[0])}</h4>`}${w[1].map((s,si)=>{total++;const id=wi+'-'+si;if(st[id])done++;
+  c.plan.forEach((w,wi)=>w[1].forEach((_,si)=>{total++;if(st[wi+'-'+si])done++}));
+  const wk=Math.min(dWk,c.plan.length-1);
+  const weeks=wkBar(c.plan.map(w=>w[0]),c.plan.map((w,wi)=>[w[1].filter((_,si)=>st[wi+'-'+si]).length,w[1].length]))+c.plan.map((w,wi)=>wi!==wk?'':`<div class="week">${dEdit?`<input type="search" class="dwt" data-dw="${wi}" value="${esc(w[0])}" maxlength="60">`:`<h4>${esc(w[0])}</h4>`}${w[1].map((s,si)=>{const id=wi+'-'+si;
      return dEdit?`<div class="goalrow"><input type="search" class="dti" data-dt="${id}" value="${esc(s)}" maxlength="160"><button class="del" type="button" data-dx="${id}" aria-label="${L(['Remove','امسحي'])}">×</button></div>`:chk(`data-dc="${id}"`,st[id],esc(s))}).join('')}
      ${dEdit?`<button class="opt sm" type="button" data-dadd="${wi}">+ ${L(['Add a step','ضيفي خطوة'])}</button>`:''}</div>`).join('');
   return `<div class="card">${ttl([`My plan: ${c.topic}`,`خطتي: ${c.topic}`])}
@@ -1416,7 +1453,9 @@ function dCollect(){const c=S.dcustom;if(!c)return;document.querySelectorAll('[d
 function renderDrive(){
   const isC=S.passion==='custom';const cur=P[S.passion]?S.passion:'Fashion';const x=P[cur];
   const st=(S.drive[cur]&&typeof S.drive[cur]==='object')?S.drive[cur]:{};let total=0,done=0;
-  const weeks=x[2].map((w,wi)=>`<div class="week"><h4>${L(w[0])}</h4>${w[1].map((s,si)=>{total++;const id=wi+'-'+si;if(st[id])done++;return chk(`data-ds="${id}"`,st[id],L(s))}).join('')}</div>`).join('');
+  const wd=x[2].map((w,wi)=>w[1].filter((_,si)=>st[wi+'-'+si]).length);x[2].forEach((w,wi)=>{total+=w[1].length;done+=wd[wi]});
+  const wk=Math.min(dWk,x[2].length-1),w0=x[2][wk];
+  const weeks=wkBar(x[2].map(w=>L(w[0])),x[2].map((w,i)=>[wd[i],w[1].length]))+`<div class="week"><h4>${L(w0[0])}</h4>${w0[1].map((s,si)=>{const id=wk+'-'+si;return chk(`data-ds="${id}"`,st[id],L(s))}).join('')}</div>`;
   setView('v-drive',`
   <div style="margin-top:8px">${ttl(['Drive','الطموح'],'h1')}</div>
   <p class="muted" style="margin-top:6px">${L(['Bridge what you love with what you could become. Pick your passion for a full four-week walkthrough this month.','اربطي اللي بتحبيه باللي ممكن تبقيه. اختاري شغفك وخدي خطة كاملة لأربع أسابيع الشهر ده.'])}</p>
@@ -1699,7 +1738,7 @@ document.addEventListener('click',e=>{
   else if(b.id==='obChange'){$('obName').hidden=false;$('obGo').hidden=false;$('obKeep').hidden=true;$('obChange').hidden=true;$('obName').value='';$('obName').focus();changed=false}
   else if(ds.p!==undefined){const d=day();d.p[+ds.p]=!d.p[+ds.p];renderToday();if(curView()==='deen')renderDeen()}
   else if(ds.t){const d=day();d[ds.t]=!d[ds.t];renderToday()}
-  else if(ds.go){location.hash=ds.go;changed=false}
+  else if(ds.go){const [v,t]=ds.go.split(':');if(t)VT['v-'+v]=t;const r={deen:renderDeen,today:renderToday,style:renderStyle,health:renderHealth,journal:renderJournal}[v];if(t&&r)r();if(curView()===v)window.scrollTo(0,0);else location.hash=v;changed=false}
   else if(ds.js!==undefined){const j=journey(),k=jKey(j);if(!Array.isArray(j.done[k]))j.done[k]=[];j.done[k][+ds.js]=!j.done[k][+ds.js];
     if(STG[j.stage]&&STG[j.stage][3].every((_,i)=>j.done[k][i])){j.stage++;renderToday();replay()}else renderToday()}
   else if(b.id==='newMoon'){const j=journey();j.cycle++;j.stage=0;renderToday();replay()}
@@ -1730,7 +1769,8 @@ document.addEventListener('click',e=>{
   else if(ds.th){tryOn=Object.assign({},tryOn,{h:ds.th});for(const x of document.querySelectorAll('[data-th]'))x.setAttribute('aria-pressed',x.dataset.th===ds.th);paintGirl(tryOn);changed=false}
   else if(ds.tp){const c=ds.tp.split(',').filter(x=>/^#[0-9a-f]{6}$/i.test(x));if(c.length>=4){tryOn=Object.assign({},tryOn,{h:c[0],t:c[1],b:c[2],g:c[3]});paintGirl(tryOn);const g=document.querySelector('.tryon');if(g&&g.scrollIntoView)g.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}changed=false}
   else if(ds.cown){if(!S.capOwn||typeof S.capOwn!=='object')S.capOwn={};S.capOwn[ds.cown]=!S.capOwn[ds.cown];renderStyle()}
-  else if(ds.pa){S.passion=ds.pa;dEdit=false;renderDrive()}
+  else if(ds.dwk!==undefined){if(dEdit)dCollect();dWk=+ds.dwk;renderDrive();changed=false}
+  else if(ds.pa){S.passion=ds.pa;dEdit=false;dWk=0;renderDrive()}
   else if(ds.dlv){S.dlv=ds.dlv;for(const x of document.querySelectorAll('[data-dlv]'))x.setAttribute('aria-pressed',x.dataset.dlv===S.dlv)}
   else if(b.id==='dGen'){const t=$('dTopic').value.replace(/\s+/g,' ').trim().slice(0,80);if(t){S.dcustom={topic:t,plan:genDrive(t,S.dlv||'new')};S.drive.custom={};dEdit=false;renderDrive();replay()}else{$('dTopic').focus();changed=false}}
   else if(b.id==='dCancel'){dEdit=false;renderDrive();changed=false}
