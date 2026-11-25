@@ -182,6 +182,7 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .vtabs button{flex:1 0 auto;border:0;background:transparent;border-radius:14px;padding:10px 14px;font:600 14px 'DM Sans',Tajawal,sans-serif;color:var(--muted);cursor:pointer;white-space:nowrap;min-height:42px}
 .vtabs button[aria-selected=true]{background:var(--card);color:var(--wine);box-shadow:0 1px 4px #3c0a1922}
 .vthide{display:none!important}
+.aboutb{align-self:flex-start;margin-top:4px}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -1131,7 +1132,8 @@ function renderToday(){
   const ram=(H&&H.m===9)?L(['Ramadan Mubarak','رمضان كريم']):daysToRam!=null?L([`${daysToRam} days to Ramadan`,`فاضل ${toAr(daysToRam)} يوم على رمضان`]):'';
   setView('v-today',`
   <div class="intro"><p class="hi">${S.name?L([`Hey ${esc(S.name)}`,`أهلاً يا ${esc(S.name)}`]):L(['Hey lovely','أهلاً يا قمر'])}</p><p class="muted">${L(INTRO)}</p>
-      <div class="row pillars">${PILL.map(p=>`<a href="#${p[0]}">${L(p[1])}</a>`).join('')}</div></div>
+      <div class="row pillars">${PILL.map(p=>`<a href="#${p[0]}">${L(p[1])}</a>`).join('')}</div>
+      <button class="btn ghost aboutb" type="button" id="aboutH">🌙 ${L(['About Hilal and our aim','اعرفي أكتر عن هلال وهدفنا'])}</button></div>
   <div class="hero"><div style="display:flex;flex-direction:column;gap:8px"><h2>${line}</h2><p>${L([`${n} of ${t} done today. Your prayers, your daily list and this week's steps all light it up.`,`خلصتي ${toAr(n)} من ${toAr(t)} النهارده. صلواتك وقايمتك وخطوات الأسبوع، كلهم بينوّروه.`])}</p></div>${moonSVG(f)}</div>
   ${monthHTML()}
   ${todayListHTML()}
@@ -1487,6 +1489,12 @@ const HOME={
  cardio:[W('Home Cardio',B('Home Cardio')),[W('5 minutes marching on the spot to warm up','٥ دقايق مشي في المكان تسخين'),W('6 rounds: 40 seconds jumping jacks (or step jacks), 20 seconds rest',`٦ جولات: ٤٠ ثانية ${B('Jumping jacks')} (أو ${B('Step jacks')})، و٢٠ ثانية راحة`),W('6 rounds: 40 seconds high knees, 20 seconds rest',`٦ جولات: ٤٠ ثانية ${B('High knees')}، و٢٠ ثانية راحة`),W('5 minutes stretching','٥ دقايق استرتش')]],
  hyrox:[W('Home Hyrox Workout',B('Home Hyrox Workout')),[W('4 rounds:','٤ جولات:'),W('400 m run or 2 minutes jog on the spot','جري ٤٠٠ متر أو دقيقتين جري في المكان'),W('10 burpees (step back if needed)',`${B('Burpees')}: ١٠ (ممكن ترجعي رجل رجل)`),W('20 walking lunges',`${B('Walking lunges')}: ٢٠`),W('15 squat to press with a backpack or water bottles',`${B('Squat to press')}: ١٥ بشنطة أو إزايز مية`)]]
 };
+const OUT={
+ run:[W('Outdoor Run',B('Outdoor Run')),[W('5 minutes brisk walk to warm up','٥ دقايق مشي سريع تسخين'),W('20 minutes easy run, or run 2 minutes and walk 1 minute',`٢٠ دقيقة جري هادي، أو دقيقتين جري ودقيقة مشي`),W('5 minutes walk and stretch','٥ دقايق مشي واسترتش')]],
+ park:[W('Park Workout',B('Park Workout')),[W('4 rounds, using a bench:','٤ جولات، باستخدام دكة:'),W('10 step-ups each leg',`${B('Step-ups')}: ١٠ لكل رجل`),W('10 incline push-ups on the bench',`${B('Incline push-ups')} على الدكة: ١٠`),W('12 bench squats',`${B('Bench squats')}: ١٢`),W('10 bench dips (bend your knees to make it easier)',`${B('Bench dips')}: ١٠ (ثني ركبك يسهّلها)`),W('30 seconds plank',`${B('Plank')}: ٣٠ ثانية`)]],
+ hills:[W('Hill Sprints',B('Hill Sprints')),[W('10 minutes easy jog to warm up','١٠ دقايق جري خفيف تسخين'),W('6 to 8 × 20 seconds fast uphill, walk back down to recover',`٦ لـ ٨ مرات: ٢٠ ثانية جري سريع لفوق، وانزلي مشي ترتاحي`),W('10 minutes easy walk to cool down','١٠ دقايق مشي هادي تهدية')]],
+ hyrox:[W('Outdoor Hyrox Workout',B('Outdoor Hyrox Workout')),[W('4 rounds:','٤ جولات:'),W('400 m run','جري ٤٠٠ متر'),W('20 walking lunges',`${B('Walking lunges')}: ٢٠`),W('10 burpees',`${B('Burpees')}: ١٠`),W('30 seconds bear crawl',`${B('Bear crawl')}: ٣٠ ثانية`)]]
+};
 const MOB=[W('Mobility & Stretch',B('Mobility & Stretch')),[W('Cat-cow 10 times',`${B('Cat-cow')}: ١٠ مرات`),W('Hip flexor stretch 30 seconds each side',`${B('Hip flexor stretch')}: ٣٠ ثانية لكل جنب`),W('Hamstring stretch 30 seconds each side',`${B('Hamstring stretch')}: ٣٠ ثانية لكل جنب`),W("Child's pose 1 minute",`${B("Child's pose")}: دقيقة`)]];
 const WALK=[W('Brisk Walk',B('Brisk Walk')),[W('30 minutes brisk walk outside, or on a treadmill','٣٠ دقيقة مشي سريع بره، أو على المشاية')]];
 function planState(){
@@ -1494,7 +1502,7 @@ function planState(){
   const p=S.gplan;if(!PGOAL.some(x=>x[0]===p.goal))p.goal='start';if(!hyT()&&p.goal==='hyrox')p.goal='strong';
   if(!Array.isArray(p.days)||!p.days.length)p.days=[0,2,4];
   if(![20,30,45,60].includes(p.mins))p.mins=30;
-  if(p.place!=='gym'&&p.place!=='home')p.place='gym';
+  if(!['gym','home','out'].includes(p.place))p.place='gym';
   if(!p.custom||typeof p.custom!=='object')p.custom={};
   if(!p.done||typeof p.done!=='object')p.done={};
   return p;
@@ -1503,7 +1511,8 @@ function buildPlan(){
   const p=planState(),lv=LV[S.level]?S.level:'Beginner',w=LVX()[lv][3],gym=p.place==='gym';
   const g=w,A0=g[0],A1=g[1],A2=g[2],A3=g[3]||g[0];
   let rot;
-  if(!gym){rot={start:[HOME.full,WALK,MOB],strong:[HOME.full,HOME.cardio,HOME.full,MOB],run:[WALK,HOME.cardio,HOME.full,WALK],hyrox:[HOME.hyrox,HOME.full,HOME.cardio,HOME.hyrox]}[p.goal]}
+  if(p.place==='out'){rot={start:[OUT.park,WALK,MOB],strong:[OUT.park,OUT.run,OUT.park,MOB],run:[OUT.run,OUT.hills,OUT.run,OUT.park],hyrox:[OUT.hyrox,OUT.park,OUT.run,OUT.hills]}[p.goal]}
+  else if(!gym){rot={start:[HOME.full,WALK,MOB],strong:[HOME.full,HOME.cardio,HOME.full,MOB],run:[WALK,HOME.cardio,HOME.full,WALK],hyrox:[HOME.hyrox,HOME.full,HOME.cardio,HOME.hyrox]}[p.goal]}
   else if(lv==='Beginner')rot={start:[A0,A1,MOB],strong:[A0,A1,A0,MOB],run:[A1,A0,A1,MOB],hyrox:[A0,A1,A2,A1]}[p.goal];
   else if(lv==='Intermediate')rot={start:[A0,A1,MOB],strong:[A0,A1,A0,MOB],run:[A1,A0,A1,WALK],hyrox:[A0,A1,A2,A1]}[p.goal];
   else rot={start:[A3,A2,MOB],strong:[A3,A2,A3,MOB],run:[A2,A0,A2,A3],hyrox:[A0,A3,A1,A2]}[p.goal];
@@ -1524,7 +1533,7 @@ function timetableHTML(){
   return `<div class="card">${ttl(['My gym timetable','جدول تماريني'])}
    <p class="muted">${L(['Tell us what you want and Hilal builds your week. Change anything, and add your own sessions.','قوليلنا عايزة إيه وهلال يعملك جدول الأسبوع. غيّري اللي انتي عايزاه، وضيفي تمارينك انتي كمان.'])}</p>
    <div class="lkrow"><p class="lkt">${L(['My goal','هدفي'])}</p><div class="row">${PGOAL.filter(x=>hyT()||x[0]!=='hyrox').map(x=>`<button class="opt sm" type="button" data-pg="${x[0]}" aria-pressed="${p.goal===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
-   <div class="lkrow"><p class="lkt">${L(['Where','فين'])}</p><div class="row">${[['gym',['Gym','الجيم']],['home',['Home','البيت']]].map(x=>`<button class="opt sm" type="button" data-pp="${x[0]}" aria-pressed="${p.place===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
+   <div class="lkrow"><p class="lkt">${L(['Where','فين'])}</p><div class="row">${[['gym',['🏋️‍♀️ Gym','🏋️‍♀️ الجيم']],['home',['🏠 Home','🏠 البيت']],['out',['🌳 Outdoors','🌳 برّه في الهوا']]].map(x=>`<button class="opt sm" type="button" data-pp="${x[0]}" aria-pressed="${p.place===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
    <div class="lkrow"><p class="lkt">${L(['My training days','أيام التمرين'])}</p><div class="row">${DAYS.map((dn,d)=>`<button class="opt sm" type="button" data-pday="${d}" aria-pressed="${p.days.includes(d)}">${L(dn)}</button>`).join('')}</div></div>
    <div class="lkrow"><p class="lkt">${L(['Time per session','وقت التمرين'])}</p><div class="row">${[20,30,45,60].map(m=>`<button class="opt sm" type="button" data-pm="${m}" aria-pressed="${p.mins===m}">${L([`${m} min`,`${toAr(m)} دقيقة`])}</button>`).join('')}</div></div>
    <p class="note">${L([`Built for your level: ${L(LVX()[S.level]?LVX()[S.level][0]:LV.Beginner[0])}. Change your level above.`,`معمول على مستواكي: ${L(LVX()[S.level]?LVX()[S.level][0]:LV.Beginner[0])}. تقدري تغيّري المستوى فوق.`])}${short?' '+short:''}</p>
@@ -1704,6 +1713,7 @@ document.addEventListener('click',e=>{
   else if(b.id==='setLoc'){if(S.loc&&!S.locOff){S.locOff=true;S.loc=null;save();openSettings();renderToday();if(curView()==='deen')renderDeen();ntLater()}else{S.locOff=false;$('sheet').hidden=true;location.hash='deen';setTimeout(useMyLoc,300)}changed=false}
   else if(b.id==='setNt'){ntToggle();changed=false}
   else if(ds.nt){const P=ntPrefs(),n=NOTE.find(x=>x[0]===ds.nt);if(n){P[n[0]]=P[n[0]]?(n[2]?null:false):(n[2]||true);save();openSettings();ntLater()}changed=false}
+  else if(b.id==='aboutH'){showStory(true);changed=false}
   else if(b.id==='setIntro'){$('sheet').hidden=true;showStory(true);changed=false}
   else if(b.id==='nameBtn'){showName(true)}
   else if(b.id==='installBtn'){if(installEvt){installEvt.prompt();installEvt.userChoice.then(()=>{installEvt=null;renderToday()}).catch(()=>{})}changed=false}
