@@ -146,6 +146,30 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .mcc i.full{box-shadow:0 0 8px #D8B46Acc}
 .mcc.fut{background:transparent;border:1px dashed var(--line)}.mcc.fut i{opacity:.12}
 .mcc.now{background:var(--wineBg);color:#fff}.mcc.now small{color:#F4D7DC}
+.swc{position:relative;display:grid;place-items:center;font-size:18px;color:var(--wine);background:conic-gradient(#e57373,#ffd54f,#81c784,#64b5f6,#ba68c8,#e57373);overflow:hidden;cursor:pointer}
+.swc input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.bslots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.bslot{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;text-align:start;cursor:pointer}
+.bslot i{width:30px;height:30px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px #0002}.bslot span{display:flex;flex-direction:column;font-weight:600;font-size:14px}.bslot small{font-weight:400;color:var(--muted)}
+.bslot[aria-pressed=true]{border-color:var(--wine);background:var(--soft);box-shadow:inset 0 0 0 1px var(--wine)}
+.mtabs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border-radius:16px;background:var(--soft)}
+.mtabs button{border:0;background:transparent;border-radius:12px;padding:10px 4px;font:600 14px 'DM Sans',Tajawal,sans-serif;color:var(--muted);cursor:pointer;white-space:nowrap}
+.mtabs button[aria-selected=true]{background:var(--card);color:var(--wine);box-shadow:0 1px 4px #3c0a1922}
+.cnt{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--wine);color:#fff;font-size:11px;font-weight:700}
+.opt .cnt{background:color-mix(in srgb,var(--wine) 15%,transparent);color:var(--wine)}.opt[aria-pressed=true] .cnt{background:#fff3;color:inherit}
+.mbody{display:flex;flex-direction:column;gap:10px;animation:rise .3s ease}
+.mwks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.mwb{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 2px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 13px 'DM Sans',Tajawal,sans-serif;cursor:pointer}
+.mwb small{font-weight:500;font-size:10.5px;color:var(--muted)}.mwb i{font-style:normal;font-size:11px;color:var(--muted);font-weight:500}
+.mwb.cur{border-color:var(--gold)}.mwb.sel{background:var(--wineBg);border-color:var(--wineBg);color:#fff}.mwb.sel small,.mwb.sel i{color:#F4D7DC}
+.mgrp{display:flex;flex-direction:column}.mgrp .lkt{margin:6px 0 0}
+.mtiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mtile{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:12px;border-radius:16px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;text-align:start;cursor:pointer;min-height:112px}
+.mtile b{font-size:14.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.mtile .mgbar{padding:0;width:100%}.mtile small{color:var(--muted);font-size:12px}
+.mtile.sel{border-color:var(--wine);background:var(--soft);box-shadow:inset 0 0 0 1px var(--wine)}.mtile.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
+.mdet{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:16px;border:1.5px solid var(--wine);animation:rise .3s ease}
+.mdh{display:flex;flex-direction:column;align-items:flex-start;gap:4px}.mdet label{display:flex;flex-direction:column;gap:4px}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -242,6 +266,8 @@ quran-madina-html-aya-popup button.quran-madina-html-action{color:#fff!important
 .jtools{gap:8px}.jup{position:relative;display:inline-flex;align-items:center;overflow:hidden}.jup input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .opt.rec{background:var(--wine);color:#fff;border-color:var(--wine);animation:recp 1.4s ease-in-out infinite}
 @keyframes recp{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--wine) 25%,transparent)}}
+.jauds{display:flex;flex-direction:column;gap:6px}.jauds:empty{display:none}.jaud{display:flex;align-items:center;gap:6px}.jauds audio{width:100%;height:40px}
+.vlang{gap:6px;align-items:center}
 .jthumbs{display:flex;flex-wrap:wrap;gap:8px}.jthumbs:empty{display:none}
 .jth{position:relative}.jth img,.jimg{width:84px;height:84px;object-fit:cover;border-radius:12px;display:block;cursor:pointer;background:var(--soft)}
 .jth .del{position:absolute;top:-6px;inset-inline-end:-6px;width:26px;height:26px;font-size:16px;background:var(--card);box-shadow:0 1px 4px #0003}
@@ -891,7 +917,7 @@ const fmtD=d=>d.toLocaleDateString(A()?'ar-EG':'en-GB',{day:'numeric',month:'lon
 function dayFrac(k){const d=S.days[k];if(!d)return 0;const hs=habits();let n=Array.isArray(d.p)?d.p.filter(Boolean).length:0;
   for(const h of hs){if(h.k==='dhikr'){if(d.dh&&(d.dh['g-'+dayDh]||0)>=GEN[dayDh][3])n++}else if(h.k){if(d[h.k])n++}else if(d.h&&d.h[h.id])n++}
   return n/(5+hs.length)}
-let mChg=false,mView=null,hCat='deen',hEdit=false,mOpen=new Set(),mEdit=null;
+let mTb=null,mFilter='all',mSel=null,mMsg='',mChg=false,mView=null,hCat='deen',hEdit=false,mEdit=null;
 function habits(){
   if(!Array.isArray(S.habits))S.habits=[{k:'quran'},{k:'adhkar'},{k:'dhikr'},{k:'move'},{k:'journal'}];
   return S.habits;
@@ -945,33 +971,54 @@ function calHTML(st,e,vw){
 function monthHTML(){
   const m=mg(),gs=m.goals,w=mWeek(),vw=mView==null?w:mView;
   const tot=gs.length*4,dn=gs.reduce((a,g)=>a+g.sd.filter(Boolean).length,0);
-  const sugs=GSUG.map((x,i)=>[x,i]).filter(([x])=>x[0]===gCat&&!gs.some(g=>Array.isArray(g.t)&&g.t[0]===x[1][0]));
-  const goal=g=>{const op=mOpen.has(g.id),n=g.sd.filter(Boolean).length,cat=(GCAT.find(c=>c[0]===g.c)||GCAT[4]);
-    const ed=mEdit===g.id,lk=g.link&&MLINK[g.link];
-    return `<div class="mgoal${n===4?' done':''}"><button type="button" class="mgh" data-mo="${g.id}" aria-expanded="${op}"><span class="mgc mg-${g.c}">${L(cat[1])}</span><b>${esc(L(g.t))}</b><span class="mgn">${N(n)}/${N(4)}</span></button>
-     <div class="mgbar" aria-hidden="true">${g.sd.map((x,i)=>`<i class="${x?'on':''}${i===w?' now':''}"></i>`).join('')}</div>
-     ${op?`<div class="mgin">${ed?g.st.map((s,i)=>`<label class="note">${L([`Week ${i+1}`,`الأسبوع ${toAr(i+1)}`])}<input type="search" data-msi="${i}" maxlength="140" value="${esc(L(s))}"></label>`).join('')+`<div class="row"><button class="btn" type="button" data-msave="${g.id}">${L(['Save plan','احفظي الخطة'])}</button><button class="btn ghost" type="button" data-medit="">${L(['Cancel','إلغاء'])}</button></div>`
-      :g.st.map((s,i)=>chk(`data-mst="${g.id}-${i}"`,g.sd[i],esc(L(s)),L([`Week ${i+1} · ${STG[i][0][0]}`+(i===w?' · this week':''),`الأسبوع ${toAr(i+1)} · ${STG[i][0][1]}`+(i===w?' · الأسبوع ده':'')]))).join('')+
-      `<div class="row">${lk?`<button class="opt sm" type="button" data-mlink="${g.link}">${L(lk[0])} ${A()?'←':'→'}</button>`:''}<button class="opt sm" type="button" data-medit="${g.id}">✎ ${L(['Edit plan','عدّلي الخطة'])}</button><button class="opt sm" type="button" data-mdel="${g.id}">${L(['Remove','امسحي'])}</button></div>`}</div>`:''}</div>`};
-  const st=mStart(),e=mElapsed(),cyc=m.cycle||1;
+  const st=mStart(),e=mElapsed(),cyc=m.cycle||1,run=st&&e<28;
+  if(!mTb)mTb=gs.length?(run?'week':'goals'):'add';
+  if(!gs.length&&(mTb==='goals'||mTb==='week'))mTb='add';
+  const cats=GCAT.filter(c=>gs.some(g=>g.c===c[0]));
+  if(mFilter!=='all'&&!cats.some(c=>c[0]===mFilter))mFilter='all';
+  const fg=gs.filter(g=>mFilter==='all'||g.c===mFilter);
+  const catName=c=>L((GCAT.find(x=>x[0]===c)||GCAT[4])[1]);
+  const filt=cats.length>1?`<div class="row mfil">${[['all',['All','الكل'],gs.length],...cats.map(c=>[c[0],c[1],gs.filter(g=>g.c===c[0]).length])].map(c=>`<button class="opt sm" type="button" data-mf="${c[0]}" aria-pressed="${mFilter===c[0]}">${L(c[1])} <span class="cnt">${N(c[2])}</span></button>`).join('')}</div>`:'';
   const dateIn=(id,lbl,btn,bid)=>`<div class="mstart"><label class="note" for="${id}">${L(lbl)}</label><div class="row" style="flex-wrap:nowrap"><input type="date" id="${id}" value="${tk}"><button class="btn" type="button" id="${bid}">${L(btn)}</button></div></div>`;
-  let head;
-  if(!st)head=`<div class="mwk"><h3>${L(['When do you want to start?','عايزة تبدأي إمتى؟'])}</h3><p class="muted">${L(['Pick any day. Your moon is 4 weeks from that day: prepare, plant, water and harvest.','اختاري أي يوم. قمرك ٤ أسابيع من اليوم ده: تجهيز، وزرع، وسقي، وحصاد.'])}</p>${dateIn('mDate',['Start day','يوم البداية'],['Start my moon','ابدأي قمري'],'mGo')}</div>`;
-  else if(e>=28)head=`<div class="mwk done"><h3>${L(['Your moon is full, ma sha Allah 🌕','قمرك كمل، ما شاء الله 🌕'])}</h3><p class="muted">${L([`You finished ${dn} of ${tot} steps. Rest, celebrate, then start your next moon whenever you are ready.`,`خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة. ارتاحي، واحتفلي بنفسك، وابدأي قمرك الجاي وقت ما تحبي.`])}</p>${dateIn('mDate',['Next moon starts on','القمر الجاي يبدأ يوم'],['Start a new moon','ابدأي قمر جديد'],'mNew')}<button class="check" type="button" id="mKeep" aria-pressed="${S.mKeep!==false}"><span class="box"></span><span class="lbl">${L(["Bring the goals I didn't finish","كمّلي بالأهداف اللي مخلصتهاش"])}</span></button></div>`;
-  else head=calHTML(st,e,vw)+(e<0?`<p class="note">${L([`Your moon starts on ${fmtD(st)}.`,`قمرك هيبدأ يوم ${fmtD(st)}.`])}</p>`:'');
+  let top='';
+  if(!st)top=`<div class="mwk"><h3>${L(['When do you want to start?','عايزة تبدأي إمتى؟'])}</h3><p class="muted">${L(['Pick any day. Your moon is 4 weeks from that day: prepare, plant, water and harvest.','اختاري أي يوم. قمرك ٤ أسابيع من اليوم ده: تجهيز، وزرع، وسقي، وحصاد.'])}</p>${dateIn('mDate',['Start day','يوم البداية'],['Start my moon','ابدأي قمري'],'mGo')}</div>`;
+  else if(e>=28)top=`<div class="mwk done"><h3>${L(['Your moon is full, ma sha Allah 🌕','قمرك كمل، ما شاء الله 🌕'])}</h3><p class="muted">${L([`You finished ${dn} of ${tot} steps. Rest, celebrate, then start your next moon whenever you are ready.`,`خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة. ارتاحي، واحتفلي بنفسك، وابدأي قمرك الجاي وقت ما تحبي.`])}</p>${dateIn('mDate',['Next moon starts on','القمر الجاي يبدأ يوم'],['Start a new moon','ابدأي قمر جديد'],'mNew')}<button class="check" type="button" id="mKeep" aria-pressed="${S.mKeep!==false}"><span class="box"></span><span class="lbl">${L(["Bring the goals I didn't finish","كمّلي بالأهداف اللي مخلصتهاش"])}</span></button></div>`;
+  else if(gs.length)top=`<div class="bar" aria-hidden="true"><i style="width:${tot?dn/tot*100:0}%"></i></div><p class="note">${e>=0?L([`Day ${e+1} of 28 · week ${w+1}: ${STG[w][0][0]} · ${dn} of ${tot} steps done`,`اليوم ${toAr(e+1)} من ${toAr(28)} · الأسبوع ${toAr(w+1)}: ${STG[w][0][1]} · خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة`]):L([`Your moon starts on ${fmtD(st)}.`,`قمرك هيبدأ يوم ${fmtD(st)}.`])}</p>`;
+  const tabs=[['week',['This week','الأسبوع'],run&&gs.length],['cal',['Calendar','الكالندر'],run],['goals',[`My goals`,`أهدافي`],gs.length],['add',['+ Add','+ ضيفي'],1]].filter(t=>t[2]);
+  let body='';
+  if(mTb==='week'){
+    const ws=fg;
+    body=`<div class="mwks">${STG.map((s,i)=>`<button type="button" class="mwb${i===vw?' sel':''}${i===w?' cur':''}" data-mw="${i}"><small>${L([`Week ${i+1}`,`الأسبوع ${toAr(i+1)}`])}</small>${L(s[0])}<i>${N(gs.filter(g=>g.sd[i]).length)}/${N(gs.length)}</i></button>`).join('')}</div>
+    <div class="mwk"><h3>${L(STG[vw][1])}${vw===w?` <span class="chip">${L(['This week','الأسبوع ده'])}</span>`:''}</h3><p class="muted">${L(STG[vw][2])}</p></div>${filt}
+    ${mFilter==='all'&&cats.length>1?cats.map(c=>`<div class="mgrp"><p class="lkt">${L(c[1])}</p>${gs.filter(g=>g.c===c[0]).map(g=>chk(`data-mst="${g.id}-${vw}"`,g.sd[vw],esc(L(g.st[vw])),esc(L(g.t)))).join('')}</div>`).join(''):`<div class="mgrp">${ws.map(g=>chk(`data-mst="${g.id}-${vw}"`,g.sd[vw],esc(L(g.st[vw])),esc(L(g.t)))).join('')}</div>`}
+    ${vw===3?`<p class="note">${L(['Harvest week: write in your journal about what changed, and choose what you want for your next moon.','أسبوع الحصاد: اكتبي في يومياتك إيه اللي اتغير، واختاري عايزة إيه للقمر الجاي.'])}</p>`:''}`;
+  }else if(mTb==='cal'){
+    body=calHTML(st,e,vw)+`<button class="opt sm" type="button" id="mChg" style="align-self:flex-start">📅 ${L(['Change start day','غيّري يوم البداية'])}</button>${mChg?dateIn('mDate',['New start day','يوم البداية الجديد'],['Save','احفظي'],'mGo'):''}`;
+  }else if(mTb==='goals'){
+    if(mSel&&!gs.some(g=>g.id===mSel))mSel=null;
+    const g=gs.find(x=>x.id===mSel);
+    let det='';
+    if(g){const ed=mEdit===g.id,lk=g.link&&MLINK[g.link];
+      det=`<div class="mdet"><div class="mdh"><span class="mgc">${catName(g.c)}</span><h3>${esc(L(g.t))}</h3></div>
+      ${ed?g.st.map((s,i)=>`<label class="note">${L([`Week ${i+1} · ${STG[i][0][0]}`,`الأسبوع ${toAr(i+1)} · ${STG[i][0][1]}`])}<input type="search" data-msi="${i}" maxlength="140" value="${esc(L(s))}"></label>`).join('')+`<div class="row"><button class="btn" type="button" data-msave="${g.id}">${L(['Save plan','احفظي الخطة'])}</button><button class="btn ghost" type="button" data-medit="">${L(['Cancel','إلغاء'])}</button></div>`
+      :g.st.map((s,i)=>chk(`data-mst="${g.id}-${i}"`,g.sd[i],esc(L(s)),L([`Week ${i+1} · ${STG[i][0][0]}`+(run&&i===w?' · this week':''),`الأسبوع ${toAr(i+1)} · ${STG[i][0][1]}`+(run&&i===w?' · الأسبوع ده':'')]))).join('')+
+      `<div class="row">${lk?`<button class="opt sm" type="button" data-mlink="${g.link}">${L(lk[0])} ${A()?'←':'→'}</button>`:''}<button class="opt sm" type="button" data-medit="${g.id}">✎ ${L(['Edit plan','عدّلي الخطة'])}</button><button class="opt sm" type="button" data-mdel="${g.id}">${L(['Remove','امسحي'])}</button></div>`}</div>`}
+    body=`${filt}<div class="mtiles">${fg.map(x=>{const n=x.sd.filter(Boolean).length;return `<button type="button" class="mtile${x.id===mSel?' sel':''}${n===4?' done':''}" data-msel="${x.id}" aria-pressed="${x.id===mSel}"><span class="mgc">${catName(x.c)}</span><b>${esc(L(x.t))}</b><span class="mgbar" aria-hidden="true">${x.sd.map((d,i)=>`<i class="${d?'on':''}${run&&i===w?' now':''}"></i>`).join('')}</span><small>${N(n)}/${N(4)}</small></button>`}).join('')}</div>
+    ${det||`<p class="note">${L(['Tap a goal to see its 4-week plan.','دوسي على أي هدف عشان تشوفي خطته على ٤ أسابيع.'])}</p>`}`;
+  }else{
+    const sugs=GSUG.map((x,i)=>[x,i]).filter(([x])=>x[0]===gCat&&!gs.some(g=>Array.isArray(g.t)&&g.t[0]===x[1][0]));
+    body=`<p class="note">${L(['1. Choose an area','١. اختاري الجانب'])}</p>${catChips('data-gc',gCat)}
+    <p class="note">${L(['2. Pick an idea with a ready plan, or write your own','٢. اختاري فكرة ليها خطة جاهزة، أو اكتبي هدفك'])}</p>
+    <div class="row">${sugs.map(([x,i])=>`<button class="opt sm" type="button" data-ms="${i}">+ ${L(x[1])}</button>`).join('')||`<span class="note">${L(['All ideas here are added','كل الأفكار هنا اتضافت'])}</span>`}</div>
+    <div class="row" style="flex-wrap:nowrap"><input type="search" id="gIn" maxlength="120" placeholder="${L(['Or write your own goal','أو اكتبي هدفك انتي'])}" aria-label="${L(['New goal','هدف جديد'])}"><button class="btn" type="button" id="gAdd">${L(['Add','ضيفي'])}</button></div>
+    <p class="note" id="gMsg" role="status">${mMsg}</p>
+    <button class="check" type="button" id="gShare" aria-pressed="${S.gShare!==false}"><span class="box"></span><span class="lbl">${L(['Share my own goals anonymously as ideas for other girls','شاركي أهدافك من غير اسم كأفكار لبنات تانيين'])}<small>${L(['Only the goal text is shared, never your name.','بيتشارك نص الهدف بس، من غير اسمك أبداً.'])}</small></span></button>`;
+  }
   return `<div class="card">${ttl([`My moon${cyc>1?' '+cyc:''}`,`قمري${cyc>1?' '+toAr(cyc):''}`])}
-   <p class="muted">${L(['Every moon is 4 weeks that start on the day you choose: prepare, plant, water and harvest. Add as many goals as you like, and Hilal splits each one across the 4 weeks.','كل قمر ٤ أسابيع بتبدأ من اليوم اللي انتي تختاريه: تجهيز، وزرع، وسقي، وحصاد. ضيفي أهداف من غير عدد، وهلال يقسّم كل هدف على الأسابيع الأربعة.'])}</p>
-   ${head}
-   ${st&&e<28?`<button class="opt sm" type="button" id="mChg" style="align-self:flex-start">📅 ${L(['Change start day','غيّري يوم البداية'])}</button>${mChg?dateIn('mDate',['New start day','يوم البداية الجديد'],['Save','احفظي'],'mGo'):''}`:''}
-   ${st&&e<28?`<div class="mwk"><h3>${L(STG[vw][1])}${vw===w?` <span class="chip">${L(['This week','الأسبوع ده'])}</span>`:''}</h3><p class="muted">${L(STG[vw][2])}</p>
-    ${gs.length?`<div>${gs.map(g=>chk(`data-mst="${g.id}-${vw}"`,g.sd[vw],esc(L(g.st[vw])),esc(L(g.t)))).join('')}</div>`:`<p class="note">${L(['Add your first goal below and its steps for each week will show up here.','ضيفي أول هدف تحت، وخطوات كل أسبوع هتظهر هنا.'])}</p>`}
-    ${vw===3&&gs.length?`<p class="note">${L(['Harvest week: write in your journal about what changed, and choose what you want for your next moon.','أسبوع الحصاد: اكتبي في يومياتك إيه اللي اتغير، واختاري عايزة إيه للقمر الجاي.'])}</p>`:''}</div>`:''}
-   ${gs.length?`<div class="bar" aria-hidden="true"><i style="width:${tot?dn/tot*100:0}%"></i></div><p class="note">${(st&&e>=0&&e<28?L([`Day ${e+1} of 28 · ${dn} of ${tot} steps done`,`اليوم ${toAr(e+1)} من ${toAr(28)} · خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة`]):L([`${dn} of ${tot} steps done`,`خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة`]))}</p><p class="lkt">${L(['My goals','أهدافي'])}</p><div class="mgl">${gs.map(goal).join('')}</div>`:''}
-   <p class="lkt">${L(['Add a goal','ضيفي هدف'])}</p>${catChips('data-gc',gCat)}
-   <div class="row">${sugs.map(([x,i])=>`<button class="opt sm" type="button" data-ms="${i}">+ ${L(x[1])}</button>`).join('')}</div>
-   <div class="row" style="flex-wrap:nowrap"><input type="search" id="gIn" maxlength="120" placeholder="${L(['Or write your own goal','أو اكتبي هدفك انتي'])}" aria-label="${L(['New goal','هدف جديد'])}"><button class="btn" type="button" id="gAdd">${L(['Add','ضيفي'])}</button></div>
-   <button class="check" type="button" id="gShare" aria-pressed="${S.gShare!==false}"><span class="box"></span><span class="lbl">${L(['Share my own goals anonymously as ideas for other girls','شاركي أهدافك من غير اسم كأفكار لبنات تانيين'])}<small>${L(['Only the goal text is shared, never your name.','بيتشارك نص الهدف بس، من غير اسمك أبداً.'])}</small></span></button>
-   <p class="note" id="gMsg" role="status"></p></div>`;
+   <p class="muted">${L(['4 weeks from the day you choose: prepare, plant, water and harvest. Hilal splits each goal across them.','٤ أسابيع من اليوم اللي تختاريه: تجهيز، وزرع، وسقي، وحصاد. وهلال بيقسّم كل هدف عليهم.'])}</p>
+   ${top}
+   <div class="mtabs" role="tablist">${tabs.map(t=>`<button type="button" role="tab" data-mtb="${t[0]}" aria-selected="${mTb===t[0]}">${L(t[1])}${t[0]==='goals'?` <span class="cnt">${N(gs.length)}</span>`:''}</button>`).join('')}</div>
+   <div class="mbody">${body}</div></div>`;
 }
 function journeyHTML(){
   const j=journey(),full=j.stage>=4,cur=full?null:STG[j.stage],dn=full?[]:(Array.isArray(j.done[jKey(j)])?j.done[jKey(j)]:[]);
@@ -1145,10 +1192,43 @@ function renderSurahs(){
   $('surahs').innerHTML=ids.length?ids.map(i=>chk(`data-s="${i}"`,S.surahs[i],A()?`<span class="ar" style="font-size:19px">${N(i)}. سورة ${SAR[i-1]}</span>`:`${i}. Surah ${SEN[i-1]}`,L([`${AY[i-1]} ayat`,`${toAr(AY[i-1])} آية`]))).join(''):`<p class="note">${L(['No surahs here yet.','مفيش سور هنا لسه.'])}</p>`;
 }
 
+/* ---------- own combos: from a photo/collage or built by hand ---------- */
+let bPal=null,bSlot=0,bMsg='';
+const BSLOT=[['Hijab','الطرحة'],['Top','البلوزة'],['Bottom','البنطلون'],['Bag','الشنطة']];
+function paletteFrom(img,n){
+  const c=document.createElement('canvas');c.width=c.height=96;const x=c.getContext('2d');x.drawImage(img,0,0,96,96);
+  const px=x.getImageData(0,0,96,96).data,bk={};
+  for(let i=0;i<px.length;i+=4){if(px[i+3]<128)continue;const k=[px[i]>>3,px[i+1]>>3,px[i+2]>>3].join(',');bk[k]=(bk[k]||0)+1}
+  const cand=Object.entries(bk).sort((a,b)=>b[1]-a[1]).map(e=>rgb2hex(e[0].split(',').map(v=>v*8+4)));
+  const out=[];for(const h of cand){if(out.every(o=>dist(o,h)>55))out.push(h);if(out.length>=n)break}
+  for(const h of cand){if(out.length>=n)break;if(!out.includes(h))out.push(h)}
+  return out;
+}
+function onCollage(e){
+  const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+  const url=URL.createObjectURL(f),img=new Image();
+  img.onload=()=>{const p=paletteFrom(img,5);URL.revokeObjectURL(url);if(p.length){bPal=[p[0],p[1]||p[0],p[2]||p[0],p[3]||p[1]||p[0]];bMsg=L([`Found ${p.length} colours in your photo: ${p.map(cname).join(', ')}. Tap a slot to swap any of them.`,`لقينا ${toAr(p.length)} ألوان في صورتك: ${p.map(cname).join('، ')}. دوسي على أي خانة لو عايزة تغيّري لونها.`]);tryOn=Object.assign({},tryOn,{h:bPal[0],t:bPal[1],b:bPal[2],g:bPal[3]})}renderStyle()};
+  img.onerror=()=>{URL.revokeObjectURL(url);bMsg=L(['That photo could not be read. Try another one.','مقدرناش نقرا الصورة دي. جربي واحدة تانية.']);renderStyle()};
+  img.src=url;
+}
+function myPalHTML(){
+  if(!bPal)bPal=[tryOn.h,tryOn.t,tryOn.b,tryOn.g].map(safeHex);
+  const mine=Array.isArray(S.myPal)?S.myPal:[];
+  return `<details class="sub"${bPal&&bMsg?' open':''}><summary>${L(['Make your own combo','اعملي تنسيقك انتي'])}</summary>
+   <p class="muted">${L(['Upload a colour collage, a Pinterest palette or any photo you love and we pick out its colours. Or build one yourself: tap a slot, then tap a colour.','حطي كولاج ألوان، أو باليت من بنترست، أو أي صورة بتحبيها وإحنا نطلّع ألوانها. أو اعمليه بنفسك: دوسي على خانة، وبعدين على اللون.'])}</p>
+   <label class="upload"><input type="file" accept="image/*" id="collage">📷 ${L(['From a photo or colour collage','من صورة أو كولاج ألوان'])}</label>
+   ${bMsg?`<p class="note">${bMsg}</p>`:''}
+   <div class="bslots">${bPal.map((c,i)=>`<button type="button" class="bslot" data-bs="${i}" aria-pressed="${i===bSlot}"><i style="background:${c}"></i><span>${L(BSLOT[i])}<small>${cname(c)}</small></span></button>`).join('')}</div>
+   <p class="note">${L([`Choose a colour for: ${BSLOT[bSlot][0]}`,`اختاري لون: ${BSLOT[bSlot][1]}`])}</p>
+   <div class="swatches">${NAMED.map(c=>`<button class="swb" type="button" data-bc="${c[2]}" aria-label="${L([c[0],c[1]])}" style="background:${c[2]}"></button>`).join('')}<label class="swb swc" aria-label="${L(['Any colour','أي لون'])}"><input type="color" id="bAny" value="${bPal[bSlot]}">＋</label></div>
+   <div class="row"><button class="btn ghost tryb" type="button" data-tp="${bPal.join(',')}">${L(['Try it on','جربيه'])}</button><button class="btn" type="button" id="bSave">${L(['Save to my combos','احفظيه في تنسيقاتي'])}</button></div>
+   ${mine.length?`<p class="note">${L([`You have ${mine.length} saved combos. Find them under "My combos".`,`عندك ${toAr(mine.length)} تنسيقات محفوظة، هتلاقيهم في «تنسيقاتي».`])}</p>`:''}</details>`;
+}
 function renderStyle(){
   const base=safeHex(S.colour);
   if(!tryOn||tryOn.base!==base){tryOn=Object.assign(defaultLook(base),{base})}
-  let list=pf==='all'?[...PAL].sort((a,b)=>Math.min(...a[2].map(c=>dist(c,base)))-Math.min(...b[2].map(c=>dist(c,base)))).slice(0,3):PAL.filter(p=>p[1]===pf);
+  const mine=(Array.isArray(S.myPal)?S.myPal:[]).map((c,i)=>[[`My combo ${i+1}`,`تنسيقي ${toAr(i+1)}`],'m',c,i]);
+  let list=pf==='mine'?mine.slice().reverse():pf==='all'?[...PAL].sort((a,b)=>Math.min(...a[2].map(c=>dist(c,base)))-Math.min(...b[2].map(c=>dist(c,base)))).slice(0,3):PAL.filter(p=>p[1]===pf);
   if(genPal)list=[genPal,...list];
   const x=F[fCur];
   setView('v-style',`
@@ -1159,7 +1239,7 @@ function renderStyle(){
    <p class="muted">${L(['Show us your outfit: upload a photo and we\'ll find your colour and create combos for you, or tap the colour of your main piece.','ورّينا لبسك: حطي صورة وإحنا هنعرف لونك ونعملك تنسيقات، أو دوسي على لون القطعة الأساسية.'])}</p>
    <label class="upload"><input type="file" accept="image/*" id="photo">${L(['Upload an outfit photo','حطي صورة لبسك'])}</label>
    <p class="note">${photoMsg||L(["Your photo stays on your phone. It's only used to read its main colour.",'صورتك بتفضل على موبايلك، بنستخدمها بس عشان نعرف اللون الأساسي.'])}</p>
-   <div class="swatches" role="group" aria-label="${L(['Choose your outfit colour','اختاري لون لبسك'])}">${NAMED.map(c=>`<button class="swb" type="button" data-col="${c[2]}" aria-label="${L([c[0],c[1]])}" aria-pressed="${c[2]===base}" style="background:${c[2]}"></button>`).join('')}</div>
+   <div class="swatches" role="group" aria-label="${L(['Choose your outfit colour','اختاري لون لبسك'])}">${NAMED.map(c=>`<button class="swb" type="button" data-col="${c[2]}" aria-label="${L([c[0],c[1]])}" aria-pressed="${c[2]===base}" style="background:${c[2]}"></button>`).join('')}<label class="swb swc" aria-label="${L(['Any other colour','أي لون تاني'])}"${NAMED.some(c=>c[2]===base)?'':` aria-pressed="true" style="background:${base}"`}><input type="color" id="anyCol" value="${base}">＋</label></div>
    <div class="picked"><i style="background:${base}"></i><div><b>${cname(base)}</b><p class="note">${L(['Your outfit colour','لون لبسك'])}</p></div></div>
    <div class="tryon"><div class="girlbox">${girlSVG(tryPrev||tryOn)}</div><div style="display:flex;flex-direction:column;gap:8px"><p style="font-weight:600">${L(['Try it on','جربيه على الموديل'])}</p><div id="girlKey" style="display:flex;flex-direction:column;gap:6px"></div></div></div>
    <p class="note">${L(['Tap a hijab colour or a combo to see it on her, and make her look like you.','دوسي على لون طرحة أو تنسيق عشان تشوفيه عليها، وخلّيها شبهك.'])}</p>
@@ -1168,9 +1248,10 @@ function renderStyle(){
    <div class="sugg">${suggestions(base).map(s=>`<button class="sg tryb" type="button" data-th="${s[0]}" aria-pressed="${tryOn&&tryOn.h===s[0]}"><i style="background:${s[0]}"></i><span>${cname(s[0])}<small>${L(s[1])}</small></span></button>`).join('')}</div></div>
   <div class="card">${ttl(['Colour combos','تنسيقات ألوان'])}
    <p class="muted">${L(["Palettes from nature and from the looks everyone's loving, matched to your colour.",'ألوان من الطبيعة ومن الستايلات اللي الكل بيحبها، على حسب لونك.'])}</p>
-   <div class="row">${[['all',['For my colour','على لوني']],['n',['Nature','الطبيعة']],['t',['Trending','ترند']]].map(o=>`<button class="opt" type="button" data-pf="${o[0]}" aria-pressed="${o[0]===pf}">${L(o[1])}</button>`).join('')}</div>
-   <div style="display:flex;flex-direction:column;gap:10px">${list.map((p,pi)=>`<button type="button" class="pal tryb" data-tp="${p[2].join(',')}" style="border:0;padding:0;text-align:start;font:inherit;color:inherit;cursor:pointer;width:100%"><div class="strip" style="grid-template-columns:repeat(${p[2].length},1fr)">${p[2].map(c=>`<i style="background:${c}"></i>`).join('')}</div><div class="meta"><b>${L(p[0])}</b><small>${p[2].map(cname).join(A()?'، ':', ')}</small></div></button>`).join('')}</div>
-   <button class="btn ghost" id="shuffle" type="button">${L(['Generate a new combo','اعملي تنسيق جديد'])}</button></div>
+   <div class="row">${[['all',['For my colour','على لوني']],['n',['Nature','الطبيعة']],['t',['Trending','ترند']],['mine',[`My combos${mine.length?' ('+mine.length+')':''}`,`تنسيقاتي${mine.length?' ('+toAr(mine.length)+')':''}`]]].map(o=>`<button class="opt" type="button" data-pf="${o[0]}" aria-pressed="${o[0]===pf}">${L(o[1])}</button>`).join('')}</div>
+   <div style="display:flex;flex-direction:column;gap:10px">${list.map((p,pi)=>`<button type="button" class="pal tryb" data-tp="${p[2].join(',')}" style="border:0;padding:0;text-align:start;font:inherit;color:inherit;cursor:pointer;width:100%"><div class="strip" style="grid-template-columns:repeat(${p[2].length},1fr)">${p[2].map(c=>`<i style="background:${c}"></i>`).join('')}</div><div class="meta"><b>${L(p[0])}</b><small>${p[2].map(cname).join(A()?'، ':', ')}</small></div></button>${p[1]==='m'?`<button class="opt sm" type="button" data-pdel="${p[3]}" style="align-self:flex-end">🗑 ${L(['Delete','امسحي'])}</button>`:''}`).join('')||(pf==='mine'?`<p class="note">${L(['No saved combos yet. Make one below.','لسه مفيش تنسيقات محفوظة. اعملي واحد تحت.'])}</p>`:'')}</div>
+   <button class="btn ghost" id="shuffle" type="button">${L(['Generate a new combo','اعملي تنسيق جديد'])}</button>
+   ${myPalHTML()}</div>
   ${fold(['Outfit ideas','أفكار لبس'],`<p class="muted">${L(["Just ideas to spark some inspiration. Every girl has her own journey and her own style, so take what feels right for you.",'دي مجرد أفكار تلهمك. كل بنت ليها رحلتها وستايلها، فخدي اللي يريّحك.'])}</p>
    <div class="row">${Object.entries(F).map(([k,v])=>`<button class="opt" type="button" data-f="${k}" aria-pressed="${k===fCur}">${L(v[0])}</button>`).join('')}</div>
    <div class="week"><h4>${L(x[1])}</h4><ul>${x[2].map(i=>`<li>${L(i)}</li>`).join('')}</ul></div>`,fOpen)}
@@ -1178,6 +1259,9 @@ function renderStyle(){
   ${fold(['The budget ladder','سلّم التوفير'],`<p class="muted">${L(["Start where you are. Tap your step, and climb when you're ready.",'ابدأي من مكانك. دوسي على خطوتك، واطلعي لما تكوني جاهزة.'])}</p>
    <div style="display:flex;flex-direction:column;gap:8px">${BL.map((b,i)=>`<button class="lvl" type="button" data-bl="${i+1}" aria-pressed="${S.budget===i+1}"><b class="n">${N(i+1)}</b><span><b>${L(b[0])}</b><span class="body">${L(b[1])}</span></span></button>`).join('')}</div>`,bOpen)}`);
   $('photo').addEventListener('change',onPhoto);
+  $('anyCol').addEventListener('change',e=>{S.colour=safeHex(e.target.value);genPal=null;photoMsg='';renderStyle();save()});
+  $('collage').addEventListener('change',onCollage);
+  $('bAny').addEventListener('change',e=>{bPal[bSlot]=safeHex(e.target.value);bSlot=(bSlot+1)%4;renderStyle()});
   $('shuffle').addEventListener('click',()=>{genPal=genCombo();const c=genPal[2];tryOn=Object.assign({},tryOn,{h:c[0],t:c[1],b:c[2],g:c[3]});renderStyle()});
   const target=tryOn;requestAnimationFrame(()=>requestAnimationFrame(()=>paintGirl(target)));
 }
@@ -1384,15 +1468,34 @@ function addJPhotos(files){
   const st=$('jPhotoMsg');if(st)st.textContent=L(['Adding…','بنضيف…']);
   Promise.all([...files].slice(0,6).map(f=>shrinkImg(f).then(b=>({blob:b,url:URL.createObjectURL(b)})).catch(()=>null))).then(arr=>{for(const a of arr)if(a&&jImgs.length<6)jImgs.push(a);drawJThumbs();if(st)st.textContent=jImgs.length>=6?L(['Up to 6 photos per entry','لحد ٦ صور في الكتابة الواحدة']):''});
 }
+let jAuds=[],mrec=null,mrecT=0,mrecTimer=null;
+const VL=[['ar-EG',['Egyptian Arabic','عامية مصري']],['ar-SA',['Arabic (Fusha)','عربي فصحى']],['en-GB',['English','English']]];
+function vLang(){return VL.some(v=>v[0]===S.vlang)?S.vlang:(A()?'ar-EG':'en-GB')}
+function drawJAud(){const el=$('jAuds');if(!el)return;el.innerHTML=jAuds.map((x,i)=>`<div class="jaud"><audio controls src="${x.url}" preload="metadata"></audio><button type="button" class="del" data-jarm="${i}" aria-label="${L(['Remove voice note','شيلي الريكورد'])}">×</button></div>`).join('')}
+function toggleRec(){
+  const msg=$('jVoiceMsg'),btn=$('jRec');
+  if(mrec&&mrec.state==='recording'){mrec.stop();return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){msg.textContent=L(["Voice notes aren't supported in this browser.",'الريكورد مش مدعوم في المتصفح ده.']);return}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    const type=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+    const ch=[];mrec=type?new MediaRecorder(stream,{mimeType:type}):new MediaRecorder(stream);
+    mrec.ondataavailable=e=>{if(e.data&&e.data.size)ch.push(e.data)};
+    mrec.onstop=()=>{stream.getTracks().forEach(t=>t.stop());clearInterval(mrecTimer);const bl=new Blob(ch,{type:mrec.mimeType||type||'audio/webm'});if(bl.size&&jAuds.length<5){jAuds.push({blob:bl,url:URL.createObjectURL(bl)});drawJAud()}const b=$('jRec');if(b){b.classList.remove('rec');b.innerHTML='🎤 '+L(['Voice note','ريكورد صوتي'])}msg.textContent=L(['Voice note added. It is saved with your entry exactly as you said it.','الريكورد اتضاف، وهيتحفظ مع كتابتك بصوتك زي ما هو.'])};
+    mrec.start();mrecT=0;btn.classList.add('rec');
+    const tick=()=>{btn.innerHTML=`⏹ ${L(['Stop','وقفي'])} ${Math.floor(mrecT/60)}:${String(mrecT%60).padStart(2,'0')}`};tick();
+    mrecTimer=setInterval(()=>{mrecT++;tick();if(mrecT>=300&&mrec.state==='recording')mrec.stop()},1000);
+    msg.textContent=L(['Recording… talk freely. Up to 5 minutes.','بنسجّل… اتكلمي براحتك، لحد ٥ دقايق.']);
+  }).catch(()=>{msg.textContent=L(['Please allow the microphone to record a voice note.','اسمحي للمايك عشان تسجّلي.'])});
+}
 function toggleVoice(){
   const msg=$('jVoiceMsg');
   if(!SR){msg.textContent=L(["Voice typing isn't available in this browser. Tap the microphone on your keyboard instead, it works the same way.",'الكتابة بالصوت مش متاحة في المتصفح ده. دوسي على المايك اللي في الكيبورد بتاعك، وهيعمل نفس الحاجة.']);return}
   if(recOn&&recog){recog.stop();return}
-  recog=new SR();recog.lang=A()?'ar-EG':'en-GB';recog.continuous=true;recog.interimResults=true;
+  recog=new SR();recog.lang=vLang();recog.maxAlternatives=1;recog.continuous=true;recog.interimResults=true;
   const ta=$('jText'),base=jDraft?jDraft.replace(/\s*$/,' '):'';let fin='';
-  recog.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript+' ';else interim+=r[0].transcript}jDraft=base+fin+interim;if(ta)ta.value=jDraft};
+  recog.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript.trim()+' ';else interim+=r[0].transcript}jDraft=base+fin+interim;if(ta)ta.value=jDraft};
   recog.onerror=e=>{msg.textContent=e.error==='not-allowed'?L(['Please allow the microphone to use voice typing.','اسمحي للمايك عشان تكتبي بالصوت.']):L(["Couldn't hear you clearly. Try again.",'مسمعناكيش كويس، جربي تاني.'])};
-  recog.onend=()=>{recOn=false;jDraft=base+fin;if(ta)ta.value=jDraft;const b=$('jVoice');if(b){b.classList.remove('rec');b.innerHTML='🎙 '+L(['Speak','اتكلمي'])}if(!msg.textContent.includes('!'))msg.textContent=''};
+  recog.onend=()=>{recOn=false;jDraft=base+fin;if(ta)ta.value=jDraft;const b=$('jVoice');if(b){b.classList.remove('rec');b.innerHTML='🎙 '+L(['Speak to type','اتكلمي واتكتب'])}if(!msg.textContent.includes('!'))msg.textContent=''};
   try{recog.start();recOn=true;const b=$('jVoice');b.classList.add('rec');b.innerHTML='⏹ '+L(['Listening… tap to stop','بسمعك… دوسي عشان توقفي']);msg.textContent=L(['Speak naturally, your words will appear in the box.','اتكلمي عادي، وكلامك هيظهر في المربع.'])}catch(e){recOn=false}
 }
 function openPhoto(url){const v=document.createElement('div');v.className='jview';v.innerHTML=`<img src="${url}" alt="">`;v.addEventListener('click',()=>v.remove());document.body.append(v)}
@@ -1408,8 +1511,10 @@ function renderJournal(){
    <div class="row"><button class="btn ghost" id="jNext" type="button">${L(['Another question','سؤال تاني'])}</button></div>
    <label for="jText" class="note">${L(['Your answer','إجابتك'])}</label>
    <textarea id="jText" placeholder="${L(['Write freely, or tap Speak and just talk. Nobody else will read this.','اكتبي براحتك، أو دوسي «اتكلمي» واتكلمي عادي. محدش هيقرا ده غيرك.'])}">${esc(jDraft)}</textarea>
-   <div class="row jtools"><button class="opt sm${recOn?' rec':''}" type="button" id="jVoice">🎙 ${L(['Speak','اتكلمي'])}</button><label class="opt sm jup">📷 ${L(['Add photos','ضيفي صور'])}<input type="file" id="jFile" accept="image/*" multiple></label></div>
+   <div class="row jtools"><button class="opt sm" type="button" id="jRec">🎤 ${L(['Voice note','ريكورد صوتي'])}</button><button class="opt sm${recOn?' rec':''}" type="button" id="jVoice">🎙 ${L(['Speak to type','اتكلمي واتكتب'])}</button><label class="opt sm jup">📷 ${L(['Add photos','ضيفي صور'])}<input type="file" id="jFile" accept="image/*" multiple></label></div>
+   <div class="row vlang"><span class="note">${L(['I speak in:','باتكلم:'])}</span>${VL.map(v=>`<button class="opt sm" type="button" data-vl="${v[0]}" aria-pressed="${vLang()===v[0]}">${L(v[1])}</button>`).join('')}</div>
    <p class="note" id="jVoiceMsg" role="status"></p>
+   <div class="jauds" id="jAuds"></div>
    <div class="jthumbs" id="jThumbs"></div><p class="note" id="jPhotoMsg" role="status"></p>
    <p class="note">${L(['Photos of paper notes, pages from your notebook or moments from your day. They stay on this phone only.','صور ورق كتبتيه، أو صفحات من النوتبوك، أو لحظات من يومك. بيتحفظوا على الموبايل ده بس.'])}</p>
    <div class="lkrow"><p class="lkt">${L(['Save to day','احفظيها ليوم'])}</p><input type="date" id="jDate" value="${jDate||tk}" max="${tk}"></div>
@@ -1431,25 +1536,31 @@ function renderJournal(){
     const del=document.createElement('button');del.className='del';del.type='button';del.dataset.jdel=idx;del.textContent=L(['Delete','امسحي']);
     const ims=document.createElement('div');ims.className='jthumbs';
     if(Array.isArray(en.img))for(const k of en.img){const im=document.createElement('img');im.alt='';im.className='jimg';ims.append(im);IMGDB.get(k).then(bl=>{if(bl){const u=URL.createObjectURL(bl);im.src=u;im.addEventListener('click',()=>openPhoto(u))}else im.remove()}).catch(()=>im.remove())}
-    box.append(dt,qe);if(en.t)box.append(te);if(ims.childNodes.length)box.append(ims);box.append(del);list.append(box);
+    const aus=document.createElement('div');aus.className='jauds';
+    if(Array.isArray(en.aud))for(const k of en.aud){const au=document.createElement('audio');au.controls=true;au.preload='metadata';aus.append(au);IMGDB.get(k).then(bl=>{if(bl)au.src=URL.createObjectURL(bl);else au.remove()}).catch(()=>au.remove())}
+    box.append(dt,qe);if(en.t)box.append(te);if(aus.childNodes.length)box.append(aus);if(ims.childNodes.length)box.append(ims);box.append(del);list.append(box);
   });
   $('jText').addEventListener('input',e=>{jDraft=e.target.value});
   $('jNext').addEventListener('click',()=>{jQ=(jQ+1)%5;renderJournal()});
-  drawJThumbs();
+  drawJThumbs();drawJAud();
   $('jVoice').addEventListener('click',toggleVoice);
+  $('jRec').addEventListener('click',toggleRec);
+  $('jAuds').addEventListener('click',e=>{const r=e.target.closest('[data-jarm]');if(r){const x=jAuds.splice(+r.dataset.jarm,1)[0];if(x)URL.revokeObjectURL(x.url);drawJAud()}});
+  document.querySelectorAll('[data-vl]').forEach(b=>b.addEventListener('click',()=>{S.vlang=b.dataset.vl;save();document.querySelectorAll('[data-vl]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.vl===S.vlang))}));
   $('jFile').addEventListener('change',e=>{if(e.target.files&&e.target.files.length)addJPhotos(e.target.files);e.target.value=''});
   $('jThumbs').addEventListener('click',e=>{const r=e.target.closest('[data-jrm]');if(r){const x=jImgs.splice(+r.dataset.jrm,1)[0];if(x)URL.revokeObjectURL(x.url);drawJThumbs()}});
   $('jDate').addEventListener('change',e=>{jDate=/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)&&e.target.value<=tk?e.target.value:null});
   $('jSave').addEventListener('click',async()=>{
-    if(recOn&&recog)recog.stop();
-    const t=jDraft.trim();if(!t&&!jImgs.length)return;
+    if(recOn&&recog)recog.stop();if(mrec&&mrec.state==='recording'){mrec.stop();setTimeout(()=>$('jSave')&&$('jSave').click(),400);return}
+    const t=jDraft.trim();if(!t&&!jImgs.length&&!jAuds.length)return;
     const d=jDate||tk,ids=[];
     for(const x of jImgs){const k='j'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);try{await IMGDB.put(k,x.blob);ids.push(k)}catch(e){}}
     if(!Array.isArray(S.journal))S.journal=[];
-    const en={d,th:jT,q:jQ,t:t.slice(0,4000)};if(ids.length)en.img=ids;
+    const aids=[];for(const x of jAuds){const k='a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);try{await IMGDB.put(k,x.blob);aids.push(k)}catch(e){}}
+    const en={d,th:jT,q:jQ,t:t.slice(0,4000)};if(ids.length)en.img=ids;if(aids.length)en.aud=aids;
     S.journal.push(en);S.journal.sort((a,b)=>String(a.d)<String(b.d)?-1:String(a.d)>String(b.d)?1:0);if(S.journal.length>300)S.journal=S.journal.slice(-300);
     if(d===tk)day().journal=true;else{const o=S.days[d]=S.days[d]||{};o.journal=true}
-    jImgs.forEach(x=>URL.revokeObjectURL(x.url));jImgs=[];jDraft='';jDate=null;renderJournal();renderToday();save();
+    jImgs.forEach(x=>URL.revokeObjectURL(x.url));jImgs=[];jAuds.forEach(x=>URL.revokeObjectURL(x.url));jAuds=[];jDraft='';jDate=null;renderJournal();renderToday();save();
   });
 }
 
@@ -1468,9 +1579,11 @@ document.addEventListener('click',e=>{
   else if(ds.cx){const [d,i]=ds.cx.split('-').map(Number);const p=planState();if(Array.isArray(p.custom[d])){p.custom[d].splice(i,1);renderHealth()}}
   else if(ds.gc){gCat=ds.gc;renderToday();changed=false}
   else if(b.id==='gShare'){S.gShare=S.gShare===false;b.setAttribute('aria-pressed',S.gShare!==false)}
-  else if(b.id==='gAdd'){const t=$('gIn').value.replace(/\s+/g,' ').trim().slice(0,120);if(t){const g=newGoal(t,gCat);mg().goals.push(g);mOpen.add(g.id);const sh=S.gShare!==false;if(sh)shareGoal(t,gCat);renderToday();$('gMsg').textContent=L(['Added with a 4-week plan. Tap it to see the steps.','اتضاف ومعاه خطة ٤ أسابيع. دوسي عليه تشوفي الخطوات.'])}else changed=false}
-  else if(ds.ms!==undefined){const x=GSUG[+ds.ms];if(x){const g=newGoal(x[1],x[0],x);mg().goals.push(g);mOpen.add(g.id);renderToday()}}
-  else if(ds.mo){if(mOpen.has(ds.mo))mOpen.delete(ds.mo);else mOpen.add(ds.mo);renderToday();changed=false}
+  else if(b.id==='gAdd'){const t=$('gIn').value.replace(/\s+/g,' ').trim().slice(0,120);if(t){const g=newGoal(t,gCat);mg().goals.push(g);mSel=g.id;if(S.gShare!==false)shareGoal(t,gCat);mMsg=L([`Added «${t}» with a 4-week plan. Find it in My goals.`,`اتضاف «${t}» ومعاه خطة ٤ أسابيع. هتلاقيه في أهدافي.`]);renderToday()}else changed=false}
+  else if(ds.ms!==undefined){const x=GSUG[+ds.ms];if(x){const g=newGoal(x[1],x[0],x);mg().goals.push(g);mSel=g.id;mMsg=L([`Added «${x[1][0]}» with a 4-week plan. Find it in My goals.`,`اتضاف «${x[1][1]}» ومعاه خطة ٤ أسابيع. هتلاقيه في أهدافي.`]);renderToday()}}
+  else if(ds.mtb){mTb=ds.mtb;mMsg='';renderToday();changed=false}
+  else if(ds.mf){mFilter=ds.mf;renderToday();changed=false}
+  else if(ds.msel){mSel=mSel===ds.msel?null:ds.msel;mEdit=null;renderToday();changed=false;const d=document.querySelector('.mdet');if(d&&d.scrollIntoView)d.scrollIntoView({block:'nearest',behavior:'smooth'})}
   else if(ds.mst){const k=ds.mst.lastIndexOf('-'),id=ds.mst.slice(0,k),w=+ds.mst.slice(k+1),g=mg().goals.find(x=>x.id===id);if(g){g.sd[w]=!g.sd[w];renderToday()}}
   else if(ds.mdel){const m=mg();m.goals=m.goals.filter(x=>x.id!==ds.mdel);renderToday()}
   else if(ds.medit!==undefined){mEdit=ds.medit||null;renderToday();changed=false}
@@ -1536,6 +1649,10 @@ document.addEventListener('click',e=>{
   else if(ds.hf){hf=ds.hf;for(const x of document.querySelectorAll('[data-hf]'))x.setAttribute('aria-pressed',x.dataset.hf===hf);renderSurahs();changed=false}
   else if(ds.s){S.surahs[ds.s]=!S.surahs[ds.s];renderSurahs()}
   else if(ds.col){S.colour=ds.col;genPal=null;photoMsg='';renderStyle()}
+  else if(ds.bs!==undefined){bSlot=+ds.bs;renderStyle();changed=false}
+  else if(ds.bc){bPal[bSlot]=ds.bc;bSlot=(bSlot+1)%4;renderStyle();changed=false}
+  else if(b.id==='bSave'){if(!Array.isArray(S.myPal))S.myPal=[];S.myPal.push(bPal.slice());if(S.myPal.length>30)S.myPal.shift();bMsg=L(['Saved to your combos ✓','اتحفظ في تنسيقاتك ✓']);pf='mine';genPal=null;renderStyle()}
+  else if(ds.pdel!==undefined){if(Array.isArray(S.myPal)){S.myPal.splice(+ds.pdel,1);renderStyle()}}
   else if(ds.pf){pf=ds.pf;genPal=null;renderStyle();changed=false}
   else if(ds.f){fCur=ds.f;fOpen=true;renderStyle();changed=false}
   else if(ds.bl){S.budget=+ds.bl;bOpen=true;renderStyle()}
@@ -1560,7 +1677,7 @@ document.addEventListener('click',e=>{
   else if(ds.lv){S.level=ds.lv;renderHealth()}
   else if(ds.wk){S.wk[ds.wk]=!S.wk[ds.wk];renderHealth()}
   else if(ds.jt!==undefined){jT=+ds.jt;jQ=0;renderJournal();changed=false}
-  else if(ds.jdel!==undefined){if(Array.isArray(S.journal)){const en=S.journal.splice(+ds.jdel,1)[0];if(en&&Array.isArray(en.img))en.img.forEach(k=>IMGDB.del(k).catch(()=>{}));renderJournal()}}
+  else if(ds.jdel!==undefined){if(Array.isArray(S.journal)){const en=S.journal.splice(+ds.jdel,1)[0];if(en)[...(Array.isArray(en.img)?en.img:[]),...(Array.isArray(en.aud)?en.aud:[])].forEach(k=>IMGDB.del(k).catch(()=>{}));renderJournal()}}
   else changed=false;
   if(changed)save();
   const at=[...b.attributes].find(a=>a.name.startsWith('data-')&&a.name!=='data-go');
