@@ -131,6 +131,8 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .ilist{display:flex;flex-direction:column;gap:10px;text-align:start}.ilist div{background:#ffffff12;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column}.ilist b{color:var(--gold)}.ilist span{color:#D9D6F2}
 .slidein{animation:rise .5s cubic-bezier(.2,.75,.2,1)}
 .opt:disabled{opacity:.4;cursor:not-allowed}
+.ladder button.rung{border:0;font:inherit;cursor:pointer}.rung.cur:not(.now){box-shadow:inset 0 0 0 1.5px var(--wine)}
+.mstage{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:16px;background:var(--soft)}.mstage h3{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.mstage .check{background:transparent}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -864,7 +866,7 @@ const mKey=()=>mHij()?H.y+'-'+H.m:today.getFullYear()+'-g'+(today.getMonth()+1);
 const mWeek=()=>Math.min(3,Math.floor(((mHij()?H.d:today.getDate())-1)/7));
 const mName=()=>mHij()?(A()?MAR[H.m-1]:MEN[H.m-1]):today.toLocaleDateString(A()?'ar-EG':'en-GB',{month:'long'});
 const mLeft=()=>{if(mHij())return Math.max(0,(H.d<=29?29:30)-H.d);const e=new Date(today.getFullYear(),today.getMonth()+1,0).getDate();return e-today.getDate()};
-let hCat='deen',hEdit=false,mOpen=new Set(),mEdit=null;
+let mView=null,hCat='deen',hEdit=false,mOpen=new Set(),mEdit=null;
 function habits(){
   if(!Array.isArray(S.habits))S.habits=[{k:'quran'},{k:'adhkar'},{k:'dhikr'},{k:'move'},{k:'journal'}];
   return S.habits;
@@ -900,7 +902,6 @@ function todayListHTML(){
   const sugs=HSUG.map((x,i)=>[x,i]).filter(([x])=>x[0]===hCat&&!hs.some(h=>!h.k&&Array.isArray(h.t)&&h.t[0]===x[1][0]));
   return `<div class="card">${ttl(['Today','النهارده'])}${prayersHTML()}
    <div>${hs.map(row).join('')}</div>
-   ${gs.length?`<p class="lkt" style="margin-top:4px">${L(["This week's steps","خطوات الأسبوع ده"])}</p><div>${gs.map(g=>chk(`data-mst="${g.id}-${w}"`,g.sd[w],esc(L(g.st[w])),esc(L(g.t)))).join('')}</div>`:''}
    <button class="btn ghost" type="button" id="hEdit">${hEdit?L(['Done','تمام']):L(['Edit my list','عدّلي القايمة'])}</button>
    ${hEdit?`<div class="hadd"><p class="lkt">${L(['Add to my daily list','ضيفي لقايمتي اليومية'])}</p>${catChips('data-hc',hCat)}
     <div class="row">${sugs.map(([x,i])=>`<button class="opt sm" type="button" data-hs="${i}">+ ${L(x[1])}</button>`).join('')||`<span class="note">${L(['All ideas here are added','كل الأفكار هنا اتضافت'])}</span>`}</div>
@@ -908,7 +909,7 @@ function todayListHTML(){
     <p class="note">${L(['No limit: add as many as you like. Everything you tick lights up your moon.','من غير عدد: ضيفي اللي انتي عايزاه. كل حاجة بتعلّمي عليها بتنوّر قمرك.'])}</p></div>`:''}</div>`;
 }
 function monthHTML(){
-  const m=mg(),gs=m.goals,w=mWeek();
+  const m=mg(),gs=m.goals,w=mWeek(),vw=mView==null?w:mView;
   const tot=gs.length*4,dn=gs.reduce((a,g)=>a+g.sd.filter(Boolean).length,0);
   const sugs=GSUG.map((x,i)=>[x,i]).filter(([x])=>x[0]===gCat&&!gs.some(g=>Array.isArray(g.t)&&g.t[0]===x[1][0]));
   const goal=g=>{const op=mOpen.has(g.id),n=g.sd.filter(Boolean).length,cat=(GCAT.find(c=>c[0]===g.c)||GCAT[4]);
@@ -916,14 +917,18 @@ function monthHTML(){
     return `<div class="mgoal${n===4?' done':''}"><button type="button" class="mgh" data-mo="${g.id}" aria-expanded="${op}"><span class="mgc mg-${g.c}">${L(cat[1])}</span><b>${esc(L(g.t))}</b><span class="mgn">${N(n)}/${N(4)}</span></button>
      <div class="mgbar" aria-hidden="true">${g.sd.map((x,i)=>`<i class="${x?'on':''}${i===w?' now':''}"></i>`).join('')}</div>
      ${op?`<div class="mgin">${ed?g.st.map((s,i)=>`<label class="note">${L([`Week ${i+1}`,`الأسبوع ${toAr(i+1)}`])}<input type="search" data-msi="${i}" maxlength="140" value="${esc(L(s))}"></label>`).join('')+`<div class="row"><button class="btn" type="button" data-msave="${g.id}">${L(['Save plan','احفظي الخطة'])}</button><button class="btn ghost" type="button" data-medit="">${L(['Cancel','إلغاء'])}</button></div>`
-      :g.st.map((s,i)=>chk(`data-mst="${g.id}-${i}"`,g.sd[i],esc(L(s)),L([`Week ${i+1}`+(i===w?' · this week':''),`الأسبوع ${toAr(i+1)}`+(i===w?' · الأسبوع ده':'')]))).join('')+
+      :g.st.map((s,i)=>chk(`data-mst="${g.id}-${i}"`,g.sd[i],esc(L(s)),L([`Week ${i+1} · ${STG[i][0][0]}`+(i===w?' · this week':''),`الأسبوع ${toAr(i+1)} · ${STG[i][0][1]}`+(i===w?' · الأسبوع ده':'')]))).join('')+
       `<div class="row">${lk?`<button class="opt sm" type="button" data-mlink="${g.link}">${L(lk[0])} ${A()?'←':'→'}</button>`:''}<button class="opt sm" type="button" data-medit="${g.id}">✎ ${L(['Edit plan','عدّلي الخطة'])}</button><button class="opt sm" type="button" data-mdel="${g.id}">${L(['Remove','امسحي'])}</button></div>`}</div>`:''}</div>`};
   return `<div class="card">${ttl([`My moon this month · ${mName()}`,`قمر الشهر · ${mName()}`])}
    <div class="row" style="gap:6px">${[['g',['Calendar month','الشهر الميلادي']],['h',['Hijri month','الشهر الهجري']]].map(c=>`<button class="opt sm" type="button" data-mcal="${c[0]}" aria-pressed="${(mHij()?'h':'g')===c[0]}"${c[0]==='h'&&!hijOK()?' disabled':''}>${L(c[1])}</button>`).join('')}</div>
    ${H&&H.m===9?`<p class="note">${L(['Ramadan Mubarak! Ramadan has its own special space coming soon, so the month here follows the calendar month for now.','رمضان كريم! رمضان ليه مساحة خاصة جاية قريب، فالشهر هنا ماشي بالميلادي دلوقتي.'])}</p>`:mHij()?`<p class="note">${L(['The Hijri option runs until Ramadan, which will have its own space.','الهجري موجود لحد رمضان، ورمضان هيبقى ليه مساحة لوحده.'])}</p>`:''}
-   <p class="muted">${L(['What do you want to reach by the end of this month? Add as many goals as you like, and Hilal turns each one into a 4-week plan.','عايزة توصلي لإيه لحد آخر الشهر؟ ضيفي أهداف من غير عدد، وهلال يحوّل كل هدف لخطة على ٤ أسابيع.'])}</p>
+   <p class="muted">${L(['Every month is one moon with 4 weeks: prepare, plant, water and harvest. Add as many goals as you like, and Hilal splits each one across the 4 weeks.','كل شهر قمر، وفيه ٤ أسابيع: تجهيز، وزرع، وسقي، وحصاد. ضيفي أهداف من غير عدد، وهلال يقسّم كل هدف على الأسابيع الأربعة.'])}</p>
    ${S.mgPrev&&S.mgPrev.length?`<div class="week"><p>${L([`${S.mgPrev.length} goal(s) from last month are not finished yet. Carry them into this month?`,`فيه ${toAr(S.mgPrev.length)} هدف من الشهر اللي فات لسه مخلصوش. تكمّليهم الشهر ده؟`])}</p><div class="row" style="margin-top:8px"><button class="btn" type="button" id="mCarry">${L(['Yes, carry them','أيوه، كمّليهم'])}</button><button class="btn ghost" type="button" id="mCarryNo">${L(['Start fresh','ابدأي من جديد'])}</button></div></div>`:''}
-   ${gs.length?`<div class="bar" aria-hidden="true"><i style="width:${tot?dn/tot*100:0}%"></i></div><p class="note">${L([`Week ${w+1} of 4 · ${dn} of ${tot} steps done · ${mLeft()} days left`,`الأسبوع ${toAr(w+1)} من ${toAr(4)} · خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة · فاضل ${toAr(mLeft())} يوم`])}</p><div class="mgl">${gs.map(goal).join('')}</div>`:`<p class="note">${L(['No goals yet this month. Pick an idea below or write your own.','لسه مفيش أهداف الشهر ده. اختاري فكرة من تحت أو اكتبي هدفك.'])}</p>`}
+   <div class="ladder">${STG.map((st,i)=>`<button type="button" class="rung ${i===vw?'now':''}${i<w?' done':''}${i===w?' cur':''}" data-mw="${i}"><b style="color:inherit;font-size:13px">${L([`Week ${i+1}`,`الأسبوع ${toAr(i+1)}`])}</b>${L(st[0])}</button>`).join('')}</div>
+   <div class="mstage"><h3>${L(STG[vw][1])}${vw===w?` <span class="chip">${L(['This week','الأسبوع ده'])}</span>`:''}</h3><p class="muted">${L(STG[vw][2])}</p>
+    ${gs.length?`<div>${gs.map(g=>chk(`data-mst="${g.id}-${vw}"`,g.sd[vw],esc(L(g.st[vw])),esc(L(g.t)))).join('')}</div>`:`<p class="note">${L(['Add your first goal below and its steps for each week will show up here.','ضيفي أول هدف تحت، وخطوات كل أسبوع هتظهر هنا.'])}</p>`}
+    ${vw===3&&gs.length?`<p class="note">${L(['Harvest week: write in your journal about what changed, and choose what you want for next month.','أسبوع الحصاد: اكتبي في يومياتك إيه اللي اتغير، واختاري عايزة إيه للشهر الجاي.'])}</p>`:''}</div>
+   ${gs.length?`<div class="bar" aria-hidden="true"><i style="width:${tot?dn/tot*100:0}%"></i></div><p class="note">${L([`${dn} of ${tot} steps done · ${mLeft()} days left this month`,`خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة · فاضل ${toAr(mLeft())} يوم على آخر الشهر`])}</p><p class="lkt">${L(['My goals this month','أهدافي الشهر ده'])}</p><div class="mgl">${gs.map(goal).join('')}</div>`:''}
    <p class="lkt">${L(['Add a goal','ضيفي هدف'])}</p>${catChips('data-gc',gCat)}
    <div class="row">${sugs.map(([x,i])=>`<button class="opt sm" type="button" data-ms="${i}">+ ${L(x[1])}</button>`).join('')}</div>
    <div class="row" style="flex-wrap:nowrap"><input type="search" id="gIn" maxlength="120" placeholder="${L(['Or write your own goal','أو اكتبي هدفك انتي'])}" aria-label="${L(['New goal','هدف جديد'])}"><button class="btn" type="button" id="gAdd">${L(['Add','ضيفي'])}</button></div>
@@ -953,7 +958,6 @@ function renderToday(){
   ${monthHTML()}
   ${todayListHTML()}
   ${ramadanHTML()}
-  ${journeyHTML()}
   ${installHTML()}`);
 }
 
@@ -1346,6 +1350,7 @@ document.addEventListener('click',e=>{
   else if(ds.medit!==undefined){mEdit=ds.medit||null;renderToday();changed=false}
   else if(ds.msave){const g=mg().goals.find(x=>x.id===ds.msave);if(g){const box=b.closest('.mgin');box.querySelectorAll('[data-msi]').forEach(inp=>{const v=inp.value.replace(/\s+/g,' ').trim();if(v)g.st[+inp.dataset.msi]=v})}mEdit=null;renderToday()}
   else if(ds.mlink){const l=MLINK[ds.mlink];if(ds.mlink==='mushaf')openMushaf();else if(l)location.hash=l[1].slice(1);changed=false}
+  else if(ds.mw!==undefined){mView=+ds.mw===mWeek()?null:+ds.mw;renderToday();changed=false}
   else if(ds.mcal){if(ds.mcal!=='h'||hijOK()){const m=mg();S.mcal=ds.mcal;m.k=mKey();renderToday()}else changed=false}
   else if(b.id==='mCarry'){const m=mg();for(const g of S.mgPrev||[]){g.sd=[false,false,false,false];m.goals.push(g)}S.mgPrev=null;renderToday()}
   else if(b.id==='mCarryNo'){S.mgPrev=null;renderToday()}
