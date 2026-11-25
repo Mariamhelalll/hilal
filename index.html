@@ -119,6 +119,13 @@ textarea{min-height:150px;resize:vertical;line-height:1.6}
 html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .soon{display:flex;flex-direction:column;gap:4px;background:#ffffff14;border:1px dashed var(--gold);border-radius:16px;padding:12px 14px;font-size:15px;color:#ECEAF8}
 .soon b{color:var(--gold);font-size:13px}
+.sheet{position:fixed;inset:0;z-index:15;background:rgba(20,10,15,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet[hidden]{display:none}
+.sheetin{background:var(--bg);width:100%;max-width:460px;max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));animation:up .35s cubic-bezier(.2,.75,.2,1)}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.lang{display:inline-flex;align-items:center;gap:6px}
+.steps{margin:0;padding-inline-start:22px}.steps li{margin:5px 0}
+.pinl{display:inline-flex;align-items:center;text-decoration:none}
 .lk{display:flex;flex-direction:column;gap:10px}
 .lkt{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
 .opt.sm{min-height:40px;padding:0 13px;font-size:13px}
@@ -227,15 +234,18 @@ nav.tabs a[aria-current=page] svg{animation:pop .4s ease}
     <label for="obName" class="sr" id="ob2l"></label>
     <input id="obName" type="text" maxlength="30" autocomplete="given-name" enterkeyhint="go">
     <p class="oberr" id="obErr" role="status"></p>
+    <button type="button" class="obgo" id="obKeep" hidden></button>
     <button type="button" class="obgo" id="obGo"></button>
+    <button type="button" class="obback" id="obChange" hidden></button>
     <button type="button" class="obback" id="obBack"></button>
   </div>
 </div>
 
+<div class="sheet" id="sheet" hidden><div class="sheetin" role="dialog" aria-modal="true" aria-labelledby="setT"><div id="sheetBody"></div></div></div>
 <div class="app">
   <div class="top">
     <div class="logo" id="logo">Hilal</div>
-    <div class="side"><div class="date" id="dateLine"></div><button class="lang" id="langBtn" type="button"></button></div>
+    <div class="side"><div class="date" id="dateLine"></div><button class="lang" id="setBtn" type="button" aria-label="Settings"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span id="setLbl"></span></button></div>
   </div>
   <section class="view" id="v-today"></section>
   <section class="view" id="v-deen"></section>
@@ -523,49 +533,42 @@ function lookState(){
 }
 function girlSVG(o){
   const k=lookState(),sk=LOOK.skin[k.skin],bw=LOOK.body.find(x=>x[0]===k.body)[2],a=k.acc,st=k.style,fit=k.fit;
-  const T=`class="c-t" fill="${o.t}"`,Bt=`class="c-b" fill="${o.b}"`,Hh=`class="c-h" fill="${o.h}"`,G=`class="c-g" fill="${o.g}"`,sh='fill="#000" opacity=".1"';
-  const gold='#D8B46A';
+  const P=(c,d,extra)=>`<path class="c-${c}" fill="${o[c]}" d="${d}" ${extra||''}/><path d="${d}" fill="url(#fold)"/>`;
+  const sh='fill="#000" opacity=".09"',gold='#D8B46A',line='stroke="#000" stroke-opacity=".08" stroke-width="1.2" fill="none"';
   let body='';
-  // bottoms + long garments
-  if(fit==='trousers')body+=`<path ${Bt} d="M70 228 L100 228 L97 336 L60 336 Z M100 228 L130 228 L140 336 L103 336 Z"/><path d="M100 232 L100 330" stroke="#000" stroke-opacity=".12" stroke-width="2"/>`;
-  if(fit==='skirt')body+=`<path ${Bt} d="M66 198 L134 198 L152 334 Q100 344 48 334 Z"/><path d="M100 200 L104 340 Q128 338 152 334 L134 198 Z" ${sh}/>`;
-  if(fit==='abaya')body+=`<path ${T} d="M68 104 Q100 96 132 104 L154 334 Q100 344 46 334 Z"/><path ${Bt} d="M91 112 L109 112 L116 338 L84 338 Z"/><path d="M109 112 L132 104 L154 334 Q134 338 116 338 Z" ${sh}/>`;
-  if(fit==='dress')body+=`<path ${T} d="M68 104 Q100 96 132 104 L142 198 L158 334 Q100 346 42 334 L58 198 Z"/><path d="M100 104 Q104 220 104 342 Q132 340 158 334 L142 198 L132 104 Z" ${sh}/>`;
-  // shoes
-  body+=`<ellipse cx="78" cy="340" rx="19" ry="7" fill="#f4f0ea"/><ellipse cx="122" cy="340" rx="19" ry="7" fill="#f4f0ea"/>`;
-  // tops
-  if(fit==='trousers')body+=`<path ${T} d="M68 104 Q100 96 132 104 L150 246 Q100 260 50 246 Z"/><path d="M100 110 Q96 180 104 255 Q120 252 150 246 L132 104 Q118 100 108 100 Z" ${sh}/>`;
-  if(fit==='skirt')body+=`<path ${T} d="M68 104 Q100 96 132 104 L138 204 Q100 212 62 204 Z"/><path d="M100 108 Q98 160 102 210 Q120 208 138 204 L132 104 Z" ${sh}/>`;
-  // sleeves + hands
-  body+=`<path ${T} d="M70 108 Q50 150 46 210 L60 212 Q64 164 80 126 Z"/><path ${T} d="M130 108 Q150 150 154 210 L140 212 Q136 164 120 126 Z"/><path d="M130 108 Q150 150 154 210 L148 211 Q144 160 128 118 Z" ${sh}/>`;
-  body+=`<circle cx="53" cy="217" r="7" fill="${sk}"/><circle cx="147" cy="217" r="7" fill="${sk}"/>`;
-  // belt
-  if(a.belt){const y=fit==='trousers'?170:197;body+=`<rect x="60" y="${y}" width="80" height="7" rx="3" fill="#3b2a20"/><rect x="95" y="${y-1}" width="10" height="9" rx="2" fill="none" stroke="${gold}" stroke-width="2"/>`}
-  // watch / bracelet
-  if(a.watch)body+=`<rect x="46" y="203" width="14" height="7" rx="2" fill="#2b2b2b"/><circle cx="53" cy="206.5" r="3" fill="${gold}"/>`;
-  if(a.bracelet)body+=`<circle cx="147" cy="206" r="6.5" fill="none" stroke="${gold}" stroke-width="2.2"/>`;
-  // bags
-  if(a.cross)body+=`<path class="s-g" d="M76 112 L132 198" stroke="${o.g}" stroke-width="3" fill="none"/><rect ${G} x="120" y="192" width="30" height="22" rx="5"/><rect x="132" y="199" width="6" height="4" rx="1" fill="${gold}"/>`;
-  if(a.tote&&!a.cross)body+=`<path ${G} d="M142 196 h22 a4 4 0 0 1 4 4 v26 a4 4 0 0 1 -4 4 h-22 a4 4 0 0 1 -4 -4 v-26 a4 4 0 0 1 4 -4 z"/><path class="s-g" d="M146 196 q7 -14 14 0" fill="none" stroke="${o.g}" stroke-width="3"/>`;
-  // head
+  if(fit==='trousers')body+=P('b','M80 244 L100 244 L98 400 L73 400 Z M100 244 L120 244 L127 400 L102 400 Z')+`<path d="M86 260 L83 396 M114 260 L118 396" ${line}/>`;
+  if(fit==='skirt')body+=P('b','M82 184 L118 184 L136 398 Q100 405 64 398 Z')+`<path d="M92 200 L84 396 M108 200 L116 396 M100 200 L100 400" ${line}/>`;
+  if(fit==='abaya')body+=P('t','M76 98 Q100 92 124 98 L139 398 Q100 406 61 398 Z')+P('b','M95 104 L105 104 L111 401 L89 401 Z')+`<path d="M84 140 L72 396 M116 140 L128 396" ${line}/>`;
+  if(fit==='dress')body+=P('t','M76 98 Q100 92 124 98 L119 184 L139 398 Q100 406 61 398 L81 184 Z')+`<path d="M90 196 L80 396 M110 196 L120 396 M100 196 L100 402" ${line}/>`;
+  body+=`<path d="M73 400 Q84 395 96 399 L97 404 Q85 407 72 404 Z" fill="#e6ddd2"/><path d="M104 399 Q116 395 128 400 L128 404 Q115 407 103 404 Z" fill="#e6ddd2"/>`;
+  if(fit==='trousers')body+=P('t','M76 98 Q100 92 124 98 L134 250 Q100 258 66 250 Z')+`<path d="M92 120 L86 246 M108 120 L114 246" ${line}/>`;
+  if(fit==='skirt')body+=P('t','M76 98 Q100 92 124 98 L127 188 Q100 194 73 188 Z')+`<path d="M95 112 L92 186 M105 112 L108 186" ${line}/>`;
+  body+=P('t','M78 100 Q67 150 63 226 L72 228 Q76 160 86 118 Z')+P('t','M122 100 Q133 150 137 226 L128 228 Q124 160 114 118 Z');
+  body+=`<ellipse cx="68" cy="234" rx="3.6" ry="7.5" fill="${sk}"/><ellipse cx="132" cy="234" rx="3.6" ry="7.5" fill="${sk}"/>`;
+  if(a.belt){const y=fit==='trousers'?176:182;body+=`<rect x="74" y="${y}" width="52" height="5" rx="2" fill="#3b2a20"/><rect x="97" y="${y-1}" width="7" height="7" rx="1.5" fill="none" stroke="${gold}" stroke-width="1.5"/>`}
+  if(a.watch)body+=`<rect x="63" y="219" width="10" height="5" rx="1.5" fill="#2b2b2b"/><circle cx="68" cy="221.5" r="2" fill="${gold}"/>`;
+  if(a.bracelet)body+=`<ellipse cx="132" cy="222" rx="5" ry="2.4" fill="none" stroke="${gold}" stroke-width="1.6"/>`;
+  if(a.cross)body+=`<path class="s-g" d="M82 102 L126 194" stroke="${o.g}" stroke-width="2.2" fill="none"/><rect class="c-g" fill="${o.g}" x="116" y="188" width="24" height="17" rx="4"/><rect x="125" y="193" width="5" height="3" rx="1" fill="${gold}"/>`;
+  if(a.tote&&!a.cross)body+=`<path class="s-g" d="M131 236 q8 -14 16 0" fill="none" stroke="${o.g}" stroke-width="2.2"/><path class="c-g" fill="${o.g}" d="M128 236 h22 a3 3 0 0 1 3 3 v22 a3 3 0 0 1 -3 3 h-22 a3 3 0 0 1 -3 -3 v-22 a3 3 0 0 1 3 -3 z"/>`;
+  const face=`<ellipse cx="100" cy="59" rx="15" ry="18" ${sh}/><ellipse cx="100" cy="58" rx="12.5" ry="15.5" fill="${sk}"/><ellipse cx="100" cy="58" rx="12.5" ry="15.5" fill="url(#skinsh)"/>`;
+  const cap='M100 40 C84 40 80 52 81 66 C80 76 83 84 88 88 Q100 94 112 88 C117 84 120 76 119 66 C120 52 116 40 100 40 Z';
   let back='',head='';
-  const face=`<ellipse cx="100" cy="73" rx="22.5" ry="26.5" ${sh}/><ellipse cx="100" cy="72" rx="19" ry="23" fill="${sk}"/><circle cx="91" cy="80" r="4" fill="#E58C95" opacity=".3"/><circle cx="109" cy="80" r="4" fill="#E58C95" opacity=".3"/>`;
-  const plainFace=`<ellipse cx="100" cy="72" rx="19" ry="23" fill="${sk}"/><circle cx="91" cy="80" r="4" fill="#E58C95" opacity=".3"/><circle cx="109" cy="80" r="4" fill="#E58C95" opacity=".3"/>`;
-  if(st==='classic')head=`<path ${Hh} d="M100 26 C68 26 60 54 62 78 C56 100 54 122 64 144 Q100 162 136 144 C146 122 144 100 138 78 C140 54 132 26 100 26 Z"/><path d="M100 26 C122 26 136 46 138 78 C144 100 146 122 136 144 Q120 152 104 155 Q126 120 124 80 C122 50 112 34 100 26 Z" ${sh}/>${face}`;
-  if(st==='drape')head=`<path ${Hh} d="M100 26 C68 26 60 54 62 78 C56 98 58 118 66 132 Q90 146 112 140 L120 100 Z"/><path ${Hh} d="M100 26 C132 26 140 54 138 80 C146 110 150 160 150 214 L130 218 Q128 160 116 126 Q104 140 100 142 Z"/><path d="M128 90 C140 120 148 160 150 214 L142 215 Q138 150 122 112 Z" ${sh}/>${face}`;
-  if(st==='turban'){back=`<circle ${Hh} cx="118" cy="40" r="15"/><path ${T} d="M88 88 L112 88 L114 112 Q100 118 86 112 Z"/>`;head=`${plainFace}<path ${Hh} d="M75 84 C68 50 84 26 104 26 C128 26 138 50 128 84 L122 84 C122 66 116 54 100 54 C84 54 78 66 78 84 Z"/><path d="M82 46 Q100 36 120 46 M80 58 Q100 46 124 58" stroke="#000" stroke-opacity=".14" stroke-width="2" fill="none"/>`}
-  if(st==='loose')head=`<path ${Hh} d="M100 30 C70 30 62 56 64 80 C58 100 58 118 66 132 Q84 150 100 146 Q118 150 134 132 C142 118 142 100 136 80 C138 56 130 30 100 30 Z"/><path d="M100 30 C124 30 136 52 136 80 C142 100 142 118 134 132 Q120 146 106 147 Q124 112 122 80 C120 52 112 36 100 30 Z" ${sh}/>${face}<path d="M81 63 Q100 40 119 63 Q100 51 81 63 Z" fill="#2b2b2b" opacity=".85"/><path d="M74 112 Q100 128 126 112 M70 124 Q100 141 130 124" stroke="#000" stroke-opacity=".14" stroke-width="3" fill="none"/><path ${Hh} d="M70 118 Q62 158 70 198 L86 194 Q80 156 86 124 Z"/><path d="M70 118 Q62 158 70 198 L76 197 Q70 158 76 121 Z" ${sh}/>`;
-  if(st==='full'){head=`<path ${Hh} d="M100 22 C64 22 58 56 60 80 C50 112 46 152 52 192 Q100 202 148 192 C154 152 150 112 140 80 C142 56 136 22 100 22 Z"/><path d="M100 22 C124 22 140 48 140 80 C150 112 154 152 148 192 Q128 198 110 199 Q132 140 124 80 C122 46 112 28 100 22 Z" ${sh}/>${face}`}
-  if(st==='amira')head=`<path ${Hh} d="M66 102 Q100 88 134 102 L144 134 Q100 150 56 134 Z"/><path d="M100 94 Q120 96 134 102 L144 134 Q124 141 104 143 Z" ${sh}/><path ${Hh} d="M100 34 C76 34 70 56 72 80 C70 96 74 106 82 112 Q100 120 118 112 C126 106 130 96 128 80 C130 56 124 34 100 34 Z"/>${face}`;
-  if(st==='sporty')head=`<path ${Hh} d="M76 96 Q100 110 124 96 L128 116 Q100 128 72 116 Z"/><path ${Hh} d="M100 34 C76 34 70 56 72 80 C70 96 74 106 82 112 Q100 120 118 112 C126 106 130 96 128 80 C130 56 124 34 100 34 Z"/>${face}`;
-  // face accessories
-  let fx='';
-  if(a.glasses)fx+=`<rect x="83" y="63" width="15" height="10" rx="4" fill="#2b2b2b"/><rect x="102" y="63" width="15" height="10" rx="4" fill="#2b2b2b"/><path d="M98 67 h4" stroke="${gold}" stroke-width="1.6"/>`;
-  if(a.pin){const pp=st==='turban'?[126,64]:st==='amira'||st==='sporty'?[124,100]:[124,98];fx+=`<circle cx="${pp[0]}" cy="${pp[1]}" r="4.5" fill="${gold}"/><circle cx="${pp[0]-1.5}" cy="${pp[1]-1.5}" r="1.5" fill="#fff" opacity=".8"/>`}
-  if(a.necklace)fx+=`<path d="M86 ${st==='full'?150:148} Q100 ${st==='full'?188:184} 114 ${st==='full'?150:148}" stroke="${gold}" stroke-width="1.6" fill="none"/><circle cx="100" cy="${st==='full'?186:182}" r="4" fill="${gold}"/>`;
-  return `<svg class="girl" viewBox="0 0 200 360" role="img" aria-label="${L(['Illustration of a hijabi girl wearing your colours','رسمة بنت محجبة لابسة ألوانك'])}">
-  <ellipse cx="100" cy="346" rx="${58*bw}" ry="7" fill="#000" opacity=".08"/>
-  <g transform="translate(100 0) scale(${bw} 1) translate(-100 0)">${back}${body}</g>${head}<g transform="translate(100 0) scale(${bw} 1) translate(-100 0)">${a.necklace?fx.slice(fx.indexOf('<path d="M86')):''}</g>${a.necklace?fx.slice(0,fx.indexOf('<path d="M86')):fx}</svg>`;
+  if(st==='classic')head=P('h','M100 35 C80 35 74 50 75 64 C70 82 66 106 74 126 Q100 140 126 126 C134 106 130 82 125 64 C126 50 120 35 100 35 Z')+`<path d="M100 35 C116 35 125 48 125 64 C130 84 134 108 126 126 Q114 133 103 135 Q118 104 116 66 C115 48 108 39 100 35 Z" ${sh}/><path d="M80 104 Q100 116 120 104" ${line}/>${face}`;
+  if(st==='loose')head=P('h','M100 37 C80 37 74 51 76 64 C70 82 68 104 74 120 Q88 132 100 130 Q112 132 126 120 C132 104 130 82 124 64 C126 51 120 37 100 37 Z')+`<path d="M100 37 C116 37 124 50 124 64 C130 84 132 106 126 120 Q114 130 104 131 Q118 100 116 66 C115 50 108 40 100 37 Z" ${sh}/>${face}<path d="M88 50 Q100 37 112 50 Q100 44 88 50 Z" fill="#2b2b2b" opacity=".85"/><path d="M80 98 Q100 110 120 98 M78 108 Q100 121 122 108" ${line}/>`+P('h','M80 104 Q74 134 79 172 L89 170 Q86 136 89 108 Z');
+  if(st==='drape')head=P('h','M100 35 C80 35 74 50 75 64 C71 82 70 104 76 118 Q92 128 108 124 L114 84 Z')+P('h','M100 35 C120 35 127 50 125 64 C131 92 136 150 136 230 L122 232 Q120 160 110 116 Q102 124 100 125 Z')+`<path d="M118 80 C126 110 132 160 134 228" ${line}/>${face}`;
+  if(st==='turban'){back=`<circle class="c-h" fill="${o.h}" cx="113" cy="36" r="10"/>`+P('t','M93 72 L107 72 L109 99 Q100 103 91 99 Z');head=`${face}`+P('h','M86 68 C80 44 90 31 102 31 C119 31 125 46 116 68 L112 68 C112 56 108 47 100 47 C91 47 88 56 88 68 Z')+`<path d="M90 41 Q101 34 114 41 M88 50 Q101 42 116 50" stroke="#000" stroke-opacity=".12" stroke-width="1.4" fill="none"/>`}
+  if(st==='full')head=P('h','M100 30 C76 30 72 50 73 66 C64 96 60 140 64 186 Q100 196 136 186 C140 140 136 96 127 66 C128 50 124 30 100 30 Z')+`<path d="M100 30 C118 30 127 46 127 66 C136 96 140 140 136 186 Q122 192 108 193 Q126 140 119 70 C117 46 110 34 100 30 Z" ${sh}/><path d="M84 120 L80 182 M116 120 L120 182" ${line}/>${face}`;
+  if(st==='amira')head=P('h','M78 88 Q100 80 122 88 L130 114 Q100 126 70 114 Z')+P('h',cap)+face;
+  if(st==='sporty')head=P('h','M86 82 Q100 92 114 82 L116 97 Q100 105 84 97 Z')+P('h',cap)+face;
+  let fx='',nk='';
+  if(a.glasses)fx+=`<rect x="88.5" y="52" width="10" height="6.5" rx="2.6" fill="#2b2b2b"/><rect x="101.5" y="52" width="10" height="6.5" rx="2.6" fill="#2b2b2b"/><path d="M98.5 55 h3" stroke="${gold}" stroke-width="1.2"/>`;
+  if(a.pin){const pp=st==='turban'?[116,50]:[114,72];fx+=`<circle cx="${pp[0]}" cy="${pp[1]}" r="3" fill="${gold}"/><circle cx="${pp[0]-1}" cy="${pp[1]-1}" r="1" fill="#fff" opacity=".8"/>`}
+  if(a.necklace){const y0=st==='full'?150:128;nk=`<path d="M91 ${y0} Q100 ${y0+26} 109 ${y0}" stroke="${gold}" stroke-width="1.2" fill="none"/><circle cx="100" cy="${y0+24}" r="2.8" fill="${gold}"/>`}
+  return `<svg class="girl" viewBox="0 0 200 420" role="img" aria-label="${L(['Illustration of a hijabi girl wearing your colours','رسمة بنت محجبة لابسة ألوانك'])}">
+  <defs><linearGradient id="fold" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".14"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>
+  <radialGradient id="skinsh" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></radialGradient></defs>
+  <ellipse cx="100" cy="407" rx="${44*bw}" ry="5" fill="#000" opacity=".08"/>
+  <g transform="translate(100 0) scale(${bw} 1) translate(-100 0)">${back}${body}${nk}</g>${head}${fx}</svg>`;
 }
 function paintGirl(o){
   const sv=document.querySelector('.girl');
@@ -658,8 +661,7 @@ function renderToday(){
   const ram=(H&&H.m===9)?L(['Ramadan Mubarak','رمضان كريم']):daysToRam!=null?L([`${daysToRam} days to Ramadan`,`فاضل ${toAr(daysToRam)} يوم على رمضان`]):'';
   setView('v-today',`
   <div class="intro"><p class="hi">${S.name?L([`Hey ${esc(S.name)}`,`أهلاً يا ${esc(S.name)}`]):L(['Hey lovely','أهلاً يا قمر'])}</p><p class="muted">${L(INTRO)}</p>
-   <button class="namebtn" type="button" id="nameBtn">${L(['Change your name','غيّري اسمك'])}</button>
-   <div class="row pillars">${PILL.map(p=>`<a href="#${p[0]}">${L(p[1])}</a>`).join('')}</div></div>
+      <div class="row pillars">${PILL.map(p=>`<a href="#${p[0]}">${L(p[1])}</a>`).join('')}</div></div>
   <div class="hero"><div style="display:flex;flex-direction:column;gap:8px"><h2>${line}</h2><p>${L([`${n} of ${t} done today. Every good deed lights it up a little more.`,`خلصتي ${toAr(n)} من ${toAr(t)} النهارده. كل حاجة حلوة بتعمليها بتنوّره أكتر.`])}</p></div>${moonSVG(f)}</div>
   ${ramadanHTML()}
   ${journeyHTML()}
@@ -720,7 +722,8 @@ function renderStyle(){
   const x=F[fCur];
   setView('v-style',`
   <div style="margin-top:8px">${ttl(['Style','الأناقة'],'h1')}</div>
-  <p class="muted" style="margin-top:6px">${L(['Modest, confident and kind to your bank account.','محتشمة، واثقة، ومن غير ما تصرفي كتير.'])}</p>
+  <p class="muted" style="margin-top:6px">${L(['Ideas, colours, strategies, looks and trends to help you find your own style. Take what inspires you and leave the rest.','أفكار، وألوان، واستراتيجيات، وموديلات، وحاجات ترند، عشان تلاقي ستايلك انتي. خدي اللي يلهمك وسيبي الباقي.'])}</p>
+  ${styleFinderHTML()}
   <div class="card">${ttl(['Hijab colour matcher','منسّق ألوان الطرحة'])}
    <p class="muted">${L(['Show us your outfit: upload a photo and we\'ll find your colour and create combos for you, or tap the colour of your main piece.','ورّينا لبسك: حطي صورة وإحنا هنعرف لونك ونعملك تنسيقات، أو دوسي على لون القطعة الأساسية.'])}</p>
    <label class="upload"><input type="file" accept="image/*" id="photo">${L(['Upload an outfit photo','حطي صورة لبسك'])}</label>
@@ -748,6 +751,15 @@ function renderStyle(){
   $('photo').addEventListener('change',onPhoto);
   $('shuffle').addEventListener('click',()=>{genPal=genCombo();const c=genPal[2];tryOn=Object.assign({},tryOn,{h:c[0],t:c[1],b:c[2],g:c[3]});renderStyle()});
   const target=tryOn;requestAnimationFrame(()=>requestAnimationFrame(()=>paintGirl(target)));
+}
+function pin(q){return 'https://www.pinterest.com/search/pins/?q='+encodeURIComponent(q)}
+function styleFinderHTML(){
+  const base=safeHex(S.colour),cn=nearest(base)[0].toLowerCase();
+  const links=[[['Modest outfit ideas','أفكار لبس محتشم'],'modest outfit ideas hijab'],[['Hijab styles','ربطات طرح'],'hijab styles tutorial'],[[`${nearest(base)[0]} outfits`,`لبس ${nearest(base)[1]}`],`${cn} modest outfit hijab`],[['Modest capsule wardrobe','كابسول محتشم'],'modest capsule wardrobe'],[['Modest gym wear','لبس جيم محتشم'],'modest activewear hijab gym'],[['Eid and occasion looks','لبس العيد والمناسبات'],'modest eid outfit']];
+  return `<div class="card">${ttl(['Find your own style','لاقي ستايلك'])}
+   <ol class="steps">${[['Save 20 looks you love on Pinterest, without overthinking.','احفظي ٢٠ لوك بتحبيهم على بنترست من غير تفكير كتير.'],['Look at them together: which colours, shapes and hijab styles keep repeating?','بصّي عليهم مع بعض: أنهي ألوان وقصّات وربطات بتتكرر؟'],['Pick three words for your style, like soft, classic and sporty.','اختاري تلات كلمات لستايلك، زي ناعم، وكلاسيك، وسبور.'],['Try one look this week with what you already own.','جربي لوك واحد الأسبوع ده من اللي عندك.']].map(x=>`<li>${L(x)}</li>`).join('')}</ol>
+   <p style="font-weight:600">${L(['Get inspired on Pinterest','اتلهمي من بنترست'])}</p>
+   <div class="row">${links.map(x=>`<a class="opt pinl" href="${pin(x[1])}" target="_blank" rel="noopener">${L(x[0])} ↗</a>`).join('')}</div></div>`;
 }
 function capsuleHTML(){
   const ck=CAPS[S.cap]?S.cap:'classic',cols=CAPS[ck][1],own=S.capOwn&&typeof S.capOwn==='object'?S.capOwn:{};let n=0,have=0;
@@ -864,7 +876,16 @@ document.addEventListener('click',e=>{
   else if(b.id==='installHide'){S.installHide=true;renderToday()}
   else if(b.id==='obGo'){submitName()}
   else if(b.id==='obBack'){if(S.name){$('ob').hidden=true;replay()}else{$('ob2').hidden=true;$('ob1').hidden=false}changed=false}
-  else if(b.id==='langBtn'){S.lang=A()?'en':'ar';applyLang()}
+  else if(b.id==='setBtn'){openSettings()}
+  else if(b.id==='setClose'){$('sheet').hidden=true;changed=false}
+  else if(ds.setlang){S.lang=ds.setlang;applyLang();openSettings()}
+  else if(b.id==='setName'){const n=$('setNameIn').value.replace(/\s+/g,' ').trim().slice(0,30);if(n){S.name=n;renderToday();$('setMsg').textContent=L(['Saved','اتحفظ'])}}
+  else if(b.id==='setAsk'){S.askName=S.askName===false;openSettings()}
+  else if(b.id==='setReset'){$('resetBox').hidden=false;changed=false}
+  else if(b.id==='resetNo'){$('resetBox').hidden=true;changed=false}
+  else if(b.id==='resetYes'){const keep={lang:S.lang,name:S.name,askName:S.askName};S={lang:keep.lang,name:keep.name,askName:keep.askName,days:{},surahs:{},challenge:{},drive:{},passion:'Fashion',level:'Beginner',wk:{},budget:1,colour:'#1b1b1b',journal:[]};$('sheet').hidden=true;renderAll();replay()}
+  else if(b.id==='obKeep'){$('ob').hidden=true;replay();changed=false}
+  else if(b.id==='obChange'){$('obName').hidden=false;$('obGo').hidden=false;$('obKeep').hidden=true;$('obChange').hidden=true;$('obName').value='';$('obName').focus();changed=false}
   else if(ds.p!==undefined){const d=day();d.p[+ds.p]=!d.p[+ds.p];renderToday();if(curView()==='deen')renderDeen()}
   else if(ds.t){const d=day();d[ds.t]=!d[ds.t];renderToday()}
   else if(ds.go){location.hash=ds.go;changed=false}
@@ -919,6 +940,21 @@ function installHTML(){
 }
 if('serviceWorker' in navigator&&location.protocol==='https:'&&!framed()){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
 
+/* ---------- settings ---------- */
+function openSettings(){
+  const ask=S.askName!==false;
+  $('sheetBody').innerHTML=`<div class="ttl" style="justify-content:space-between"><h2 id="setT">${L(['Settings','الإعدادات'])}</h2><button class="btn ghost" type="button" id="setClose">${L(['Done','تمام'])}</button></div>
+   <div class="card" style="margin-top:6px"><h3>${L(['Your name','اسمك'])}</h3>
+    <div class="row" style="flex-wrap:nowrap"><input type="search" id="setNameIn" maxlength="30" value="${esc(S.name||'')}" aria-label="${L(['Your name','اسمك'])}"><button class="btn" type="button" id="setName">${L(['Save','احفظي'])}</button></div><p class="note" id="setMsg" role="status"></p>
+    <button class="check" type="button" id="setAsk" aria-pressed="${ask}"><span class="box"></span><span class="lbl">${L(['Ask my name every time I open Hilal','اسأليني على اسمي كل ما أفتح هلال'])}</span></button></div>
+   <div class="card"><h3>${L(['Language','اللغة'])}</h3><div class="row"><button class="opt" type="button" data-setlang="en" aria-pressed="${!A()}">English</button><button class="opt" type="button" data-setlang="ar" aria-pressed="${A()}">العربية</button></div></div>
+   <div class="card"><h3>${L(['Your progress','تقدّمك'])}</h3><p class="note">${L(['Your progress and journal are saved on this phone only.','تقدّمك ويومياتك محفوظين على الموبايل ده بس.'])}</p>
+    <button class="btn ghost" type="button" id="setReset">${L(['Start fresh','ابدأي من جديد'])}</button>
+    <div id="resetBox" hidden class="week"><p>${L(['This clears your prayers, adhkar, hifz, journey, journal and choices on this phone. Are you sure?','ده هيمسح صلواتك وأذكارك وحفظك ورحلتك ويومياتك واختياراتك على الموبايل ده. متأكدة؟'])}</p><div class="row" style="margin-top:8px"><button class="btn" type="button" id="resetYes">${L(['Yes, clear it','أيوه، امسحي'])}</button><button class="btn ghost" type="button" id="resetNo">${L(['Cancel','إلغاء'])}</button></div></div></div>
+   <div class="card"><h3>${L(['About Hilal','عن هلال'])}</h3><p class="muted">${L(INTRO)}</p></div>`;
+  $('sheet').hidden=false;
+}
+
 /* ---------- welcome ---------- */
 function showName(edit){
   $('ob').hidden=false;$('ob1').hidden=true;$('ob2').hidden=false;
@@ -928,8 +964,19 @@ function showName(edit){
   $('obName').placeholder=L(['Your name','اسمك']);$('obName').value=S.name||'';
   $('obGo').textContent=edit?L(['Save','احفظي']):L(["Let's start",'يلا نبدأ']);
   $('obBack').textContent=edit?L(['Cancel','إلغاء']):L(['Change language','غيّري اللغة']);
+  $('obName').hidden=false;$('obGo').hidden=false;$('obKeep').hidden=true;$('obChange').hidden=true;
   $('obErr').textContent='';
   setTimeout(()=>{try{$('obName').focus()}catch(e){}},50);
+}
+function welcomeBack(){
+  $('ob').hidden=false;$('ob1').hidden=true;$('ob2').hidden=false;
+  $('ob2t').textContent=L([`Welcome back, ${S.name}`,`أهلاً بيكي تاني يا ${S.name}`]);
+  $('ob2p').textContent=L(['Is this you?','ده انتي؟']);
+  $('obKeep').textContent=L([`Continue as ${S.name}`,`كمّلي باسم ${S.name}`]);
+  $('obChange').textContent=L(['Use a different name','اكتبي اسم تاني']);
+  $('obGo').textContent=L(["Let's go",'يلا بينا']);$('obBack').textContent=L(['Change language','غيّري اللغة']);
+  $('obName').placeholder=L(['Your name','اسمك']);$('ob2l').textContent=L(['Your name','اسمك']);
+  $('obName').hidden=true;$('obGo').hidden=true;$('obKeep').hidden=false;$('obChange').hidden=false;$('obErr').textContent='';
 }
 function submitName(){
   const n=$('obName').value.replace(/\s+/g,' ').trim().slice(0,30);
@@ -950,7 +997,7 @@ function route(){
 window.addEventListener('hashchange',route);
 function applyLang(){
   const ar=A();document.documentElement.lang=ar?'ar':'en';document.documentElement.dir=ar?'rtl':'ltr';
-  $('langBtn').textContent=ar?'English':'عربي';
+  $('setLbl').textContent=ar?'الإعدادات':'Settings';$('setBtn').setAttribute('aria-label',ar?'الإعدادات':'Settings');
   $('logo').innerHTML=MARK+(ar?'<span class="ar" style="font-size:30px">هلال</span>':'<span>Hilal</span>');
   $('dateLine').innerHTML=(H?(ar?`<span class="ar">${toAr(H.d)} ${MAR[H.m-1]} ${toAr(H.y)}</span><br>`:`${H.d} ${MEN[H.m-1]} ${H.y} AH<br>`):'')+today.toLocaleDateString(ar?'ar-EG':'en-GB',{weekday:'long',day:'numeric',month:'long'});
   document.title=ar?'هلال':'Hilal';
@@ -974,19 +1021,20 @@ function merge(x){
   if(!Array.isArray(S.journal))S.journal=[];
   if(!P[S.passion])S.passion='Fashion';
   if(typeof S.name!=='string')S.name='';
-  if((S.lang==='ar'||S.lang==='en')&&S.name)$('ob').hidden=true;
+  if((S.lang==='ar'||S.lang==='en')&&S.name&&(S.askName===false||framed()))$('ob').hidden=true;
 }
 try{const l=localStorage.getItem('hilal');if(l)merge(JSON.parse(l))}catch(e){}
 applyLang();
 if(!(S.lang==='ar'||S.lang==='en')){$('ob').hidden=false;$('ob1').hidden=false;$('ob2').hidden=true}
 else if(!S.name)showName();
+else if(S.askName!==false&&!framed())welcomeBack();
 if(window.claude&&typeof window.claude.use==='function'){
   Promise.all([window.claude.use('db'),window.claude.use('user')]).then(async([db,user])=>{
     if(!db||!user)return;const id=await user.id();if(!id)return;
     ref=db.collection('data/users/'+id).doc('hilal');
     const snap=await ref.get();const data=snap&&typeof snap.data==='function'?snap.data():snap;
     if(data&&data.days){const keepLang=S.lang,keepName=S.name;merge(data);if(!S.lang)S.lang=keepLang;if(!S.name)S.name=keepName}
-    applyLang();if((S.lang==='ar'||S.lang==='en')&&S.name)$('ob').hidden=true;
+    applyLang();
   }).catch(()=>{});
 }
 }
