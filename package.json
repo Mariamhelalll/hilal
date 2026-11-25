@@ -1,0 +1,10 @@
+{
+  "name": "hilal",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.11",
+    "adhan": "4.4.6",
+    "web-push": "^3.6.7"
+  }
+}

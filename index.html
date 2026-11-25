@@ -176,6 +176,7 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .ploc{margin:0}.ptab{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;border:1.5px solid var(--line)}
 .ptr{display:flex;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line)}.ptr:first-child{border-top:0}
 .ptr.sunr{color:var(--muted);font-size:14px}.ptr.nx{background:var(--soft);color:var(--wine);font-weight:700}
+.ntl{display:flex;flex-direction:column}.ntr{display:flex;align-items:center;gap:8px}.ntr .check{flex:1}.ntr input[type=time]{font:15px 'DM Sans',sans-serif;padding:8px 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}.check:disabled{opacity:.5}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -866,7 +867,7 @@ const PMETH=[['MoonsightingCommittee',['Moonsighting Committee (UK)','لجنة �
 let ptMsg='',ptRes=null,ptBusy=false;
 function autoMeth(lat,lon){if(lat>49&&lat<61&&lon>-11&&lon<2)return'MoonsightingCommittee';if(lat>21&&lat<32&&lon>24&&lon<37)return'Egyptian';if(lat>16&&lat<33&&lon>34&&lon<56)return'UmmAlQura';if(lat>22&&lat<26.5&&lon>51&&lon<56.5)return'Dubai';if(lat>24&&lat<50&&lon>-130&&lon<-60)return'NorthAmerica';return'MuslimWorldLeague'}
 function ptimes(dt){
-  const l=S.loc;if(!l||!window.adhan||typeof l.lat!=='number')return null;
+  const l=S.loc;if(!l||S.locOff||!window.adhan||typeof l.lat!=='number')return null;
   try{const a=window.adhan,m=PMETH.some(x=>x[0]===S.pmeth)?S.pmeth:autoMeth(l.lat,l.lon);
     const p=a.CalculationMethod[m]();p.madhab=S.pmadhab==='hanafi'?a.Madhab.Hanafi:a.Madhab.Shafi;
     if(l.lat>48)p.highLatitudeRule=a.HighLatitudeRule.recommended(new a.Coordinates(l.lat,l.lon));
@@ -879,7 +880,7 @@ function nextPrayer(){const t=ptimes();if(!t)return null;const now=new Date();fo
 function nextLine(){const n=nextPrayer();if(!n)return'';const mins=Math.max(0,Math.round((n.at-new Date())/6e4)),h=Math.floor(mins/60),mm=mins%60;
   const inT=A()?`بعد ${h?toAr(h)+' س ':''}${toAr(mm)} د`:`in ${h?h+'h ':''}${mm}m`;
   return L([`Next: ${PR[n.i][1]} at ${fmtT(n.at)} · ${inT}`,`الجاية: ${PR[n.i][0]} الساعة ${fmtT(n.at)} · ${inT}`])}
-function setLoc(lat,lon,name,tz){S.loc={lat:+(+lat).toFixed(4),lon:+(+lon).toFixed(4),name:String(name||'').slice(0,80),tz:tz||''};if(!S.pmeth)S.pmeth=autoMeth(lat,lon);ptRes=null;ptMsg='';save();renderToday();if(curView()==='deen')renderDeen()}
+function setLoc(lat,lon,name,tz){S.locOff=false;setTimeout(ntLater,0);S.loc={lat:+(+lat).toFixed(4),lon:+(+lon).toFixed(4),name:String(name||'').slice(0,80),tz:tz||''};if(!S.pmeth)S.pmeth=autoMeth(lat,lon);ptRes=null;ptMsg='';save();renderToday();if(curView()==='deen')renderDeen()}
 function useMyLoc(){
   if(!navigator.geolocation){ptMsg=L(['Location is not available here. Search for your city instead.','اللوكيشن مش متاح هنا. دوري على مدينتك بدل كده.']);renderDeen();return}
   ptBusy=true;ptMsg=L(['Finding your location…','بندوّر على مكانك…']);if(curView()==='deen')renderDeen();
@@ -902,10 +903,11 @@ function prayerTimesCard(){
    ${ptMsg?`<p class="note" role="status">${ptMsg}</p>`:''}
    ${ptRes&&ptRes.length?`<div class="mlist">${ptRes.map((r,i)=>`<button type="button" class="mrow" data-ptc="${i}"><span>${esc(r.name)}</span></button>`).join('')}</div>`:''}
    ${l?`<details class="sub"><summary>${L(['Calculation settings','إعدادات الحساب'])}</summary>
-    <p class="lkt">${L(['Method','طريقة الحساب'])}</p><div class="row">${PMETH.map(m=>`<button class="opt sm" type="button" data-pm="${m[0]}" aria-pressed="${(t&&t.m)===m[0]}">${L(m[1])}</button>`).join('')}</div>
+    <p class="lkt">${L(['Method','طريقة الحساب'])}</p><div class="row">${PMETH.map(m=>`<button class="opt sm" type="button" data-pmeth="${m[0]}" aria-pressed="${(t&&t.m)===m[0]}">${L(m[1])}</button>`).join('')}</div>
     <p class="lkt">${L(['Asr','العصر'])}</p><div class="row">${[['shafi',['Standard (Shafi, Maliki, Hanbali)','الجمهور (شافعي، مالكي، حنبلي)']],['hanafi',['Hanafi','حنفي']]].map(m=>`<button class="opt sm" type="button" data-pmd="${m[0]}" aria-pressed="${(S.pmadhab==='hanafi'?'hanafi':'shafi')===m[0]}">${L(m[1])}</button>`).join('')}</div>
     <p class="note">${L(['Times can differ by a few minutes from your local mosque. Pick the method your mosque uses. Calculated with adhan-js (MIT).','المواعيد ممكن تفرق كام دقيقة عن مسجدك. اختاري الطريقة اللي مسجدك ماشي بيها. الحساب بمكتبة adhan-js (رخصة MIT).'])}</p></details>`:''}</div>`;
 }
+document.addEventListener('change',e=>{const t=e.target;if(t&&t.dataset&&t.dataset.ntt&&/^\d{2}:\d{2}$/.test(t.value)){ntPrefs()[t.dataset.ntt]=t.value;save();ntLater()}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='ptQ'){e.preventDefault();cityFind(e.target.value)}});
 setInterval(()=>{const e=document.querySelectorAll('.pnext');if(e.length){const t=nextLine();e.forEach(x=>x.textContent=t)}},60000);
 function prayersHTML(inD){const d=day(),t=ptimes(),n=t&&nextPrayer();return `${t?`<p class="pnext">${nextLine()}</p>`:''}<div class="prayers">${PR.map((p,i)=>`<button class="pr${n&&!n.tom&&n.i===i?' nx':''}" type="button" data-p="${i}" aria-pressed="${d.p[i]}">${A()?`<span class="ar">${p[0]}</span>`:`<b style="font-size:13px">${p[1]}</b>`}${t?`<small class="pt">${fmtT(t[PKEYS[i]])}</small>`:''}</button>`).join('')}</div>${t||inD?'':`<button class="opt sm" type="button" data-go="deen" style="align-self:flex-start">🕌 ${L(['Add prayer times for my location','ضيفي مواعيد الصلاة على حسب مكاني'])}</button>`}`}
@@ -1660,6 +1662,9 @@ document.addEventListener('click',e=>{
   else if(ds.ht){const d=day();if(!d.h||typeof d.h!=='object')d.h={};d.h[ds.ht]=!d.h[ds.ht];renderToday()}
   else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else if(S.name)welcomeBack();else showName()}}
   else if(b.id==='obIback'){if(introI>0){introI--;drawIntro()}else if(introAgain){$('obI').hidden=true;$('ob').hidden=true}else{$('obI').hidden=true;$('ob1').hidden=false}changed=false}
+  else if(b.id==='setLoc'){if(S.loc&&!S.locOff){S.locOff=true;S.loc=null;save();openSettings();renderToday();if(curView()==='deen')renderDeen();ntLater()}else{S.locOff=false;$('sheet').hidden=true;location.hash='deen';setTimeout(useMyLoc,300)}changed=false}
+  else if(b.id==='setNt'){ntToggle();changed=false}
+  else if(ds.nt){const P=ntPrefs(),n=NOTE.find(x=>x[0]===ds.nt);if(n){P[n[0]]=P[n[0]]?(n[2]?null:false):(n[2]||true);save();openSettings();ntLater()}changed=false}
   else if(b.id==='setIntro'){$('sheet').hidden=true;showStory(true);changed=false}
   else if(b.id==='nameBtn'){showName(true)}
   else if(b.id==='installBtn'){if(installEvt){installEvt.prompt();installEvt.userChoice.then(()=>{installEvt=null;renderToday()}).catch(()=>{})}changed=false}
@@ -1684,7 +1689,7 @@ document.addEventListener('click',e=>{
   else if(b.id==='qdone'){day().quran=true;renderQ(qCur);const el=$('qdone');if(el)el.scrollIntoView({block:'center'})}
   else if(b.id==='setBtn'){openSettings()}
   else if(b.id==='setClose'){$('sheet').hidden=true;changed=false}
-  else if(ds.setlang){S.lang=ds.setlang;applyLang();openSettings()}
+  else if(ds.setlang){S.lang=ds.setlang;applyLang();openSettings();ntLater()}
   else if(b.id==='setName'){const n=$('setNameIn').value.replace(/\s+/g,' ').trim().slice(0,30);if(n){S.name=n;renderToday();$('setMsg').textContent=L(['Saved','اتحفظ'])}}
   else if(b.id==='setAsk'){S.askName=S.askName===false;openSettings()}
   else if(b.id==='setReset'){$('resetBox').hidden=false;changed=false}
@@ -1714,8 +1719,8 @@ document.addEventListener('click',e=>{
   else if(b.id==='ptMe'){useMyLoc();changed=false}
   else if(b.id==='ptGo'){cityFind($('ptQ').value);changed=false}
   else if(ds.ptc!==undefined){const r=ptRes&&ptRes[+ds.ptc];if(r)setLoc(r.lat,r.lon,r.name,r.tz);changed=false}
-  else if(ds.pm){S.pmeth=ds.pm;renderDeen();renderToday()}
-  else if(ds.pmd){S.pmadhab=ds.pmd;renderDeen();renderToday()}
+  else if(ds.pmeth){S.pmeth=ds.pmeth;renderDeen();renderToday();ntLater()}
+  else if(ds.pmd){S.pmadhab=ds.pmd;renderDeen();renderToday();ntLater()}
   else if(ds.pf){pf=ds.pf;genPal=null;renderStyle();changed=false}
   else if(ds.f){fCur=ds.f;fOpen=true;renderStyle();changed=false}
   else if(ds.bl){S.budget=+ds.bl;bOpen=true;renderStyle()}
@@ -1769,6 +1774,42 @@ document.addEventListener('click',e=>{const v=e.target.closest('[data-qay]');if(
 document.addEventListener('keydown',e=>{const v=e.target.closest&&e.target.closest('[data-qay]');if(v&&(e.key==='Enter'||e.key===' ')){e.preventDefault();v.click()}});
 
 /* ---------- settings ---------- */
+/* ---------- notifications (Web Push via Netlify functions) ---------- */
+const NOTE=[['prayer',['Prayer times','مواعيد الصلاة'],null],['morning',['Morning adhkar','أذكار الصباح'],'07:30'],['evening',['Evening adhkar (after Asr)','أذكار المسا (بعد العصر)'],null],['quran',['Quran page','صفحة القرآن'],'20:00'],['moon',["Today's moon step",'خطوة قمرك النهارده'],'09:00'],['move',['Time to move','وقت الحركة'],'18:00'],['journal',['Journal','يومياتي'],'21:30']];
+let ntMsg='';
+const pushOK=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window&&/netlify\.app$|^localhost$/.test(location.hostname);
+function ntPrefs(){if(!S.ntp||typeof S.ntp!=='object')S.ntp={prayer:true,morning:'07:30',evening:true,quran:'20:00',moon:'09:00',move:null,journal:'21:30'};return S.ntp}
+function b64u(s){const p='='.repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(b,c=>c.charCodeAt(0))}
+async function ntSync(test){
+  if(!S.ntOn||!pushOK())return;
+  const to=new Promise((_,rj)=>setTimeout(()=>rj(0),20000));
+  try{return await Promise.race([to,(async()=>{const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();
+    if(!sub){const k=await (await fetch('/api/push')).json();sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(k.publicKey)})}
+    const r=await fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({sub:sub.toJSON(),lang:S.lang==='en'?'en':'ar',tz:Intl.DateTimeFormat().resolvedOptions().timeZone,loc:S.loc&&!S.locOff?{lat:S.loc.lat,lon:S.loc.lon}:null,meth:ptimes()?ptimes().m:'MuslimWorldLeague',madhab:S.pmadhab==='hanafi'?'hanafi':'shafi',prefs:ntPrefs(),test:!!test})});
+    if(!r.ok)throw 0;return true})()])}catch(e){ntMsg=L(["Couldn't connect notifications. Check your internet and try again.",'مقدرناش نشغّل الإشعارات. اتأكدي من النت وجربي تاني.']);return false}
+}
+let ntT=null;function ntLater(){clearTimeout(ntT);ntT=setTimeout(()=>ntSync(),1500)}
+setTimeout(()=>{if(S.ntOn)ntSync()},5000);
+async function ntToggle(){
+  if(S.ntOn){S.ntOn=false;save();try{const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();if(sub){fetch('/api/push',{method:'DELETE',headers:{'content-type':'application/json'},body:JSON.stringify({sub:sub.toJSON()})}).catch(()=>{});await sub.unsubscribe()}}catch(e){}ntMsg='';openSettings();return}
+  if(!pushOK()){ntMsg=L(['Notifications work in the Hilal app at hilal-girls.netlify.app. On iPhone, add Hilal to your home screen first, then open it from there.','الإشعارات بتشتغل في أبلكيشن هلال على hilal-girls.netlify.app. على الآيفون لازم تضيفي هلال للشاشة الرئيسية الأول، وتفتحيه من هناك.']);openSettings();return}
+  const perm=await Notification.requestPermission();
+  if(perm!=='granted'){ntMsg=L(['Notifications are blocked. Allow them for Hilal in your phone settings, then try again.','الإشعارات مقفولة. اسمحي بيها لهلال من إعدادات الموبايل، وجربي تاني.']);openSettings();return}
+  S.ntOn=true;save();ntMsg=L(['Turning on…','بنشغّل…']);openSettings();
+  const ok=await ntSync(true);if(ok)ntMsg=L(['Notifications are on ✓ You should get a test one now.','الإشعارات اشتغلت ✓ المفروض يوصلك إشعار تجربة دلوقتي.']);else S.ntOn=false;save();openSettings();
+}
+function settingsExtraHTML(){
+  const P=ntPrefs(),on=!!S.ntOn,locOn=!!(S.loc&&!S.locOff);
+  return `<div class="card"><h3>${L(['Location','اللوكيشن'])}</h3>
+    <button class="check" type="button" id="setLoc" aria-pressed="${locOn}"><span class="box"></span><span class="lbl">${L(['Use my location for prayer times','استخدمي مكاني لمواعيد الصلاة'])}<small>${locOn?esc(S.loc.name||''):L(['Off: no prayer times are shown.','مقفول: مش هيظهر مواعيد صلاة.'])}</small></span></button>
+    <p class="note">${L(['Your location stays on your phone. If you turn on prayer notifications, only rough coordinates are saved so the reminder can reach you on time.','لوكيشنك بيفضل على موبايلك. لو شغّلتي إشعارات الصلاة، بيتحفظ مكان تقريبي بس عشان التنبيه يوصلك في وقته.'])}</p></div>
+   <div class="card"><h3>${L(['Notifications','الإشعارات'])}</h3>
+    <button class="check" type="button" id="setNt" aria-pressed="${on}"><span class="box"></span><span class="lbl">${L(['Send me reminders on my phone','ابعتيلي تنبيهات على الموبايل'])}</span></button>
+    ${ntMsg?`<p class="note" role="status">${ntMsg}</p>`:''}
+    ${on?`<div class="ntl">${NOTE.map(n=>{const v=P[n[0]],act=n[2]?!!v:!!v,dis=n[0]==='prayer'&&!locOn;
+      return `<div class="ntr"><button class="check" type="button" data-nt="${n[0]}" aria-pressed="${act&&!dis}"${dis?' disabled':''}><span class="box"></span><span class="lbl">${L(n[1])}${dis?`<small>${L(['Turn on location first','شغّلي اللوكيشن الأول'])}</small>`:''}</span></button>${n[2]&&act?`<input type="time" data-ntt="${n[0]}" value="${v}" aria-label="${L(n[1])}">`:''}</div>`}).join('')}</div>
+    <p class="note">${L(['On iPhone, notifications only work after you add Hilal to your home screen and open it from there (iOS 16.4 or newer).','على الآيفون، الإشعارات بتشتغل بس لما تضيفي هلال للشاشة الرئيسية وتفتحيه من هناك (iOS 16.4 أو أحدث).'])}</p>`:''}</div>`;
+}
 function openSettings(){
   const ask=S.askName!==false;
   $('sheetBody').innerHTML=`<div class="ttl" style="justify-content:space-between"><h2 id="setT">${L(['Settings','الإعدادات'])}</h2><button class="btn ghost" type="button" id="setClose">${L(['Done','تمام'])}</button></div>
@@ -1776,6 +1817,7 @@ function openSettings(){
     <div class="row" style="flex-wrap:nowrap"><input type="search" id="setNameIn" maxlength="30" value="${esc(S.name||'')}" aria-label="${L(['Your name','اسمك'])}"><button class="btn" type="button" id="setName">${L(['Save','احفظي'])}</button></div><p class="note" id="setMsg" role="status"></p>
     <button class="check" type="button" id="setAsk" aria-pressed="${ask}"><span class="box"></span><span class="lbl">${L(['Ask my name every time I open Hilal','اسأليني على اسمي كل ما أفتح هلال'])}</span></button></div>
    <div class="card"><h3>${L(['Language','اللغة'])}</h3><div class="row"><button class="opt" type="button" data-setlang="en" aria-pressed="${!A()}">English</button><button class="opt" type="button" data-setlang="ar" aria-pressed="${A()}">العربية</button></div></div>
+   ${settingsExtraHTML()}
    <div class="card"><h3>${L(['Your progress','تقدّمك'])}</h3><p class="note">${L(['Your progress and journal are saved on this phone only.','تقدّمك ويومياتك محفوظين على الموبايل ده بس.'])}</p>
     <button class="btn ghost" type="button" id="setReset">${L(['Start fresh','ابدأي من جديد'])}</button>
     <div id="resetBox" hidden class="week"><p>${L(['This clears your prayers, adhkar, hifz, journey, journal and choices on this phone. Are you sure?','ده هيمسح صلواتك وأذكارك وحفظك ورحلتك ويومياتك واختياراتك على الموبايل ده. متأكدة؟'])}</p><div class="row" style="margin-top:8px"><button class="btn" type="button" id="resetYes">${L(['Yes, clear it','أيوه، امسحي'])}</button><button class="btn ghost" type="button" id="resetNo">${L(['Cancel','إلغاء'])}</button></div></div></div>

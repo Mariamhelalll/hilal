@@ -1,0 +1,7 @@
+[build]
+  command = "rm -rf dist && mkdir dist && cp -r index.html sw.js manifest.webmanifest icon-192.png icon-512.png apple-touch-icon.png logo.svg quran.json quran_en.json mushaf dist/"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
