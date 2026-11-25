@@ -127,6 +127,7 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .steps{margin:0;padding-inline-start:22px}.steps li{margin:5px 0}
 .pinl{display:inline-flex;align-items:center;text-decoration:none}
 .dots{display:flex;gap:8px;justify-content:center}.dots i{width:8px;height:8px;border-radius:50%;background:#ffffff40}.dots i.on{background:var(--gold);width:22px;border-radius:4px}
+.track{display:grid;grid-template-columns:1fr 1fr;gap:10px}.trk{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:start;padding:14px;border-radius:18px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer;transition:transform .15s ease,background .2s ease,border-color .2s ease}.trk .ti{font-size:26px}.trk b{font-size:16px}.trk small{font-size:12.5px;color:var(--muted);line-height:1.45}.trk[aria-pressed=true]{border-color:var(--wine);background:var(--soft);box-shadow:inset 0 0 0 1px var(--wine)}.trk:active{transform:scale(.97)}
 .ilist{display:flex;flex-direction:column;gap:10px;text-align:start}.ilist div{background:#ffffff12;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column}.ilist b{color:var(--gold)}.ilist span{color:#D9D6F2}
 .slidein{animation:rise .5s cubic-bezier(.2,.75,.2,1)}
 .goalrow{display:flex;align-items:center;gap:6px}.goalrow .check{flex:1}
@@ -226,6 +227,48 @@ nav.tabs a[aria-current=page]{color:var(--wine);background:var(--soft)}
 button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,label:focus-within{outline:3px solid var(--gold);outline-offset:2px}
 .view{display:none}.view.on{display:block;animation:in .25s ease}
 @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.story{position:fixed;inset:0;z-index:22;background:radial-gradient(120% 80% at 50% 0%,#3B3A78 0%,#232650 45%,#141633 100%);color:#fff;display:flex;flex-direction:column;align-items:center;padding:calc(14px + env(safe-area-inset-top)) 22px calc(20px + env(safe-area-inset-bottom));overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.story[hidden]{display:none}
+.story::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(1.5px 1.5px at 10% 15%,#fff9,transparent),radial-gradient(1px 1px at 22% 62%,#fff8,transparent),radial-gradient(2px 2px at 35% 30%,#fffa,transparent),radial-gradient(1px 1px at 48% 85%,#fff7,transparent),radial-gradient(1.5px 1.5px at 62% 12%,#fff9,transparent),radial-gradient(1px 1px at 74% 48%,#fff8,transparent),radial-gradient(2px 2px at 86% 26%,#fffa,transparent),radial-gradient(1.5px 1.5px at 92% 78%,#fff8,transparent),radial-gradient(1px 1px at 6% 88%,#fff7,transparent);animation:twinkle 3.5s ease-in-out infinite alternate}
+.story.full{background:radial-gradient(120% 80% at 50% 10%,#5A4C86 0%,#2B2A5E 45%,#151634 100%);transition:background 1s}
+.story>*{position:relative;max-width:440px;width:100%}
+.stbars{display:flex;gap:5px}.stbars i{flex:1;height:3px;border-radius:3px;background:#ffffff33;overflow:hidden}.stbars b{display:block;height:100%;width:0;background:var(--gold)}
+.stbars i.done b{width:100%}.stbars i.on b{width:100%;animation:stfill .7s ease}
+@keyframes stfill{from{width:0}}
+.stskip{align-self:flex-end;width:auto;margin-top:10px;background:none;border:0;color:#D9D6F2;font:500 14px 'DM Sans',Tajawal,sans-serif;padding:8px 4px;cursor:pointer}
+html[lang=ar] .stskip{align-self:flex-start}
+.stskip[hidden]{visibility:hidden;display:block}
+.stsky{flex:none;height:min(30vh,210px);display:flex;align-items:center;justify-content:center;position:relative}
+.stmoon{width:min(26vh,170px);height:min(26vh,170px);animation:float 6s ease-in-out infinite;filter:drop-shadow(0 0 22px #D8B46A55)}
+.stglow{opacity:.12;transition:opacity 1.2s ease}.story.full .stglow{opacity:.35}
+.story.full .stmoon{filter:drop-shadow(0 0 40px #F6E2B0aa)}
+#stShade{transition:transform 1.3s cubic-bezier(.2,.75,.2,1)}
+.stchips{position:absolute;inset:0;pointer-events:none}
+.stchips span{position:absolute;left:50%;top:50%;font-size:26px;width:48px;height:48px;margin:-24px 0 0 -24px;display:grid;place-items:center;border-radius:14px;background:#ffffff18;border:1px solid #ffffff22;opacity:0;translate:0 0;scale:.4;transition:translate 1s cubic-bezier(.2,.75,.2,1),scale 1s cubic-bezier(.2,.75,.2,1),opacity .7s ease}
+.stchips.scatter span{opacity:1;scale:1;animation:float 4s ease-in-out infinite}
+.stchips.scatter span:nth-child(1){translate:-130px -55px}.stchips.scatter span:nth-child(2){translate:128px -62px;animation-delay:-1s}.stchips.scatter span:nth-child(3){translate:-118px 62px;animation-delay:-2s}.stchips.scatter span:nth-child(4){translate:126px 58px;animation-delay:-3s}.stchips.scatter span:nth-child(5){translate:0 -96px;animation-delay:-1.5s}
+.stchips.gather span{opacity:0;scale:.3}
+.story.tl .stsky{height:min(18vh,130px)}.story.tl .stmoon{width:min(15vh,110px);height:min(15vh,110px)}
+.stsky,.stmoon{transition:height .6s ease,width .6s ease}
+.stbody{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;min-height:0}
+.stbody>*{margin:0}
+.stbody.go>*{animation:rise .7s cubic-bezier(.2,.75,.2,1) both}
+.stbody.go>*:nth-child(2){animation-delay:.12s}.stbody.go>*:nth-child(3){animation-delay:.3s}.stbody.go>*:nth-child(4){animation-delay:.48s}.stbody.go>*:nth-child(5){animation-delay:.66s}
+.stk{color:var(--gold);font:600 13px 'DM Sans',Tajawal,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+html[lang=ar] .stk{letter-spacing:0;font-size:15px}
+.stbody h2{font:600 30px/1.2 Fraunces,serif;color:#fff}
+html[lang=ar] .stbody h2{font:800 30px/1.4 Tajawal,sans-serif}
+.stg{font:italic 600 24px Fraunces,serif;color:var(--gold)}html[lang=ar] .stg{font:800 26px Tajawal,sans-serif;font-style:normal}
+.stb{color:#D9D6F2;font-size:17px;line-height:1.75}.stb.sm{font-size:14px}
+.stsig{color:var(--gold);font-size:15px;margin-top:4px!important}
+.sttiles{display:flex;flex-direction:column;gap:8px;width:100%;text-align:start}
+.sttiles div{display:flex;align-items:center;gap:12px;background:#ffffff12;border:1px solid #ffffff18;border-radius:16px;padding:10px 14px}
+.sttiles span{font-size:24px}.sttiles p{margin:0;display:flex;flex-direction:column}.sttiles b{color:var(--gold)}.sttiles small{color:#D9D6F2;font-size:13.5px}
+.stbody.go .sttiles div{animation:rise .6s cubic-bezier(.2,.75,.2,1) both}
+.sttiles div:nth-child(1){animation-delay:.3s!important}.sttiles div:nth-child(2){animation-delay:.42s!important}.sttiles div:nth-child(3){animation-delay:.54s!important}.sttiles div:nth-child(4){animation-delay:.66s!important}.sttiles div:nth-child(5){animation-delay:.78s!important}
+.story .obgo{flex:none;background:var(--gold);color:#1E2048;border-color:var(--gold);font-weight:700}
+@media(max-height:700px){.stsky{height:22vh}.stbody h2{font-size:25px}.stb{font-size:15.5px}.sttiles div{padding:7px 12px}}
+@media(prefers-reduced-motion:reduce){.stbody.go>*,.stbody.go .sttiles div,.stmoon,.story::before,.stchips.scatter span{animation:none}#stShade,.stchips span{transition:none}}
 .ob{position:fixed;inset:0;z-index:20;background:radial-gradient(120% 80% at 50% 0%,#3B3A78 0%,#232650 45%,#141633 100%);color:#fff;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}
 .ob::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(1.5px 1.5px at 10% 15%,#fff9,transparent),radial-gradient(1px 1px at 22% 62%,#fff8,transparent),radial-gradient(2px 2px at 35% 30%,#fffa,transparent),radial-gradient(1px 1px at 48% 85%,#fff7,transparent),radial-gradient(1.5px 1.5px at 62% 12%,#fff9,transparent),radial-gradient(1px 1px at 74% 48%,#fff8,transparent),radial-gradient(2px 2px at 86% 26%,#fffa,transparent),radial-gradient(1.5px 1.5px at 92% 78%,#fff8,transparent),radial-gradient(1px 1px at 6% 88%,#fff7,transparent);animation:twinkle 3.5s ease-in-out infinite alternate}
 .ob[hidden],.ob .in[hidden]{display:none}
@@ -288,6 +331,14 @@ nav.tabs a[aria-current=page] svg{animation:pop .4s ease}
 </style>
 </head>
 <body>
+<div class="story" id="story" hidden role="dialog" aria-modal="true" aria-label="Hilal">
+  <div class="stbars" id="stBars"></div>
+  <button type="button" class="stskip" id="stSkip">Skip</button>
+  <div class="stsky"><div class="stchips" id="stChips"><span>📿</span><span>🏋️‍♀️</span><span>📌</span><span>📝</span><span>🎯</span></div>
+   <svg class="stmoon" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="stg" cx="40%" cy="35%"><stop offset="0" stop-color="#FBEBC4"/><stop offset="1" stop-color="#D8B46A"/></radialGradient><clipPath id="stc"><circle cx="60" cy="60" r="46"/></clipPath></defs><circle class="stglow" cx="60" cy="60" r="58" fill="#D8B46A"/><circle cx="60" cy="60" r="46" fill="url(#stg)"/><g clip-path="url(#stc)"><circle id="stShade" cx="46" cy="58" r="50" fill="#1E2048"/></g></svg></div>
+  <div class="stbody" id="stBody" aria-live="polite"></div>
+  <button type="button" class="obgo" id="stNext"></button>
+</div>
 <div class="ob" id="ob" hidden>
   <div class="in" id="ob1">
     <svg class="obmoon" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><defs><radialGradient id="og" cx="40%" cy="35%"><stop offset="0" stop-color="#F6E2B0"/><stop offset="1" stop-color="#D8B46A"/></radialGradient></defs><circle cx="60" cy="60" r="56" fill="#D8B46A" opacity=".15"/><circle cx="60" cy="60" r="46" fill="url(#og)"/><circle cx="82" cy="52" r="44" fill="#232650"/></svg>
@@ -1016,6 +1067,21 @@ function renderDrive(){
 }
 
 const DAYS=[['Mon','الإتنين'],['Tue','التلات'],['Wed','الأربع'],['Thu','الخميس'],['Fri','الجمعة'],['Sat','السبت'],['Sun','الحد']];
+const LVG={
+ 'Beginner':[['Beginner','مبتدئة'],['Starting the journey','البداية'],['Two or three sessions a week. Learn the moves, build the habit and feel at home in your body.','تمرينين أو تلاتة في الأسبوع. اتعلمي الحركات، وابني العادة، واتعودي على جسمك وهو بيتحرك.'],[
+  LV.Beginner[3][0],LV.Beginner[3][1],
+  [W('Core and glutes','البطن والجلوتس'),[W('Glute bridges 3 × 12',`${B('Glute bridges')}: ٣ × ١٢`),W('Dead bug 3 × 8 each side',`${B('Dead bug')}: ٣ × ٨ لكل جنب`),W('Bird dog 3 × 8 each side',`${B('Bird dog')}: ٣ × ٨ لكل جنب`),W('Side plank 3 × 15 seconds each side',`${B('Side plank')}: ٣ × ١٥ ثانية لكل جنب`),W('Clamshells 3 × 12 each side',`${B('Clamshells')}: ٣ × ١٢ لكل جنب`)]]]],
+ 'Intermediate':[['Intermediate','متوسطة'],['Building up','بنكبر'],['Three or four sessions a week. Strength, cardio and a little of everything so you feel strong and full of energy.','تلات أو أربع تمارين في الأسبوع. قوة وكارديو وشوية من كل حاجة عشان تحسي إنك قوية ومليانة طاقة.'],[
+  LV.Intermediate[3][0],LV.Intermediate[3][1],
+  [W('Full body circuit','دايرة جسم كامل'),[W('3 rounds, 90 seconds rest between rounds:','٣ جولات، وراحة ٩٠ ثانية بين كل جولة:'),W('12 kettlebell swings',`${B('Kettlebell swings')}: ١٢`),W('10 push-ups (on your knees is fine)',`${B('Push-ups')}: ١٠ (على ركبك عادي)`),W('10 reverse lunges each leg with dumbbells',`${B('Reverse lunges')} بـ ${B('dumbbells')}: ١٠ لكل رجل`),W('10 dumbbell shoulder press',`${B('Dumbbell shoulder press')}: ١٠`),W('30 seconds plank',`${B('Plank')}: ٣٠ ثانية`)]]]],
+ 'Advanced':[['Advanced','متقدمة'],['Going further','بنكمّل لقدام'],['Four or five sessions a week. Heavier lifts, longer runs and steady progress week by week.','أربع أو خمس تمارين في الأسبوع. أوزان أتقل، وجري أطول، وتقدم ثابت أسبوع ورا أسبوع.'],[
+  [W('Heavy strength','قوة بأوزان تقيلة'),[W('Back squat 5 × 5',`${B('Back squat')}: ٥ × ٥`),W('Romanian deadlift 4 × 6',`${B('Romanian deadlift')}: ٤ × ٦`),W('Pull-ups or assisted pull-ups 4 × 6',`${B('Pull-ups')} أو ${B('assisted pull-ups')}: ٤ × ٦`),W('Dumbbell bench press 4 × 8',`${B('Dumbbell bench press')}: ٤ × ٨`),W('Hanging knee raises 3 × 10',`${B('Hanging knee raises')}: ٣ × ١٠`)]],
+  [W('Tempo run','جري بإيقاع ثابت'),[W('10 minutes easy jog','١٠ دقايق جري خفيف'),W('20 minutes comfortably hard','٢٠ دقيقة بسرعة عالية بس مريحة'),W('10 minutes easy to cool down','١٠ دقايق خفيف تهدية')]],
+  [W('Upper body and core','الجزء العلوي والبطن'),[W('Lat pulldown 4 × 8',`${B('Lat pulldown')}: ٤ × ٨`),W('Seated cable row 4 × 10',`${B('Seated cable row')}: ٤ × ١٠`),W('Dumbbell shoulder press 3 × 10',`${B('Dumbbell shoulder press')}: ٣ × ١٠`),W('Face pulls 3 × 12',`${B('Face pulls')}: ٣ × ١٢`),W('Pallof press 3 × 10 each side',`${B('Pallof press')}: ٣ × ١٠ لكل جنب`)]],
+  [W('Conditioning','لياقة ونَفَس'),[W('5 rounds: 1 minute hard on the bike or rower, 1 minute easy',`٥ جولات: دقيقة سريع على ${B('bike')} أو ${B('rower')}، ودقيقة هادي`),W('Then 3 rounds: 15 kettlebell swings and 10 step-ups each leg',`وبعدين ٣ جولات: ${B('Kettlebell swings')} ١٥ و${B('Step-ups')} ١٠ لكل رجل`)]]]]
+};
+const hyT=()=>S.ftrack==='hyrox';
+const LVX=()=>hyT()?LV:LVG;
 const PGOAL=[['start',['Get started','أبدأ']],['strong',['Get stronger','أبقى أقوى']],['run',['Run better','أجري أحسن']],['hyrox',['Train for Hyrox','أتمرن لهايروكس']]];
 const HOME={
  full:[W('Home full body','جسم كامل في البيت'),[W('Bodyweight squats 3 × 12',`${B('Bodyweight squats')}: ٣ × ١٢`),W('Glute bridges 3 × 12',`${B('Glute bridges')}: ٣ × ١٢`),W('Incline push-ups 3 × 10',`${B('Incline push-ups')}: ٣ × ١٠`),W('Reverse lunges 3 × 10 each leg',`${B('Reverse lunges')}: ٣ × ١٠ لكل رجل`),W('Plank 3 × 20 seconds',`${B('Plank')}: ٣ × ٢٠ ثانية`)]],
@@ -1026,7 +1092,7 @@ const MOB=[W('Mobility and stretch','مرونة واسترتش'),[W('Cat-cow 10 
 const WALK=[W('Brisk walk','مشي سريع'),[W('30 minutes brisk walk outside, or on a treadmill','٣٠ دقيقة مشي سريع بره، أو على المشاية')]];
 function planState(){
   if(!S.gplan||typeof S.gplan!=='object')S.gplan={};
-  const p=S.gplan;if(!PGOAL.some(x=>x[0]===p.goal))p.goal='start';
+  const p=S.gplan;if(!PGOAL.some(x=>x[0]===p.goal))p.goal='start';if(!hyT()&&p.goal==='hyrox')p.goal='strong';
   if(!Array.isArray(p.days)||!p.days.length)p.days=[0,2,4];
   if(![20,30,45,60].includes(p.mins))p.mins=30;
   if(p.place!=='gym'&&p.place!=='home')p.place='gym';
@@ -1035,7 +1101,7 @@ function planState(){
   return p;
 }
 function buildPlan(){
-  const p=planState(),lv=LV[S.level]?S.level:'Beginner',w=LV[lv][3],gym=p.place==='gym';
+  const p=planState(),lv=LV[S.level]?S.level:'Beginner',w=LVX()[lv][3],gym=p.place==='gym';
   const g=w,A0=g[0],A1=g[1],A2=g[2],A3=g[3]||g[0];
   let rot;
   if(!gym){rot={start:[HOME.full,WALK,MOB],strong:[HOME.full,HOME.cardio,HOME.full,MOB],run:[WALK,HOME.cardio,HOME.full,WALK],hyrox:[HOME.hyrox,HOME.full,HOME.cardio,HOME.hyrox]}[p.goal]}
@@ -1058,11 +1124,11 @@ function timetableHTML(){
   }).join('');
   return `<div class="card">${ttl(['My gym timetable','جدول تماريني'])}
    <p class="muted">${L(['Tell us what you want and Hilal builds your week. Change anything, and add your own sessions.','قوليلنا عايزة إيه وهلال يعملك جدول الأسبوع. غيّري اللي انتي عايزاه، وضيفي تمارينك انتي كمان.'])}</p>
-   <div class="lkrow"><p class="lkt">${L(['My goal','هدفي'])}</p><div class="row">${PGOAL.map(x=>`<button class="opt sm" type="button" data-pg="${x[0]}" aria-pressed="${p.goal===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
+   <div class="lkrow"><p class="lkt">${L(['My goal','هدفي'])}</p><div class="row">${PGOAL.filter(x=>hyT()||x[0]!=='hyrox').map(x=>`<button class="opt sm" type="button" data-pg="${x[0]}" aria-pressed="${p.goal===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
    <div class="lkrow"><p class="lkt">${L(['Where','فين'])}</p><div class="row">${[['gym',['Gym','الجيم']],['home',['Home','البيت']]].map(x=>`<button class="opt sm" type="button" data-pp="${x[0]}" aria-pressed="${p.place===x[0]}">${L(x[1])}</button>`).join('')}</div></div>
    <div class="lkrow"><p class="lkt">${L(['My training days','أيام التمرين'])}</p><div class="row">${DAYS.map((dn,d)=>`<button class="opt sm" type="button" data-pday="${d}" aria-pressed="${p.days.includes(d)}">${L(dn)}</button>`).join('')}</div></div>
    <div class="lkrow"><p class="lkt">${L(['Time per session','وقت التمرين'])}</p><div class="row">${[20,30,45,60].map(m=>`<button class="opt sm" type="button" data-pm="${m}" aria-pressed="${p.mins===m}">${L([`${m} min`,`${toAr(m)} دقيقة`])}</button>`).join('')}</div></div>
-   <p class="note">${L([`Built for your level: ${L(LV[S.level]?LV[S.level][0]:LV.Beginner[0])}. Change your level above.`,`معمول على مستواكي: ${L(LV[S.level]?LV[S.level][0]:LV.Beginner[0])}. تقدري تغيّري المستوى فوق.`])}${short?' '+short:''}</p>
+   <p class="note">${L([`Built for your level: ${L(LVX()[S.level]?LVX()[S.level][0]:LV.Beginner[0])}. Change your level above.`,`معمول على مستواكي: ${L(LVX()[S.level]?LVX()[S.level][0]:LV.Beginner[0])}. تقدري تغيّري المستوى فوق.`])}${short?' '+short:''}</p>
    <div class="ttable">${days}</div>
    <p style="font-weight:600">${L(['Add your own session','ضيفي تمرينك'])}</p>
    <div class="row">${DAYS.map((dn,d)=>`<button class="opt sm" type="button" data-cd="${d}" aria-pressed="${cDay===d}">${L(dn)}</button>`).join('')}</div>
@@ -1070,19 +1136,22 @@ function timetableHTML(){
 }
 let cDay=(today.getDay()+6)%7;
 function renderHealth(){
-  const cur=LV[S.level]?S.level:'Beginner';const x=LV[cur];
+  const cur=LV[S.level]?S.level:'Beginner',LVc=LVX(),x=LVc[cur],tp=hyT()?'':'g';
   const st=[['SkiErg 1000 m',`${B('SkiErg')} ١٠٠٠ متر`],['Sled push',B('Sled push')],['Sled pull',B('Sled pull')],['Burpee broad jumps',B('Burpee broad jumps')],['Row 1000 m',`${B('Row')} ١٠٠٠ متر`],['Farmers carry',B('Farmers carry')],['Sandbag lunges',B('Sandbag lunges')],['Wall balls',B('Wall balls')]];
   setView('v-health',`
   <div style="margin-top:8px">${ttl(['Care for yourself','اهتمي بصحتك'],'h1')}</div>
   <p class="muted" style="margin-top:6px">${L(["Your body is an amanah. Start wherever you are: nobody is watching as closely as you think, and every girl in the gym had a first day.",'جسمك أمانة. ابدأي من مكانك: محدش مركز معاكي زي ما انتي فاكرة، وكل بنت في الجيم كان ليها أول يوم.'])}</p>
+  <div class="card">${ttl(['What are you training for?','بتتمرني عشان إيه؟'])}
+   <div class="track">${[['gen',['General fitness','لياقة عامة'],['Feel strong, healthy and full of energy: strength, cardio and mobility for everyday life.','عشان تحسي إنك قوية وصحتك حلوة ومليانة طاقة: قوة وكارديو ومرونة لحياتك اليومية.'],'💪'],['hyrox',['Hyrox','هايروكس'],['Train for the fitness race: running plus 8 workout stations.','اتمرني لسباق اللياقة: جري و٨ محطات تمارين.'],'🏃‍♀️']].map(t=>`<button type="button" class="trk" data-ftrack="${t[0]}" aria-pressed="${(S.ftrack==='hyrox'?'hyrox':'gen')===t[0]}"><span class="ti" aria-hidden="true">${t[3]}</span><b>${L(t[1])}</b><small>${L(t[2])}</small></button>`).join('')}</div>
+   <p class="note">${L(['Everything below changes with your choice. You can switch any time.','كل اللي تحت بيتغير على حسب اختيارك. وتقدري تغيّري في أي وقت.'])}</p></div>
   <div class="card">${ttl(['Choose your level','اختاري مستواكي'])}
-   <div class="row">${Object.entries(LV).map(([k,v])=>`<button class="opt" type="button" data-lv="${k}" aria-pressed="${k===cur}">${L(v[0])}</button>`).join('')}</div>
+   <div class="row">${Object.entries(LVc).map(([k,v])=>`<button class="opt" type="button" data-lv="${k}" aria-pressed="${k===cur}">${L(v[0])}</button>`).join('')}</div>
    <p><b>${L(x[1])}</b></p><p class="muted">${L(x[2])}</p>
-   <div style="display:flex;flex-direction:column;gap:10px">${x[3].map((w,i)=>{const id=cur+i+'-'+tk;return `<div class="wk">${chk(`data-wk="${id}"`,S.wk[id],`<b>${L(w[0])}</b>`,S.wk[id]?L(['Done today, well done','خلصتيه النهارده، برافو عليكي']):L(['Tick when you finish it today','علّمي عليه لما تخلّصيه النهارده']))}<ul>${w[1].map(s=>`<li>${L(s)}</li>`).join('')}</ul></div>`}).join('')}</div>
+   <div style="display:flex;flex-direction:column;gap:10px">${x[3].map((w,i)=>{const id=tp+cur+i+'-'+tk;return `<div class="wk">${chk(`data-wk="${id}"`,S.wk[id],`<b>${L(w[0])}</b>`,S.wk[id]?L(['Done today, well done','خلصتيه النهارده، برافو عليكي']):L(['Tick when you finish it today','علّمي عليه لما تخلّصيه النهارده']))}<ul>${w[1].map(s=>`<li>${L(s)}</li>`).join('')}</ul></div>`}).join('')}</div>
    <p class="note">${L(['Warm up before every session, go at your own pace, and stop if something hurts. If you have a health condition, check with a professional first.','سخّني قبل كل تمرين، امشي على قد طاقتك، ووقفي لو حاجة وجعتك. لو عندك أي مشكلة صحية، اسألي متخصص الأول.'])}</p></div>
   ${timetableHTML()}
-  ${fold(['What is Hyrox?','يعني إيه هايروكس؟'],`<p class="muted">${L(['A fitness race: 8 rounds of a 1 km run, each followed by one workout station, in this order.','سباق لياقة: ٨ جولات، كل جولة ١ كم جري وبعدها محطة تمرين، بالترتيب ده.'])}</p>
-   <div class="stations">${st.map((s,i)=>`<span>${N(i+1)}. ${L(s)}</span>`).join('')}</div>`)}
+  ${hyT()?fold(['What is Hyrox?','يعني إيه هايروكس؟'],`<p class="muted">${L(['A fitness race: 8 rounds of a 1 km run, each followed by one workout station, in this order.','سباق لياقة: ٨ جولات، كل جولة ١ كم جري وبعدها محطة تمرين، بالترتيب ده.'])}</p>
+   <div class="stations">${st.map((s,i)=>`<span>${N(i+1)}. ${L(s)}</span>`).join('')}</div>`):''}
   ${fold(['Your first gym visit','أول مرة في الجيم'],`<ul>${[['Go at a quieter time, like mid-morning or early afternoon, or ask about women-only hours.','روحي في وقت هادي، زي الصبح متأخر أو بعد الضهر، أو اسألي لو فيه مواعيد للبنات بس.'],['Write your plan in your notes before you go so you always know your next move.','اكتبي خطتك في النوتس قبل ما تروحي عشان دايماً تعرفي هتعملي إيه بعدها.'],["A water bottle and a small towel are all you need. Headphones can help you feel settled on your first visits, then slowly try training without them and find your own focus and rhythm.",'إزازة مية وفوطة صغيرة، وده كفاية. السماعات ممكن تساعدك تحسي براحة في أول كام مرة، وبعدين جربي بالراحة تتمرني من غيرها وتلاقي تركيزك وإيقاعك الخاص.'],['Start on machines: they guide the movement and feel less exposed than free weights.','ابدأي بالأجهزة: بتوجّه الحركة وبتحسسك براحة أكتر من الأوزان الحرة.'],["Ask the staff for a quick induction. It's usually free and it's their job.",'اطلبي من حد من الجيم يعرّفك على الأجهزة. غالباً ببلاش وده شغلهم.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul>`)}
   ${fold(['What to wear','ألبس إيه؟'],`<ul>${[['Sports or jersey hijab that tucks in, so nothing shifts when you move','طرحة سبور أو جيرسيه بتدخل كويس عشان متتحركش'],['Long, loose long-sleeve top, ideally past the hips','بلوزة واسعة بكم طويل، ويا ريت نازلة تحت الوسط'],['Wide-leg joggers or loose training trousers','بنطلون رياضي واسع'],['Supportive trainers you can walk and lift in','كوتشي مريح تمشي وترفعي بيه']].map(x=>`<li>${L(x)}</li>`).join('')}</ul>`)}`);
 }
@@ -1131,7 +1200,7 @@ function renderJournal(){
 document.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   const ds=b.dataset;let changed=true;
-  if(ds.lang){S.lang=ds.lang;applyLang();if(S.introSeen)showName();else showIntro()}
+  if(ds.lang){S.lang=ds.lang;applyLang();if(S.storySeen)showName();else showStory()}
   else if(ds.pg){planState().goal=ds.pg;renderHealth()}
   else if(ds.pp){planState().place=ds.pp;renderHealth()}
   else if(ds.pday!==undefined){const p=planState(),d=+ds.pday;if(p.days.includes(d)){if(p.days.length>1)p.days=p.days.filter(x=>x!==d)}else if(p.days.length<6)p.days.push(d);renderHealth()}
@@ -1148,7 +1217,7 @@ document.addEventListener('click',e=>{
   else if(ds.gi!==undefined){const g=GIDEAS[+ds.gi];addGoal(L(g[1]),g[0],false);renderToday();$('gMsg').textContent=L(['Added to your goals','اتضاف لأهدافك'])}
   else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else if(S.name)welcomeBack();else showName()}}
   else if(b.id==='obIback'){if(introI>0){introI--;drawIntro()}else if(introAgain){$('obI').hidden=true;$('ob').hidden=true}else{$('obI').hidden=true;$('ob1').hidden=false}changed=false}
-  else if(b.id==='setIntro'){$('sheet').hidden=true;showIntro(true);changed=false}
+  else if(b.id==='setIntro'){$('sheet').hidden=true;showStory(true);changed=false}
   else if(b.id==='nameBtn'){showName(true)}
   else if(b.id==='installBtn'){if(installEvt){installEvt.prompt();installEvt.userChoice.then(()=>{installEvt=null;renderToday()}).catch(()=>{})}changed=false}
   else if(b.id==='installHide'){S.installHide=true;renderToday()}
@@ -1206,6 +1275,7 @@ document.addEventListener('click',e=>{
   else if(ds.cown){if(!S.capOwn||typeof S.capOwn!=='object')S.capOwn={};S.capOwn[ds.cown]=!S.capOwn[ds.cown];renderStyle()}
   else if(ds.pa){S.passion=ds.pa;renderDrive()}
   else if(ds.ds){if(!S.drive[S.passion]||typeof S.drive[S.passion]!=='object')S.drive[S.passion]={};const o=S.drive[S.passion];o[ds.ds]=!o[ds.ds];renderDrive()}
+  else if(ds.ftrack){S.ftrack=ds.ftrack;const p=planState();if(ds.ftrack==='hyrox')p.goal='hyrox';else if(p.goal==='hyrox')p.goal='strong';renderHealth()}
   else if(ds.lv){S.level=ds.lv;renderHealth()}
   else if(ds.wk){S.wk[ds.wk]=!S.wk[ds.wk];renderHealth()}
   else if(ds.jt!==undefined){jT=+ds.jt;jQ=0;renderJournal();changed=false}
@@ -1248,7 +1318,7 @@ function openSettings(){
    <div class="card"><h3>${L(['Your progress','تقدّمك'])}</h3><p class="note">${L(['Your progress and journal are saved on this phone only.','تقدّمك ويومياتك محفوظين على الموبايل ده بس.'])}</p>
     <button class="btn ghost" type="button" id="setReset">${L(['Start fresh','ابدأي من جديد'])}</button>
     <div id="resetBox" hidden class="week"><p>${L(['This clears your prayers, adhkar, hifz, journey, journal and choices on this phone. Are you sure?','ده هيمسح صلواتك وأذكارك وحفظك ورحلتك ويومياتك واختياراتك على الموبايل ده. متأكدة؟'])}</p><div class="row" style="margin-top:8px"><button class="btn" type="button" id="resetYes">${L(['Yes, clear it','أيوه، امسحي'])}</button><button class="btn ghost" type="button" id="resetNo">${L(['Cancel','إلغاء'])}</button></div></div></div>
-   <div class="card"><h3>${L(['About Hilal','عن هلال'])}</h3><p class="muted">${L(INTRO)}</p><button class="btn ghost" type="button" id="setIntro">${L(['Show the intro again','اعرضي المقدمة تاني'])}</button></div>`;
+   <div class="card"><h3>${L(['About Hilal','عن هلال'])}</h3><p class="muted">${L(INTRO)}</p><button class="btn ghost" type="button" id="setIntro">${L(["Watch Hilal's story again",'شوفي حكاية هلال تاني'])}</button></div>`;
   $('sheet').hidden=false;
 }
 
@@ -1269,6 +1339,54 @@ function drawIntro(){
   const m=$('obIm');if(m)m.setAttribute('cx',82+introI*14);
   const b=$('obIbody');b.style.animation='none';void b.offsetWidth;b.style.animation='';b.classList.add('slidein');
 }
+
+/* ---------- the story of Hilal (one time) ---------- */
+const STORY=[
+ {k:['The story of Hilal','حكاية هلال'],t:['Every beautiful thing starts small','كل حاجة حلوة بتبدأ صغيرة'],b:['Like the hilal: on the first night of the month, it is just a thin line of light. But every night, it grows a little.','زي الهلال بالظبط: أول ليلة في الشهر بيبان خيط نور رفيع… بس كل ليلة بيكبر شوية.'],m:0},
+ {k:['How the idea started','الفكرة جت إزاي'],t:['I was looking for one place','كنت بدوّر على مكان واحد'],b:['One place for everything I care about as a girl: my deen, my style, my dreams and my health. Instead I found it all scattered, and most of it was not made for us.','مكان يجمع كل اللي يهمني كبنت: ديني، وستايلي، وأحلامي، وصحتي. بس لقيت كل حاجة متفرقة في حتة، وأغلبها مش معمول لينا إحنا.'],m:1,chips:1},
+ {k:['So…','فـ…'],t:['I decided to build it','قلت: طب ما أعمله أنا'],b:['Hilal was made by a girl, for every girl. One calm place, with no pressure and no comparing yourself to anyone.','هلال اتعمل من بنت، لكل بنت. مكان واحد هادي، من غير ضغط ومن غير ما نقارن نفسنا بحد.'],m:2,chips:2},
+ {k:['Why Hilal?','ليه هلال؟'],t:['My family name, and the start of every month','اسم عيلتي، وبداية كل شهر'],b:['Hilal is my family name, and the hilal is the first light of every new Islamic month. Not a full moon yet, but on its way. That is exactly us.','هلال اسم عيلتي، والهلال هو أول نور بيبان في كل شهر هجري جديد. لسه مش قمر كامل، بس في الطريق. وده إحنا بالظبط.'],m:3},
+ {k:['Inside Hilal','جوه هلال'],t:['Your spaces','مساحاتك'],m:4,tiles:[['🤲',['Deen','الدين'],['prayers, adhkar, the Mushaf and hifz','صلواتك وأذكارك والمصحف والحفظ']],['👗',['Style','الأناقة'],['colours, ideas and your own style','ألوان وأفكار وستايلك انتي']],['✨',['Drive','الطموح'],['step by step towards what you love','خطوة خطوة للي بتحبيه']],['💪',['Health','صحتك'],['general fitness or Hyrox, your way','لياقة عامة أو هايروكس، على طريقتك']],['📓',['Journal','يومياتي'],['honest questions, gentle muhasaba','أسئلة صادقة ومحاسبة نفس بهدوء']]],n:['Everything stays private on your phone.','وكل حاجة بتتحفظ على موبايلك انتي بس.']},
+ {k:['The whole idea','الفكرة كلها'],t:['One small step every day','كل يوم خطوة صغيرة'],g:['until it becomes a full moon','لحد ما يبقى قمر'],b:["You don't have to be perfect. Start from where you are, at your own pace. We are with you.",'مش لازم تكوني كاملة. ابدأي من مكانك وعلى راحتك، وإحنا معاكي.'],sig:['Mariam, who made Hilal 🤍','مريم، اللي عملت هلال 🤍'],m:5}
+];
+const SMOON=[6,-8,-22,-40,-64,-150];
+let stI=0,stAgain=false;
+function showStory(again){stAgain=!!again;stI=0;const s=$('story');s.hidden=false;document.body.style.overflow='hidden';drawStory()}
+function drawStory(){
+  const x=STORY[stI],last=stI===STORY.length-1;
+  $('stBars').innerHTML=STORY.map((_,i)=>`<i class="${i<stI?'done':i===stI?'on':''}"><b></b></i>`).join('');
+  $('stShade').style.transform=`translateX(${SMOON[x.m]}px)`;
+  $('story').classList.toggle('full',last);$('story').classList.toggle('tl',!!x.tiles);
+  const ch=$('stChips');ch.className='stchips'+(x.chips===1?' scatter':x.chips===2?' gather':'');
+  let h=`<p class="stk">${L(x.k)}</p><h2>${L(x.t)}</h2>`;
+  if(x.g)h+=`<p class="stg">${L(x.g)}</p>`;
+  if(x.b)h+=`<p class="stb">${L(x.b)}</p>`;
+  if(x.tiles)h+=`<div class="sttiles">${x.tiles.map(t=>`<div><span aria-hidden="true">${t[0]}</span><p><b>${L(t[1])}</b><small>${L(t[2])}</small></p></div>`).join('')}</div><p class="stb sm">${L(x.n)}</p>`;
+  if(x.sig)h+=`<p class="stsig">${L(x.sig)}</p>`;
+  const b=$('stBody');b.innerHTML=h;b.classList.remove('go');void b.offsetWidth;b.classList.add('go');
+  $('stNext').textContent=last?(stAgain?L(['Done','تمام']):L(['Start my journey','يلا نبدأ رحلتي'])):L(['Next','التالي']);
+  $('stSkip').hidden=last;$('stSkip').textContent=L(['Skip','تخطّي']);
+}
+function storyNav(d){
+  if(d>0){if(stI<STORY.length-1){stI++;drawStory()}else storyDone()}
+  else if(stI>0){stI--;drawStory()}
+  else if(!stAgain){$('story').hidden=true;document.body.style.overflow='';$('ob').hidden=false;$('ob1').hidden=false;$('ob2').hidden=true;$('obI').hidden=true}
+}
+function storyDone(){
+  S.storySeen=true;S.introSeen=true;save();$('story').hidden=true;document.body.style.overflow='';
+  if(stAgain){replay();return}
+  if(!S.name)showName();
+  else if(S.askName!==false&&!framed())welcomeBack();
+  else{$('ob').hidden=true;replay()}
+}
+$('story').addEventListener('click',e=>{
+  if(e.target.closest('#stNext')){storyNav(1);return}
+  if(e.target.closest('#stSkip')){storyDone();return}
+  if(e.target.closest('button'))return;
+  const r=$('story').getBoundingClientRect(),xr=(e.clientX-r.left)/r.width;
+  const fwd=A()?xr<0.5:xr>=0.5;storyNav(fwd?1:-1);
+});
+document.addEventListener('keydown',e=>{if($('story').hidden)return;if(e.key==='ArrowRight')storyNav(A()?-1:1);else if(e.key==='ArrowLeft')storyNav(A()?1:-1)});
 
 /* ---------- welcome ---------- */
 function showName(edit){
@@ -1341,7 +1459,7 @@ function merge(x){
 try{const l=localStorage.getItem('hilal');if(l)merge(JSON.parse(l))}catch(e){}
 applyLang();
 if(!(S.lang==='ar'||S.lang==='en')){$('ob').hidden=false;$('ob1').hidden=false;$('ob2').hidden=true}
-else if(!S.introSeen)showIntro();
+else if(!S.storySeen)showStory();
 else if(!S.name)showName();
 else if(S.askName!==false&&!framed())welcomeBack();
 if(window.claude&&typeof window.claude.use==='function'){
