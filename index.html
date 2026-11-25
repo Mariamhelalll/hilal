@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hilal · هلال</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22g%22%20cx%3D%2238%25%22%20cy%3D%2232%25%22%20r%3D%2275%25%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23F6E2B0%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23C99A4A%22/%3E%3C/radialGradient%3E%3Cmask%20id%3D%22m%22%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%22318%22%20cy%3D%22214%22%20r%3D%22132%22%20fill%3D%22%23000%22/%3E%3C/mask%3E%3ClinearGradient%20id%3D%22b%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%238E2846%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%235A1830%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22112%22%20fill%3D%22url%28%23b%29%22/%3E%3Ccircle%20cx%3D%22246%22%20cy%3D%22266%22%20r%3D%22150%22%20fill%3D%22url%28%23g%29%22%20mask%3D%22url%28%23m%29%22/%3E%3Ccircle%20cx%3D%22352%22%20cy%3D%22150%22%20r%3D%2210%22%20fill%3D%22%23F6E2B0%22/%3E%3Ccircle%20cx%3D%22390%22%20cy%3D%22210%22%20r%3D%226%22%20fill%3D%22%23F6E2B0%22%20opacity%3D%22.8%22/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#7A1F3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hilal">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=DM+Sans:wght@400;500;600&family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: girly, warm, sisterly; easy Egyptian-flavoured Arabic or friendly English
+   IDEA: the Hijri moon; each day you fill your own crescent toward a full moon, month by month to Ramadan
+   PICTURE: a large golden moon whose lit part grows with today's good deeds
+   COLOUR and TYPE: burgundy dominant, blush support, moon gold accent; Fraunces + DM Sans (EN), Tajawal + Amiri (AR)
+   LAYOUT: phone app shell, one column, language choice first, sticky bottom tab bar, six screens */
+:root{color-scheme:light dark;
+--bg:light-dark(#F7ECEA,#170C11);--card:light-dark(#FFFFFF,#24151C);--soft:light-dark(#F0DCD9,#2E1A23);
+--ink:light-dark(#2B1219,#F6E8E6);--muted:light-dark(#6B4A52,#CDB3B8);--line:light-dark(#E6CFCB,#40262F);
+--wine:light-dark(#7A1F3A,#E59AAE);--wineBg:light-dark(#7A1F3A,#5A1830);--gold:#D8B46A}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'DM Sans',system-ui,sans-serif;overflow-x:clip}
+html[lang=ar] body{font-family:Tajawal,'DM Sans',sans-serif;font-size:17px}
+.app{max-width:460px;margin:0 auto;min-height:100vh;padding:0 18px 116px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0;line-height:1.2;text-wrap:balance}
+html[lang=ar] :is(h1,h2,h3){font-family:Tajawal,sans-serif;font-weight:700}
+h1{font-size:32px}h2{font-size:23px}h3{font-size:18px}
+p{margin:0}ul{margin:0;padding-inline-start:20px}li{margin:4px 0}
+.muted{color:var(--muted)}.note{font-size:13px;color:var(--muted)}
+.ar{font-family:Amiri,serif;direction:rtl;unicode-bidi:isolate}
+.ttl{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ttl .ar{font-size:20px;color:var(--wine);font-weight:700}
+.ttl h1+.ar{font-size:28px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;padding:20px 0 8px;gap:12px}
+.logo{display:flex;align-items:baseline;gap:8px;font-family:Fraunces,serif;font-size:30px;font-weight:600;color:var(--wine)}
+.logo .ar{font-size:26px}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.date{font-size:13px;color:var(--muted);text-align:end}
+.date .ar{font-size:15px;color:var(--ink)}
+.lang{min-height:34px;padding:0 14px;border-radius:999px;border:1.5px solid var(--wine);background:transparent;color:var(--wine);font:600 13px 'DM Sans',Tajawal,sans-serif;cursor:pointer}
+.card{background:var(--card);border-radius:22px;padding:18px;margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.intro{padding:6px 2px 4px;display:flex;flex-direction:column;gap:10px}
+.intro .hi{font-family:Fraunces,serif;font-size:26px;font-weight:600;color:var(--wine)}
+html[lang=ar] .intro .hi{font-family:Tajawal,sans-serif;font-weight:700}
+.pillars a{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;background:var(--card);color:var(--wine);text-decoration:none;font-weight:600;font-size:14px}
+.hero{background:var(--wineBg);color:#FFF4F2;border-radius:28px;padding:22px 20px;margin-top:12px;display:grid;grid-template-columns:minmax(0,1fr) 124px;gap:14px;align-items:center}
+.hero p{color:#F4D7DC;font-size:15px}.hero h2{color:#fff}
+.ladder{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.rung{border-radius:14px;padding:10px 4px;text-align:center;background:var(--soft);font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.rung .ar{font-size:16px;color:var(--ink);font-weight:700}
+.rung.now{background:var(--wineBg);color:#F4D7DC}.rung.now .ar{color:#fff}
+.rung.done{opacity:.55}
+.check{display:flex;align-items:center;gap:12px;min-height:48px;padding:6px 2px;border:0;background:none;width:100%;text-align:start;font:inherit;color:inherit;cursor:pointer;border-bottom:1px solid var(--line)}
+.check:last-child{border-bottom:0}
+.box{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--wine);display:grid;place-items:center}
+.check[aria-pressed=true] .box{background:var(--wine)}
+.check[aria-pressed=true] .box::after{content:"";width:7px;height:12px;border:solid var(--card);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.check[aria-pressed=true] .lbl{color:var(--muted)}
+.lbl{display:flex;flex-direction:column;gap:1px}.lbl small{font-size:13px;color:var(--muted)}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--wine)}
+.prayers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.pr{min-height:70px;border-radius:16px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:500 11px 'DM Sans',sans-serif}
+.pr .ar{font-size:17px;font-weight:700}
+.pr[aria-pressed=true]{background:var(--wineBg);color:#F4D7DC;border-color:var(--wineBg)}.pr[aria-pressed=true] .ar{color:#fff}
+.tap{width:200px;height:200px;border-radius:50%;margin:4px auto;border:0;background:radial-gradient(circle at 35% 30%,#9B2F4F,#5A1830);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 18px 40px -18px #5A1830;transition:transform .08s;font:inherit}
+.tap:active{transform:scale(.96)}
+.tap span{font-family:Fraunces,serif;font-size:54px;line-height:1}
+.dhikr{text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.dhikr .ar{font-size:26px;line-height:1.8;color:var(--ink)}
+.bar{height:10px;border-radius:999px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--wine);border-radius:999px;transition:width .3s}
+.btn{min-height:46px;padding:0 20px;border-radius:999px;border:1.5px solid var(--wine);background:var(--wine);color:var(--card);font:600 15px 'DM Sans',Tajawal,sans-serif;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--wine)}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.opt{min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:500 14px 'DM Sans',Tajawal,sans-serif;cursor:pointer}
+.opt[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+input[type=search],textarea{font:16px 'DM Sans',Tajawal,sans-serif;padding:12px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);width:100%}
+textarea{min-height:150px;resize:vertical;line-height:1.6}
+.swatches{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
+.swb{aspect-ratio:1;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.swb[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 3px var(--card)}
+.picked{display:flex;align-items:center;gap:12px}
+.picked i{width:48px;height:48px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);flex:none}
+.sugg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sg{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:16px;padding:10px}
+.sg i{width:34px;height:34px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.sg span{display:flex;flex-direction:column;font-size:14px;line-height:1.3}.sg small{color:var(--muted);font-size:12px}
+.pal{border-radius:18px;overflow:hidden;background:var(--soft)}
+.pal .strip{display:grid;height:56px}
+.pal .meta{padding:10px 12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:14px}
+.pal .meta small{color:var(--muted)}
+.upload{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border:1.5px dashed var(--wine);border-radius:16px;color:var(--wine);font-weight:600;cursor:pointer}
+.upload input{position:absolute;opacity:0;width:1px;height:1px}
+.lvl{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:16px;background:var(--soft);border:1.5px solid transparent;cursor:pointer;text-align:start;font:inherit;color:inherit;width:100%}
+.lvl b.n{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--wine);font-family:Fraunces,serif}
+.lvl[aria-pressed=true]{border-color:var(--wine);background:var(--card)}
+.lvl[aria-pressed=true] b.n{background:var(--wine);color:var(--card)}
+.lvl .body{display:none;margin-top:6px;font-size:15px;color:var(--muted)}
+.lvl[aria-pressed=true] .body{display:block}
+.week{border-radius:18px;background:var(--soft);padding:12px 14px}
+.week h4{margin:0 0 2px;font:600 15px 'DM Sans',Tajawal,sans-serif;color:var(--wine)}
+.wk{border-radius:18px;background:var(--soft);padding:14px;display:flex;flex-direction:column;gap:6px}
+.wk .check{border-bottom:0;min-height:40px;padding:0}
+.logo{align-items:center}
+.mark{width:34px;height:34px;flex:none;border-radius:9px;box-shadow:0 6px 16px -8px #5A1830}
+.mark.big{width:52px;height:52px;border-radius:13px}
+.install{border:1.5px dashed var(--gold)}
+.lk{display:flex;flex-direction:column;gap:10px}
+.lkt{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.opt.sm{min-height:40px;padding:0 13px;font-size:13px}
+.tryon{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:center;background:var(--soft);border-radius:20px;padding:12px}
+.girlbox{background:radial-gradient(circle at 50% 40%,var(--card),transparent 70%);border-radius:16px}
+.girl{width:100%;height:auto;display:block}
+.tryb{border:1.5px solid transparent;cursor:pointer;font:inherit;color:inherit;text-align:start}
+.sg.tryb[aria-pressed=true]{border-color:var(--wine);background:var(--card)}
+.pal.tryb:hover{transform:translateY(-2px)}
+@media(max-width:360px){.tryon{grid-template-columns:120px minmax(0,1fr)}}
+.dot{display:inline-block;width:20px;height:20px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.stations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;font-size:14px}
+.stations span{background:var(--soft);border-radius:12px;padding:8px 10px}
+.qcard{background:var(--wineBg);color:#fff;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.qcard p{font-size:19px;line-height:1.5;font-weight:500}
+.qcard small{color:#F4D7DC}
+.entry{border-radius:16px;background:var(--soft);padding:14px;display:flex;flex-direction:column;gap:6px}
+.entry .q{font-size:13px;color:var(--wine);font-weight:600}
+.entry .t{white-space:pre-wrap;overflow-wrap:anywhere}
+.entry .del{align-self:flex-end;border:0;background:none;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;min-height:36px;text-decoration:underline}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+nav.tabs div{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+nav.tabs a{display:flex;flex-direction:column;align-items:center;min-height:56px;justify-content:center;font-size:10.5px;font-weight:600;color:var(--muted);text-decoration:none;border-radius:14px;line-height:1.2;text-align:center}
+nav.tabs a .ar{font-size:13px}
+html[lang=ar] nav.tabs a{font-size:13px;font-family:Tajawal,sans-serif}
+nav.tabs a svg{width:21px;height:21px;margin-bottom:2px}
+nav.tabs a[aria-current=page]{color:var(--wine);background:var(--soft)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,label:focus-within{outline:3px solid var(--gold);outline-offset:2px}
+.view{display:none}.view.on{display:block;animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.ob{position:fixed;inset:0;z-index:20;background:radial-gradient(120% 80% at 50% 0%,#3B3A78 0%,#232650 45%,#141633 100%);color:#fff;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}
+.ob::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(1.5px 1.5px at 10% 15%,#fff9,transparent),radial-gradient(1px 1px at 22% 62%,#fff8,transparent),radial-gradient(2px 2px at 35% 30%,#fffa,transparent),radial-gradient(1px 1px at 48% 85%,#fff7,transparent),radial-gradient(1.5px 1.5px at 62% 12%,#fff9,transparent),radial-gradient(1px 1px at 74% 48%,#fff8,transparent),radial-gradient(2px 2px at 86% 26%,#fffa,transparent),radial-gradient(1.5px 1.5px at 92% 78%,#fff8,transparent),radial-gradient(1px 1px at 6% 88%,#fff7,transparent);animation:twinkle 3.5s ease-in-out infinite alternate}
+.ob[hidden],.ob .in[hidden]{display:none}
+.ob .in{position:relative;max-width:400px;width:100%;display:flex;flex-direction:column;gap:16px;text-align:center;align-items:center}
+.ob h1{font-size:38px;color:#fff}.ob h1 .ar{font-size:34px;color:var(--gold)}
+html[lang=ar] .ob h1{font-family:Tajawal,sans-serif}
+.ob p{color:#D9D6F2}
+.obmoon{filter:drop-shadow(0 0 28px #D8B46A66);animation:float 6s ease-in-out infinite}
+.ob .choose{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.ob .choose button,.obgo{min-height:56px;border-radius:999px;border:1.5px solid var(--gold);background:transparent;color:#fff;font:600 18px 'DM Sans',Tajawal,sans-serif;cursor:pointer;width:100%}
+.ob .choose button.ar,.obgo{font-family:Tajawal,'DM Sans',sans-serif;background:var(--gold);color:#1B1F3B}
+#obName{width:100%;min-height:56px;border-radius:18px;border:1.5px solid #6E6BA8;background:#ffffff14;color:#fff;font:500 19px 'DM Sans',Tajawal,sans-serif;text-align:center;padding:0 16px}
+#obName::placeholder{color:#B7B4DA}
+.oberr{color:#F6C9A0;min-height:1.2em;font-size:14px}
+.obback{border:0;background:none;color:#B7B4DA;font:inherit;font-size:14px;cursor:pointer;min-height:40px;text-decoration:underline}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.namebtn{border:0;background:none;color:var(--muted);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:0;align-self:flex-start;min-height:32px}
+/* motion */
+.rv{opacity:0;transform:translateY(34px) scale(.97);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.75,.2,1)}
+.rv :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk){transition:opacity .55s ease,transform .55s cubic-bezier(.2,.75,.2,1)}
+.rv:not(.in) :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk){opacity:0;transform:translateY(14px)}
+.rv.in :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk):nth-child(1){transition-delay:.15s}
+.rv.in :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk):nth-child(2){transition-delay:.22s}
+.rv.in :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk):nth-child(3){transition-delay:.29s}
+.rv.in :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk):nth-child(4){transition-delay:.36s}
+.rv.in :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk):nth-child(5){transition-delay:.43s}
+.rv.in :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk):nth-child(n+6){transition-delay:.5s}
+.rv.instant :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk){transition:none}
+.girl :is(path,ellipse,rect,circle){transition:fill .6s ease}
+.rv.in{opacity:1;transform:none}
+.rv.instant{transition:none}
+.rv .bar i{transition:width 1s cubic-bezier(.2,.75,.2,1) .25s}
+.rv:not(.in) .bar i{width:0!important}
+.rv.instant .bar i{transition:none}
+.rung{transition:transform .5s ease,opacity .5s ease}
+.rv:not(.in) .rung{opacity:0;transform:translateY(10px)}
+.rv .rung:nth-child(2){transition-delay:.1s}.rv .rung:nth-child(3){transition-delay:.2s}.rv .rung:nth-child(4){transition-delay:.3s}
+.hero{position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(1.5px 1.5px at 12% 22%,#fff8,transparent),radial-gradient(1.5px 1.5px at 38% 78%,#fff7,transparent),radial-gradient(2px 2px at 64% 18%,#fff9,transparent),radial-gradient(1.5px 1.5px at 84% 64%,#fff7,transparent),radial-gradient(1px 1px at 52% 46%,#fff8,transparent);animation:twinkle 4s ease-in-out infinite alternate}
+.hero>*{position:relative}
+@keyframes twinkle{from{opacity:.35}to{opacity:1}}
+.moonw{animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.moonw .sh{transition:transform 1.2s cubic-bezier(.2,.75,.2,1)}
+.moonw .glow{transition:opacity 1.2s ease}
+.pop{animation:pop .35s ease}.pop .box{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.08)}100%{transform:scale(1)}}
+.bump{animation:bump .25s ease}
+@keyframes bump{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+.btn,.opt,.pr,.swb,.lvl,.pillars a{transition:transform .15s ease,background .2s ease,color .2s ease}
+.btn:active,.opt:active,.pr:active,.lvl:active,.pillars a:active{transform:scale(.96)}
+.swb:hover{transform:scale(1.08)}
+.ob .in>*{animation:rise .8s cubic-bezier(.2,.75,.2,1) both}
+.ob .in>*:nth-child(2){animation-delay:.12s}.ob .in>*:nth-child(3){animation-delay:.24s}.ob .in>*:nth-child(4){animation-delay:.36s}.ob .in>*:nth-child(5){animation-delay:.48s}.ob .in>*:nth-child(6){animation-delay:.6s}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+nav.tabs a{transition:background .25s ease,color .25s ease}
+nav.tabs a[aria-current=page] svg{animation:pop .4s ease}
+@media(prefers-reduced-motion:reduce){.rv:not(.in) :is(.check,.pillars a,.pr,.week,.sg,.pal,.lvl,.wk){opacity:1;transform:none}.girl :is(path,ellipse,rect,circle){transition:none}.view.on,.moonw,.hero::before,.ob .in>*,.pop,.pop .box,.bump,nav.tabs a[aria-current=page] svg{animation:none}.tap,.bar i,.rv,.rv .bar i,.rung,.moonw .sh,.moonw .glow{transition:none}.rv{opacity:1;transform:none}.rv:not(.in) .bar i{width:auto!important}.rv:not(.in) .rung{opacity:1;transform:none}}
+.toast{font-size:13px;color:var(--muted);text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="ob" id="ob" hidden>
+  <div class="in" id="ob1">
+    <svg class="obmoon" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><defs><radialGradient id="og" cx="40%" cy="35%"><stop offset="0" stop-color="#F6E2B0"/><stop offset="1" stop-color="#D8B46A"/></radialGradient></defs><circle cx="60" cy="60" r="56" fill="#D8B46A" opacity=".15"/><circle cx="60" cy="60" r="46" fill="url(#og)"/><circle cx="82" cy="52" r="44" fill="#232650"/></svg>
+    <h1>Hilal <span class="ar">هلال</span></h1>
+    <p>Our little space to help each other become a bit better every day: in our deen, our style, our dreams and our health.</p>
+    <p class="ar" style="font-family:Tajawal,sans-serif;font-size:17px">مساحتنا الصغيرة عشان نساعد بعض نبقى أحسن كل يوم شوية: في ديننا، وأناقتنا، وطموحنا، وصحتنا.</p>
+    <p style="font-weight:600;color:#fff">Choose your language · اختاري اللغة</p>
+    <div class="choose"><button type="button" data-lang="en">English</button><button type="button" class="ar" data-lang="ar">العربية</button></div>
+  </div>
+  <div class="in" id="ob2" hidden>
+    <svg class="obmoon" viewBox="0 0 120 120" width="90" height="90" aria-hidden="true"><circle cx="60" cy="60" r="46" fill="#D8B46A"/><circle cx="82" cy="52" r="44" fill="#232650"/></svg>
+    <h1 id="ob2t"></h1>
+    <p id="ob2p"></p>
+    <label for="obName" class="sr" id="ob2l"></label>
+    <input id="obName" type="text" maxlength="30" autocomplete="given-name" enterkeyhint="go">
+    <p class="oberr" id="obErr" role="status"></p>
+    <button type="button" class="obgo" id="obGo"></button>
+    <button type="button" class="obback" id="obBack"></button>
+  </div>
+</div>
+
+<div class="app">
+  <div class="top">
+    <div class="logo" id="logo">Hilal</div>
+    <div class="side"><div class="date" id="dateLine"></div><button class="lang" id="langBtn" type="button"></button></div>
+  </div>
+  <section class="view" id="v-today"></section>
+  <section class="view" id="v-deen"></section>
+  <section class="view" id="v-style"></section>
+  <section class="view" id="v-drive"></section>
+  <section class="view" id="v-health"></section>
+  <section class="view" id="v-journal"></section>
+  <p class="toast" id="saveNote" role="status"></p>
+</div>
+<nav class="tabs" aria-label="Main"><div id="tabs"></div></nav>
+<canvas id="cv" width="80" height="80" hidden></canvas>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const today=new Date();
+const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const tk=key(today);
+const doy=Math.floor((today-new Date(today.getFullYear(),0,0))/864e5);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toAr=n=>String(n).replace(/\d/g,c=>'٠١٢٣٤٥٦٧٨٩'[c]);
+
+/* ---------- state + language ---------- */
+let S={lang:'',name:'',days:{},surahs:{},challenge:{},drive:{},passion:'Fashion',level:'Beginner',wk:{},budget:1,colour:'#1b1b1b',journal:[]};
+const day=()=>{const d=S.days[tk]=S.days[tk]||{};if(!Array.isArray(d.p))d.p=[false,false,false,false,false];if(!d.dh||typeof d.dh!=='object')d.dh={};return d};
+const A=()=>S.lang==='ar';
+const L=p=>Array.isArray(p)?(A()?p[1]:p[0]):p;
+const N=x=>A()?toAr(x):String(x);
+const ttl=(p,tag)=>{tag=tag||'h3';return `<div class="ttl"><${tag}>${L(p)}</${tag}></div>`};
+const chk=(attr,on,main,small)=>`<button class="check" type="button" ${attr} aria-pressed="${!!on}"><span class="box"></span><span class="lbl">${main}${small?`<small>${small}</small>`:''}</span></button>`;
+
+/* ---------- hijri ---------- */
+function hijri(d){
+  for(const cal of ['islamic-umalqura','islamic-civil','islamic']){
+    try{const f=new Intl.DateTimeFormat('en-GB-u-ca-'+cal,{day:'numeric',month:'numeric',year:'numeric'}).formatToParts(d);
+      const g=t=>+((f.find(x=>x.type===t)||{}).value||'').replace(/\D/g,'');
+      const m=g('month'),dd=g('day'),y=g('year');if(m>=1&&m<=12&&dd)return{m,d:dd,y};}catch(e){}
+  }return null;
+}
+const MAR=['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+const MEN=['Muharram','Safar',"Rabi' al-Awwal","Rabi' al-Akhir",'Jumada al-Ula','Jumada al-Akhirah','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhul Qa'dah",'Dhul Hijjah'];
+const H=hijri(today);
+let daysToRam=null;
+if(H){for(let i=0;i<400;i++){const t=new Date(today);t.setDate(t.getDate()+i);const h=hijri(t);if(h&&h.m===9&&h.d===1){daysToRam=i;break}}}
+
+/* ---------- content ---------- */
+const INTRO=['Hilal is our little space to help each other become a bit better every day, in our deen, our style, our dreams and our health. Small steps, together, from a crescent to a full moon.','هلال مساحتنا الصغيرة عشان نساعد بعض نبقى أحسن كل يوم شوية، في ديننا، وأناقتنا، وطموحنا، وصحتنا. خطوة صغيرة كل يوم، مع بعض، من هلال لحد ما يبقى قمر.'];
+const TABS=[['today',['Today','النهارده']],['deen',['Deen','الدين']],['style',['Style','الأناقة']],['drive',['Drive','الطموح']],['health',['Health','صحتك']],['journal',['Journal','يومياتي']]];
+const PILL=[['deen',['Deen','الدين']],['style',['Style','الأناقة']],['drive',['Drive','الطموح']],['health',['Health','اهتمي بصحتك']],['journal',['Journal','يومياتي']]];
+const MSH=['Muharram','Safar',"Rabi' I","Rabi' II",'Jumada I','Jumada II','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhul Qa'dah",'Dhul Hijjah'];
+const CH={
+ 6:[['Prepare the ground','نجهّز الأرض'],['Ramadan is on the horizon. This month we build the habits that will carry us there.','رمضان قرّب. الشهر ده بنبني العادات اللي هتوصلنا له.'],[['Pray all five on time for seven days in a row','صلّي الخمس صلوات في وقتها سبع أيام ورا بعض'],['Find your step on the budget ladder and build one outfit from it','اعرفي انتي فين على سلّم التوفير واعملي لبسة منه'],['Finish week 1 of your Drive walkthrough','خلّصي الأسبوع الأول من خطة الطموح'],['Do two workouts from your level','اعملي تمرينين من مستواكي']]],
+ 7:[['Plant the seeds','نزرع البذور'],['Rajab is the month of planting. Choose the seeds you want to harvest in Ramadan.','رجب شهر الزرع. اختاري البذور اللي عايزة تحصديها في رمضان.'],[['Memorise one new surah','احفظي سورة جديدة'],['Plan three Ramadan outfits from what you already own','جهّزي تلات لبسات لرمضان من اللي عندك'],['Finish weeks 1 and 2 of your Drive walkthrough','خلّصي أول أسبوعين من خطة الطموح'],['Do two workouts a week from your level','اعملي تمرينين كل أسبوع من مستواكي']]],
+ 8:[['Water them','نسقيها'],["Sha'ban is the month of watering. Keep going gently and consistently.",'شعبان شهر السقي. كمّلي بهدوء وباستمرار.'],[['Read at least one page of Quran every day','اقري صفحة قرآن على الأقل كل يوم'],['Do your morning and evening adhkar for seven days','قولي أذكار الصباح والمسا سبع أيام'],['Finish your full Drive walkthrough','خلّصي خطة الطموح كلها'],['Do three workouts a week from your level','اعملي تلات تمارين في الأسبوع']]],
+ 9:[['The harvest','الحصاد'],['Ramadan Mubarak. This is the month everything has been building towards.','رمضان كريم. ده الشهر اللي كنا بنجهّز له من بدري.'],[['Complete the Quran, or a portion you choose','اختمي القرآن، أو الجزء اللي تختاريه'],['Keep outfits simple so your energy goes to worship','خلّي لبسك بسيط عشان طاقتك تروح للعبادة'],['Give sadaqa on a day of your choosing','اطلعي صدقة في يوم تختاريه'],['Light movement after iftar to keep your strength','حركة خفيفة بعد الفطار عشان تفضلي نشيطة']]],
+ 0:[['A new crescent','هلال جديد'],["Every new moon is a new beginning. Here is this month's challenge.",'كل هلال بداية جديدة. ده تحدي الشهر.'],[['Pray all five on time for seven days in a row','صلّي الخمس صلوات في وقتها سبع أيام ورا بعض'],['Try one new colour combo','جربي تنسيق ألوان جديد'],['Finish week 1 of your Drive walkthrough','خلّصي الأسبوع الأول من خطة الطموح'],['Do two workouts from your level','اعملي تمرينين من مستواكي']]]
+};
+const chKey=H?(H.y+'-'+H.m):'general';
+const C=(H&&CH[H.m])||CH[0];
+const PR=[['الفجر','Fajr'],['الظهر','Dhuhr'],['العصر','Asr'],['المغرب','Maghrib'],['العشاء','Isha']];
+const TODO=[['quran',['Read at least one page of Quran','اقري صفحة قرآن على الأقل']],['adhkar',['Morning and evening adhkar','أذكار الصباح والمسا']],['move',['Move for 20 minutes','اتحركي ٢٠ دقيقة']],['journal',['Write in your journal','اكتبي في يومياتك']]];
+
+/* adhkar: [arabic, transliteration, meaning, count] */
+const GEN=[
+ ['سُبْحَانَ اللَّهِ','SubhanAllah','Glory be to Allah',33],
+ ['الْحَمْدُ لِلَّهِ','Alhamdulillah','All praise belongs to Allah',33],
+ ['اللَّهُ أَكْبَرُ','Allahu Akbar','Allah is the Greatest',34],
+ ['لَا إِلَٰهَ إِلَّا اللَّهُ','La ilaha illallah','There is no god but Allah',100],
+ ['أَسْتَغْفِرُ اللَّهَ','Astaghfirullah',"I seek Allah's forgiveness",100],
+ ['سُبْحَانَ اللَّهِ وَبِحَمْدِهِ','SubhanAllahi wa bihamdihi','Glory and praise be to Allah',100],
+ ['سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ','SubhanAllahi wa bihamdihi, SubhanAllahil Azim','Glory and praise be to Allah, glory be to Allah the Magnificent',33],
+ ['لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ','La hawla wa la quwwata illa billah','There is no power and no strength except with Allah',33],
+ ['حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ',"Hasbunallahu wa ni'mal wakeel",'Allah is sufficient for us, and He is the best guardian',33],
+ ['اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ','Allahumma salli wa sallim ala nabiyyina Muhammad','O Allah, send blessings and peace upon our Prophet Muhammad',100],
+ ['لَا إِلَٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ','La ilaha illa anta subhanaka inni kuntu minaz-zalimin','There is no god but You, glory be to You, I have been of the wrongdoers',33],
+ ['رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ','Rabbighfir li wa tub alayya','My Lord, forgive me and accept my repentance',100]
+];
+const MORNING=[
+ ['اقرئي آية الكرسي','Ayat al-Kursi','Recite Ayat al-Kursi (Al-Baqarah 2:255)',1],
+ ['اقرئي سورة الإخلاص والفلق والناس','Al-Ikhlas, Al-Falaq and An-Nas','Recite the three Quls',3],
+ ['أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ','Asbahna wa asbahal mulku lillah','We have entered the morning and the dominion belongs to Allah. All praise is for Allah. There is no god but Allah alone, with no partner. His is the dominion and the praise, and He has power over all things.',1],
+ ['اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ','Allahumma bika asbahna','O Allah, by You we enter the morning and the evening, by You we live and die, and to You is the resurrection.',1],
+ ['اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ','Sayyid al-Istighfar','O Allah, You are my Lord, there is no god but You. You created me and I am Your servant. I acknowledge Your blessings and my sins, so forgive me, for none forgives sins but You.',1],
+ ['بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ','Bismillahil-ladhi la yadurru','In the name of Allah, with whose name nothing on earth or in the heavens can cause harm. He is the All-Hearing, the All-Knowing.',3],
+ ['رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا','Raditu billahi rabba','I am pleased with Allah as my Lord, Islam as my religion and Muhammad ﷺ as my Prophet.',3],
+ ['اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَٰهَ إِلَّا أَنْتَ','Allahumma afini fi badani','O Allah, grant me health in my body, my hearing and my sight. There is no god but You.',3],
+ ['حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ، وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ','Hasbiyallahu la ilaha illa huwa','Allah is sufficient for me. There is no god but Him. In Him I trust, and He is Lord of the Mighty Throne.',7],
+ ['سُبْحَانَ اللَّهِ وَبِحَمْدِهِ','SubhanAllahi wa bihamdihi','Glory and praise be to Allah',100]
+];
+const EVENING=MORNING.map((x,i)=>i===2?['أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ','Amsayna wa amsal mulku lillah','We have entered the evening and the dominion belongs to Allah. All praise is for Allah. There is no god but Allah alone, with no partner. His is the dominion and the praise, and He has power over all things.',1]
+ :i===3?['اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ','Allahumma bika amsayna','O Allah, by You we enter the evening and the morning, by You we live and die, and to You is the return.',1]:x);
+EVENING.splice(5,0,['أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ',"A'udhu bikalimatillahit-tammat",'I seek refuge in the perfect words of Allah from the evil of what He has created.',3]);
+const SLEEP=[
+ ['بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا','Bismika Allahumma amutu wa ahya','In Your name, O Allah, I die and I live.',1],
+ ['اقرئي آية الكرسي','Ayat al-Kursi','Recite Ayat al-Kursi',1],
+ ['اقرئي آخر آيتين من سورة البقرة','Last two ayat of Al-Baqarah','Recite the last two ayat of Surah Al-Baqarah',1],
+ ['اجمعي كفّيكي، واقري الإخلاص والفلق والناس، وامسحي بيهم على جسمك','The three Quls','Cup your hands, recite the three Quls, blow lightly and wipe over your body',3],
+ ['سُبْحَانَ اللَّهِ','SubhanAllah','Glory be to Allah',33],
+ ['الْحَمْدُ لِلَّهِ','Alhamdulillah','All praise belongs to Allah',33],
+ ['اللَّهُ أَكْبَرُ','Allahu Akbar','Allah is the Greatest',34],
+ ['اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ','Allahumma qini adhabaka','O Allah, protect me from Your punishment on the day You resurrect Your servants.',3],
+ ['بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، إِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ',"Bismika rabbi wada'tu janbi",'In Your name, my Lord, I lay down and by You I rise. If You take my soul, have mercy on it, and if You return it, protect it as You protect Your righteous servants.',1]
+];
+const SETS={g:[['Daily dhikr','ذكر اليوم'],GEN],m:[['Morning','أذكار الصباح'],MORNING],e:[['Evening','أذكار المسا'],EVENING],s:[['Before sleep','أذكار النوم'],SLEEP]};
+const dayDh=doy%GEN.length;
+let dSet='g',dIdx=dayDh;
+const nowH=today.getHours();
+if(nowH>=4&&nowH<11)dSet='m',dIdx=0;else if(nowH>=15&&nowH<21)dSet='e',dIdx=0;else if(nowH>=21||nowH<4)dSet='s',dIdx=0;
+
+/* surahs */
+const SAR='الفاتحة|البقرة|آل عمران|النساء|المائدة|الأنعام|الأعراف|الأنفال|التوبة|يونس|هود|يوسف|الرعد|إبراهيم|الحجر|النحل|الإسراء|الكهف|مريم|طه|الأنبياء|الحج|المؤمنون|النور|الفرقان|الشعراء|النمل|القصص|العنكبوت|الروم|لقمان|السجدة|الأحزاب|سبأ|فاطر|يس|الصافات|ص|الزمر|غافر|فصلت|الشورى|الزخرف|الدخان|الجاثية|الأحقاف|محمد|الفتح|الحجرات|ق|الذاريات|الطور|النجم|القمر|الرحمن|الواقعة|الحديد|المجادلة|الحشر|الممتحنة|الصف|الجمعة|المنافقون|التغابن|الطلاق|التحريم|الملك|القلم|الحاقة|المعارج|نوح|الجن|المزمل|المدثر|القيامة|الإنسان|المرسلات|النبأ|النازعات|عبس|التكوير|الانفطار|المطففين|الانشقاق|البروج|الطارق|الأعلى|الغاشية|الفجر|البلد|الشمس|الليل|الضحى|الشرح|التين|العلق|القدر|البينة|الزلزلة|العاديات|القارعة|التكاثر|العصر|الهمزة|الفيل|قريش|الماعون|الكوثر|الكافرون|النصر|المسد|الإخلاص|الفلق|الناس'.split('|');
+const SEN="Al-Fatihah|Al-Baqarah|Al-Imran|An-Nisa|Al-Ma'idah|Al-An'am|Al-A'raf|Al-Anfal|At-Tawbah|Yunus|Hud|Yusuf|Ar-Ra'd|Ibrahim|Al-Hijr|An-Nahl|Al-Isra|Al-Kahf|Maryam|Ta-Ha|Al-Anbiya|Al-Hajj|Al-Mu'minun|An-Nur|Al-Furqan|Ash-Shu'ara|An-Naml|Al-Qasas|Al-Ankabut|Ar-Rum|Luqman|As-Sajdah|Al-Ahzab|Saba|Fatir|Ya-Sin|As-Saffat|Sad|Az-Zumar|Ghafir|Fussilat|Ash-Shura|Az-Zukhruf|Ad-Dukhan|Al-Jathiyah|Al-Ahqaf|Muhammad|Al-Fath|Al-Hujurat|Qaf|Adh-Dhariyat|At-Tur|An-Najm|Al-Qamar|Ar-Rahman|Al-Waqi'ah|Al-Hadid|Al-Mujadilah|Al-Hashr|Al-Mumtahanah|As-Saff|Al-Jumu'ah|Al-Munafiqun|At-Taghabun|At-Talaq|At-Tahrim|Al-Mulk|Al-Qalam|Al-Haqqah|Al-Ma'arij|Nuh|Al-Jinn|Al-Muzzammil|Al-Muddaththir|Al-Qiyamah|Al-Insan|Al-Mursalat|An-Naba|An-Nazi'at|Abasa|At-Takwir|Al-Infitar|Al-Mutaffifin|Al-Inshiqaq|Al-Buruj|At-Tariq|Al-A'la|Al-Ghashiyah|Al-Fajr|Al-Balad|Ash-Shams|Al-Layl|Ad-Duha|Ash-Sharh|At-Tin|Al-Alaq|Al-Qadr|Al-Bayyinah|Az-Zalzalah|Al-Adiyat|Al-Qari'ah|At-Takathur|Al-Asr|Al-Humazah|Al-Fil|Quraysh|Al-Ma'un|Al-Kawthar|Al-Kafirun|An-Nasr|Al-Masad|Al-Ikhlas|Al-Falaq|An-Nas".split('|');
+const AY=[7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+const TOTAL_AY=AY.reduce((a,b)=>a+b,0);
+let hf='30',hq='';
+
+/* colours */
+const NAMED=[['Black','أسود','#1b1b1b'],['Charcoal','فحمي','#3b3b3b'],['Grey','رمادي','#9a9a9a'],['Silver','فضي','#c9c9c9'],['White','أبيض','#f7f7f5'],['Ivory','عاجي','#efe6d6'],['Cream','كريمي','#e9dcc3'],['Beige','بيج','#d9c4a5'],
+ ['Sand','رملي','#cdb38a'],['Camel','كامل','#c19a6b'],['Mocha','موكا','#8b6a55'],['Brown','بني','#6b4430'],['Chocolate','شوكولاتة','#4a2c20'],['Rust','نحاسي','#a5512f'],['Terracotta','تيراكوتا','#c2694b'],['Mustard','مستردة','#c99a2e'],
+ ['Olive','زيتي','#6e6b3c'],['Sage','سيج','#a3b18a'],['Forest','أخضر غامق','#2f4a35'],['Emerald','زمردي','#1f6b4f'],['Teal','بترولي','#2a6f73'],['Sea glass','أكوا','#9cc9c0'],['Sky','لبني','#9cc0e0'],['Denim','جينز','#4a6a8f'],
+ ['Navy','كحلي','#1f2a44'],['Lilac','ليلكي','#b9a6c9'],['Plum','برقوقي','#5e2a4f'],['Burgundy','نبيتي','#7a1f3a'],['Red','أحمر','#b3263a'],['Dusty pink','روز','#d8a7a7'],['Blush','بينك فاتح','#e8c8c0'],['Coral','مرجاني','#e07a6a']];
+const PAL=[
+ [['Desert dusk','غروب الصحرا'],'n',['#e3cfae','#c2694b','#d8a7a7','#8b6a55']],
+ [['Olive grove','بستان الزيتون'],'n',['#6e6b3c','#a3b18a','#efe6d6','#6b4430']],
+ [['Sea glass','زجاج البحر'],'n',['#9cc9c0','#a3b18a','#e9dcc3','#1f2a44']],
+ [['Rose garden','جنينة الورد'],'n',['#e8c8c0','#7a1f3a','#4f5d3a','#efe6d6']],
+ [['Autumn forest','غابة الخريف'],'n',['#a5512f','#c99a2e','#2f4a35','#4a2c20']],
+ [['Night sky','سما الليل'],'n',['#1f2a44','#c9c9c9','#b9a6c9','#1b1b1b']],
+ [['Date palm','نخل وبلح'],'n',['#5a3420','#c9a24e','#efe6d6','#4f6b3a']],
+ [['Lavender field','حقل اللافندر'],'n',['#b9a6c9','#a3b18a','#f7f7f5','#5e2a4f']],
+ [['Quiet neutrals','ألوان هادية'],'t',['#efe6d6','#d9c4a5','#8b6a55','#3b3b3b']],
+ [['Mocha moments','درجات الموكا'],'t',['#8b6a55','#c19a6b','#e9dcc3','#4a2c20']],
+ [['Burgundy everything','نبيتي في نبيتي'],'t',['#7a1f3a','#5e2a4f','#e8c8c0','#1b1b1b']],
+ [['Leopard and black','نمر وأسود'],'t',['#b5824a','#4a2c20','#1b1b1b','#efe6d6']],
+ [['Red with stripes','أحمر مع مقلّم'],'t',['#b3263a','#f7f7f5','#1b1b1b','#1f2a44']],
+ [['Butter and denim','أصفر زبدة وجينز'],'t',['#f1e3a6','#4a6a8f','#f7f7f5','#c19a6b']],
+ [['Monochrome','لون واحد'],'t',['#1b1b1b','#3b3b3b','#9a9a9a','#f7f7f5']],
+ [['Sage and cream','سيج وكريمي'],'t',['#a3b18a','#efe6d6','#c19a6b','#6b4430']]
+];
+let pf='all',genPal=null,photoMsg='';
+const F={
+ gym:[['Gym','الجيم'],['Ready to move','جاهزة للتمرين'],[['A sports or jersey hijab that stays in place','طرحة سبور أو جيرسيه بتفضل ثابتة'],['A loose long-sleeve top','بلوزة واسعة بكم طويل'],['Wide-leg joggers','بنطلون رياضي واسع'],['Trainers you can lift in','كوتشي مريح للتمرين']]],
+ uni:[['Uni','الجامعة'],['Comfy but cute','مريح بس شيك'],[['A jersey hijab in a soft neutral','طرحة جيرسيه لون هادي'],['A knit or striped top','بلوزة تريكو أو مقلّمة'],['Wide trousers or a skirt you love','بنطلون واسع أو جيبة بتحبيها'],['Trainers and a roomy tote','كوتشي وشنطة توت واسعة']]],
+ work:[['Work','الشغل'],['Smart and put together','شيك ومرتب'],[['A modal or chiffon hijab, styled neatly','طرحة مودال أو شيفون متظبطة بشكل مرتب'],['A shirt or fine knit','قميص أو تريكو خفيف'],['Pleated trousers','بنطلون بكسرات'],['Loafers and one structured bag','لوفر وشنطة شيك']]],
+ rain:[['Rainy day','الشتا'],['Cosy on rainy days','دافية في الشتا'],[['A jersey hijab with an underscarf','طرحة جيرسيه مع بونيه'],['A padded or waterproof jacket','جاكيت منفوخ أو ووتربروف'],['Wide trousers','بنطلون واسع'],['Chunky boots','بوت تقيل']]],
+ eid:[['Eid','العيد'],['Soft glam','جلام ناعم'],[['A satin or chiffon hijab','طرحة ساتان أو شيفون'],['A flowy dress you feel beautiful in','فستان واسع بتحسي إنك حلوة فيه'],['A pretty bag or jewellery as the statement','شنطة حلوة أو إكسسوار يلفت النظر'],['Comfortable heels or flats','كعب مريح أو فلات']]]
+};
+let fCur='gym';
+const CAPS={
+ classic:[['Classic','كلاسيك'],['#1b1b1b','#c19a6b','#efe6d6','#7a1f3a']],
+ earth:[['Warm earth','ألوان ترابية'],['#6b4430','#d9c4a5','#efe6d6','#6e6b3c']],
+ cool:[['Cool calm','هادي وبارد'],['#1f2a44','#9a9a9a','#f7f7f5','#d8a7a7']],
+ soft:[['Soft girl','سوفت جيرل'],['#8b6a55','#e8c8c0','#efe6d6','#a3b18a']]
+};
+const CAPI=[
+ [['Hijabs','الطرح'],[[0,['jersey hijab','طرحة جيرسيه']],[2,['jersey hijab','طرحة جيرسيه']],[1,['modal hijab','طرحة مودال']],[3,['chiffon hijab','طرحة شيفون']],[4,['Printed statement hijab','طرحة مطبوعة مميزة']]]],
+ [['Tops','البلوزات'],[[2,['long shirt','قميص طويل']],[0,['fine knit','بلوزة تريكو خفيفة']],[1,['long-sleeve tee','تيشيرت بكم طويل']],[3,['soft knit','بلوزة تريكو ناعمة']]]],
+ [['Bottoms','البناطيل والجيب'],[[0,['wide-leg trousers','بنطلون واسع']],[1,['pleated trousers','بنطلون بكسرات']],[2,['long skirt','جيبة طويلة']]]],
+ [['Dresses and abayas','الفساتين والعبايات'],[[0,['maxi dress or abaya','فستان ماكسي أو عباية']],[1,['shirt dress','فستان قميص']]]],
+ [['Layers','الطبقات'],[[1,['long coat','بالطو طويل']],[2,['long cardigan','كارديجان طويل']],[0,['blazer','بليزر']]]],
+ [['Shoes and bag','الجزم والشنطة'],[[2,['trainers','كوتشي']],[0,['loafers','لوفر']],[1,['tote bag','شنطة توت']]]]
+];
+const BL=[
+ [['Shop your own wardrobe','تسوّقي من دولابك'],['Before buying anything, restyle what you own. Try each hijab three ways, layer a longer top over a dress, and swap shoes to change the mood.','قبل ما تشتري أي حاجة، جرّبي تنسيقات جديدة من اللي عندك. البسي كل طرحة بتلات طرق، والبسي بلوزة طويلة فوق فستان، وغيّري الجزمة تتغير اللبسة كلها.']],
+ [['Smart basics','الأساسيات الذكية'],['Get a few jersey hijabs and an underscarf in neutrals: black, beige, brown, grey and navy. Supermarket and high-street basics are great for plain long tops.','هاتي كام طرحة جيرسيه وبونيه بألوان هادية: أسود، بيج، بني، رمادي، كحلي. وأي محل فيه بلوزات طويلة سادة بأسعار حلوة.']],
+ [['Thrift and swap','المستعمل والتبديل'],['Charity shops and second-hand apps are full of long skirts, blazers and coats. Organise an outfit swap with your friends.','محلات الخير وأبلكيشنات المستعمل مليانة جيب طويلة وبليزرات وجواكت. واعملي يوم تبديل لبس مع صحباتك.']],
+ [["Beyond the women's aisle",'بره قسم الستات'],["The men's and sports sections often have longer, looser tops and joggers. Size up for a relaxed fit and get hems taken up if needed.",'قسم الرجالي والرياضي فيه بلوزات وبناطيل أطول وأوسع. خدي مقاس أكبر، وقصّري الطول لو محتاجة.']],
+ [['Build a capsule','دولاب ذكي'],['Choose around 20 pieces that all mix together, using the capsule builder above. Fewer pieces, more outfits.','اختاري حوالي ٢٠ قطعة كلهم بيتنسقوا مع بعض، باستخدام الكابسول اللي فوق. قطع أقل، لبسات أكتر.']]
+];
+
+/* drive: passion -> [label, intro, weeks[[title, steps[]]]] each bilingual */
+const W=(en,ar)=>[en,ar];
+const P={
+ 'Fashion':[['Fashion','الموضة'],['From loving outfits to a career in fashion, fashion tech, buying or styling.','من حب اللبس لشغل في الموضة، أو تكنولوجيا الموضة، أو الشراء، أو الستايلنج.'],[
+  [W('Week 1 · Discover','الأسبوع ١ · اكتشفي'),[W('Read about 4 roles: fashion tech, buying and merchandising, retail data, content and styling','اقري عن ٤ وظايف: تكنولوجيا الموضة، الشراء والتسويق، تحليل بيانات البيع، المحتوى والستايلنج'),W('Follow 5 women working in modest fashion or fashion tech','تابعي ٥ ستات شغالين في الموضة المحتشمة أو تكنولوجيا الموضة'),W('Write a few lines on which role excites you most, and why','اكتبي كام سطر: أنهي وظيفة شدّتك أكتر وليه')]],
+  [W('Week 2 · Learn the basics','الأسبوع ٢ · الأساسيات'),[W('Take a free intro course in fashion business or digital marketing','خدي كورس مجاني عن بيزنس الموضة أو التسويق الرقمي'),W('Learn how a garment travels from design to the shop floor','اعرفي القطعة بتمشي إزاي من التصميم لحد المحل'),W('Study 3 modest brands: who they sell to, their prices and their style','ادرسي ٣ براندات محتشمة: بيبيعوا لمين، أسعارهم، وستايلهم')]],
+  [W('Week 3 · Make something','الأسبوع ٣ · اعملي حاجة'),[W('Create a mini lookbook of 5 outfits around one theme','اعملي لوك بوك صغير فيه ٥ لبسات على فكرة واحدة'),W('Write a one-page brand idea: name, audience, three signature pieces','اكتبي فكرة براند في صفحة: الاسم، الجمهور، وتلات قطع مميزة'),W('Pick 10 products from one shop and note what colours and prices repeat','اختاري ١٠ منتجات من محل واحد ولاحظي الألوان والأسعار اللي بتتكرر')]],
+  [W('Week 4 · Share and connect','الأسبوع ٤ · شاركي واتواصلي'),[W('Share your lookbook or brand idea online or with a friend','شاركي اللوك بوك أو فكرة البراند أونلاين أو مع صاحبتك'),W('Message 2 people in your chosen role with one thoughtful question','ابعتي لاتنين شغالين في المجال ده سؤال واحد مدروس'),W('Save 3 courses, internships or placements to apply for','احفظي ٣ كورسات أو تدريبات تقدّمي فيها')]]]],
+ 'Tech':[['Tech','التكنولوجيا'],['From curious to building real things in coding, data, AI or design.','من الفضول لإنك تبني حاجات حقيقية في البرمجة، أو البيانات والذكاء الاصطناعي، أو التصميم.'],[
+  [W('Week 1 · Choose your path','الأسبوع ١ · اختاري طريقك'),[W('Read about web development, data and AI, UX design and cyber security','اقري عن تطوير المواقع، والبيانات والذكاء الاصطناعي، وتصميم تجربة المستخدم، والأمن السيبراني'),W('Set up a free coding tool or online editor','نزّلي أداة برمجة مجانية أو استخدمي محرر أونلاين'),W('Finish your first beginner lesson in Python or HTML','خلّصي أول درس للمبتدئين في بايثون أو HTML')]],
+  [W('Week 2 · Build the habit','الأسبوع ٢ · اعملي عادة'),[W('Do 30 minutes of a free course every day','ذاكري ٣٠ دقيقة كل يوم من كورس مجاني'),W('Build something tiny: a to-do list or a simple calculator','اعملي حاجة صغيرة: قايمة مهام أو آلة حاسبة بسيطة'),W('Join a women-in-tech community online or at uni','انضمي لمجتمع بنات في التكنولوجيا أونلاين أو في الجامعة')]],
+  [W('Week 3 · Make your project','الأسبوع ٣ · مشروعك'),[W('Build a mini project you care about, like a dhikr counter or an outfit randomiser','اعملي مشروع صغير بتحبيه، زي عداد أذكار أو مولّد لبسات'),W('Put your code on GitHub','ارفعي الكود على GitHub'),W('Ask a friend to try it and tell you one thing to improve','خلّي صاحبتك تجربه وتقولك حاجة واحدة تتحسن')]],
+  [W('Week 4 · Show it','الأسبوع ٤ · ورّيه للناس'),[W('Write a short post about what you built and learned','اكتبي بوست قصير عن اللي عملتيه واتعلمتيه'),W('Add the skill and project to your LinkedIn or CV','ضيفي المهارة والمشروع على لينكدإن أو السي في'),W('Find 3 entry routes: courses, apprenticeships, bootcamps or insight days','دوّري على ٣ طرق تدخلي بيها: كورسات، تدريب، بوتكامب، أو أيام تعريفية')]]]],
+ 'Gym':[['Gym and sport','الجيم والرياضة'],['From loving training to a career in coaching, sports science or activewear.','من حب التمرين لشغل في التدريب، أو علوم الرياضة، أو تصميم اللبس الرياضي.'],[
+  [W('Week 1 · Explore','الأسبوع ١ · استكشفي'),[W('Read about personal training, sports science, physiotherapy and activewear design','اقري عن التدريب الشخصي، وعلوم الرياضة، والعلاج الطبيعي، وتصميم اللبس الرياضي'),W('Keep a training log for the whole week','سجّلي تمارينك طول الأسبوع'),W('Learn proper form for squat, hinge, push, pull and carry','اتعلمي الطريقة الصح للسكوات، والانحناء، والدفع، والسحب، والشيل')]],
+  [W('Week 2 · Learn','الأسبوع ٢ · اتعلمي'),[W('Learn the main muscle groups and what each one does','اعرفي العضلات الأساسية وكل واحدة بتعمل إيه'),W('Chat to a trainer at your gym about how they started','اتكلمي مع مدربة في الجيم عن بدايتها'),W('Look up the qualifications in your country (in the UK, a Level 2 Gym Instructor course comes before Level 3 Personal Trainer)','دوّري على الشهادات المطلوبة في بلدك (في بريطانيا مثلاً بتبدأي بـ Level 2 Gym Instructor وبعدين Level 3 Personal Trainer)')]],
+  [W('Week 3 · Coach someone','الأسبوع ٣ · درّبي حد'),[W('Write a simple 4-week plan for a friend','اكتبي خطة بسيطة لأربع أسابيع لصاحبتك'),W('Coach her through one session','درّبيها في تمرين واحد'),W('Ask her what helped and what felt confusing','اسأليها إيه اللي ساعدها وإيه اللي كان مش واضح')]],
+  [W('Week 4 · Step out','الأسبوع ٤ · خطوة لبره'),[W('Share one lesson from your training journey online','شاركي درس واحد من رحلتك في التمرين أونلاين'),W('Volunteer at a local run or sports event','اتطوعي في سباق جري أو حدث رياضي قريب منك'),W('Save 3 courses or degrees to look into','احفظي ٣ كورسات أو دراسات تبصي عليها')]]]],
+ 'Quran':[['Quran and teaching','القرآن والتعليم'],['From loving the Quran to teaching it, studying it or building tools for it.','من حب القرآن لتعليمه، أو دراسته، أو بناء أدوات تخدمه.'],[
+  [W('Week 1 · Intention and level','الأسبوع ١ · النية والمستوى'),[W('Renew your intention and write down why you want this','جدّدي نيتك واكتبي ليه عايزة تعملي ده'),W('Have a teacher check your recitation and tajweed level','خلّي معلمة تسمعلك وتعرف مستواكي في التلاوة والتجويد'),W('Read about the paths: Quran teacher, Islamic studies, education, ed-tech','اقري عن الطرق: معلمة قرآن، دراسات إسلامية، تعليم، أو تكنولوجيا التعليم')]],
+  [W('Week 2 · Learn','الأسبوع ٢ · اتعلمي'),[W('Find a teacher or circle you can stay with','لاقي معلمة أو حلقة تكمّلي معاها'),W('Learn one tajweed topic properly, like the rules of noon sakinah','اتعلمي حكم تجويد واحد كويس، زي أحكام النون الساكنة'),W('Teach a short surah to a younger sibling or friend','حفّظي سورة قصيرة لأختك الصغيرة أو صاحبتك')]],
+  [W('Week 3 · Teach','الأسبوع ٣ · علّمي'),[W('Prepare a 10-minute lesson on the meaning of a short surah','حضّري درس ١٠ دقايق عن معنى سورة قصيرة'),W('Deliver it to family or friends','قوليه لأهلك أو صحابك'),W('Ask for honest feedback and note it down','اسألي على رأيهم بصراحة واكتبيه')]],
+  [W('Week 4 · Grow','الأسبوع ٤ · كبّري'),[W('Offer to help at a local masjid or weekend school','اعرضي تساعدي في مسجد أو مدرسة نهاية الأسبوع'),W('Look up courses in Islamic studies or teaching','دوّري على كورسات في الدراسات الإسلامية أو التدريس'),W('Write a one-year plan for your Quran journey','اكتبي خطة سنة لرحلتك مع القرآن')]]]],
+ 'Art':[['Art and design','الفن والتصميم'],['From doodles and moodboards to graphic design, illustration or Islamic art.','من الشخبطة والمود بورد للتصميم الجرافيكي، أو الرسم، أو الفن الإسلامي.'],[
+  [W('Week 1 · Explore','الأسبوع ١ · استكشفي'),[W('Read about graphic design, illustration, product design and Islamic art','اقري عن التصميم الجرافيكي، والرسم التوضيحي، وتصميم المنتجات، والفن الإسلامي'),W('Collect 20 pieces you love into one moodboard','جمّعي ٢٠ حاجة بتحبيها في مود بورد واحد'),W('Try a free design tool for the first time','جربي أداة تصميم مجانية لأول مرة')]],
+  [W('Week 2 · Practise','الأسبوع ٢ · اتمرّني'),[W('Sketch or design for 15 minutes a day','ارسمي أو صمّمي ١٥ دقيقة كل يوم'),W('Learn the basics of colour, type and layout','اتعلمي أساسيات الألوان والخطوط والتوزيع'),W('Recreate a poster you love as practice','قلّدي بوستر بتحبيه عشان تتمرني')]],
+  [W('Week 3 · Create','الأسبوع ٣ · ابدعي'),[W('Make 3 original pieces around one theme, like Ramadan','اعملي ٣ تصميمات أصلية على فكرة واحدة، زي رمضان'),W('Ask two people for feedback','اسألي اتنين على رأيهم'),W('Refine your favourite piece','حسّني أحلى واحدة فيهم')]],
+  [W('Week 4 · Share','الأسبوع ٤ · شاركي'),[W('Start a simple online portfolio','ابدأي بورتفوليو بسيط أونلاين'),W('Offer to design something for a local cause or masjid event','اعرضي تصمّمي حاجة لمبادرة أو حدث في المسجد'),W('Save 3 courses or opportunities to apply for','احفظي ٣ كورسات أو فرص تقدّمي فيها')]]]],
+ 'Writing':[['Writing','الكتابة'],['From journaling to content, journalism, copywriting or publishing.','من كتابة اليوميات للمحتوى، أو الصحافة، أو الكتابة الإعلانية، أو النشر.'],[
+  [W('Week 1 · Find your lane','الأسبوع ١ · لاقي طريقك'),[W('Read about content writing, journalism, copywriting and publishing','اقري عن كتابة المحتوى، والصحافة، والكتابة الإعلانية، والنشر'),W('Read 3 pieces you admire and note why they work','اقري ٣ مقالات بتحبيها ولاحظي ليه حلوة'),W('Write 200 words every day','اكتبي ٢٠٠ كلمة كل يوم')]],
+  [W('Week 2 · Learn the craft','الأسبوع ٢ · اتعلمي الصنعة'),[W('Learn how to write a strong opening line','اتعلمي تكتبي أول جملة تشد'),W('Rewrite one old piece to make it tighter','أعيدي كتابة حاجة قديمة وخليها أقوى'),W('Start an ideas list and add to it daily','ابدأي ليستة أفكار وزوّدي عليها كل يوم')]],
+  [W('Week 3 · Write in full','الأسبوع ٣ · اكتبي حاجة كاملة'),[W('Write one complete piece of about 800 words','اكتبي مقال كامل حوالي ٨٠٠ كلمة'),W('Get feedback from someone you trust','خدي رأي حد بتثقي فيه'),W('Edit it into a final version','عدّليه لحد ما يبقى نسخة نهائية')]],
+  [W('Week 4 · Publish','الأسبوع ٤ · انشري'),[W('Publish it on a blog or newsletter','انشريه في بلوج أو نيوزليتر'),W('Pitch it to a student or community magazine','ابعتيه لمجلة طلابية أو مجتمعية'),W('Save 3 writing opportunities to apply for','احفظي ٣ فرص كتابة تقدّمي فيها')]]]]
+};
+
+/* health */
+const B=x=>`<bdi dir="ltr">${x}</bdi>`;
+const LV={
+ 'Beginner':[['Beginner','مبتدئة'],['Starting the journey','البداية'],['Two or three sessions a week. Focus on learning the moves and feeling at home in the gym.','تمرينين أو تلاتة في الأسبوع. ركّزي إنك تتعلمي الحركات وتتعودي على الجيم.'],[
+  [W('Full body on machines','جسم كامل على الأجهزة'),[W('Leg press 3 × 10',`${B('Leg press')}: ٣ × ١٠`),W('Seated row 3 × 10',`${B('Seated row')}: ٣ × ١٠`),W('Chest press 3 × 10',`${B('Chest press')}: ٣ × ١٠`),W('Lat pulldown 3 × 10',`${B('Lat pulldown')}: ٣ × ١٠`),W('Plank 3 × 20 seconds',`${B('Plank')}: ٣ × ٢٠ ثانية`)]],
+  [W('Walk to run','من المشي للجري'),[W('5 minutes brisk walk to warm up','٥ دقايق مشي سريع تسخين'),W('8 rounds: 1 minute easy jog, 2 minutes walk','٨ جولات: دقيقة جري خفيف ودقيقتين مشي'),W('5 minutes walk to cool down','٥ دقايق مشي للتهدئة')]],
+  [W('Hyrox taster','تجربة هايروكس'),[W('3 rounds, resting as needed:','٣ جولات، وارتاحي على قد ما تحتاجي:'),W('250 m row',`${B('Row')}: ٢٥٠ متر`),W('10 bodyweight squats',`${B('Bodyweight squats')}: ١٠`),W('10 light wall balls (or squat and press a light dumbbell)',`${B('Wall balls')} خفيف: ١٠ (أو ${B('squat')} مع رفع ${B('dumbbell')} خفيف)`),W('20 m farmers carry with light dumbbells',`${B('Farmers carry')} بـ ${B('dumbbells')} خفيفة: ٢٠ متر`)]]]],
+ 'Intermediate':[['Intermediate','متوسطة'],['Building up','بنكبر'],['Three or four sessions a week. Mixing strength with running to build your engine.','تلات أو أربع تمارين في الأسبوع. بنخلط القوة مع الجري عشان نبني نَفَسك.'],[
+  [W('Strength day','يوم القوة'),[W('Goblet squat 4 × 8',`${B('Goblet squat')}: ٤ × ٨`),W('Romanian deadlift 4 × 8',`${B('Romanian deadlift')}: ٤ × ٨`),W('Walking lunges 3 × 20 steps',`${B('Walking lunges')}: ٣ × ٢٠ خطوة`),W('Dumbbell row 3 × 10 each side',`${B('Dumbbell row')}: ٣ × ١٠ لكل جنب`),W('Push-ups 3 × as many as you can (knees is fine)',`${B('Push-ups')}: ٣ × أكتر عدد تقدري عليه (على الركب عادي)`)]],
+  [W('Run intervals','جري متقطع'),[W('10 minutes easy jog to warm up','١٠ دقايق جري خفيف تسخين'),W('6 × 400 m at a hard but steady pace, 90 seconds rest','٦ × ٤٠٠ متر بسرعة عالية بس ثابتة، وراحة ٩٠ ثانية'),W('10 minutes easy to cool down','١٠ دقايق خفيف للتهدئة')]],
+  [W('Mini Hyrox','ميني هايروكس'),[W('4 rounds for time:','٤ جولات على الوقت:'),W('500 m run','جري: ٥٠٠ متر'),W('500 m row',`${B('Row')}: ٥٠٠ متر`),W('20 wall balls',`${B('Wall balls')}: ٢٠`),W('40 m farmers carry',`${B('Farmers carry')}: ٤٠ متر`)]]]],
+ 'Advanced':[['Advanced','متقدمة'],['Hyrox ready','جاهزة لهايروكس'],['Four or five sessions a week. Race-specific work and running on tired legs.','أربع أو خمس تمارين في الأسبوع. تمارين خاصة بالسباق وجري ورجلك تعبانة.'],[
+  [W('Compromised running','جري ورجلك تعبانة'),[W('4 rounds:','٤ جولات:'),W('1 km run at race pace','١ كم جري بسرعة السباق'),W('1000 m SkiErg or 1000 m row',`${B('SkiErg')} أو ${B('Row')}: ١٠٠٠ متر`),W('Rest 2 minutes between rounds','راحة دقيقتين بين الجولات')]],
+  [W('Half simulation','نص محاكاة للسباق'),[W('1 km run, then sled push',`١ كم جري، وبعدين ${B('Sled push')}`),W('1 km run, then burpee broad jumps',`١ كم جري، وبعدين ${B('Burpee broad jumps')}`),W('1 km run, then sandbag lunges',`١ كم جري، وبعدين ${B('Sandbag lunges')}`),W('1 km run, then wall balls',`١ كم جري، وبعدين ${B('Wall balls')}`)]],
+  [W('Engine builder','بناء النَّفَس'),[W('30 to 40 minutes steady easy run','٣٠ لـ ٤٠ دقيقة جري هادي وثابت'),W('Finish with 5 × 1 minute hard, 1 minute easy','واختمي بـ ٥ × دقيقة سريع ودقيقة هادي')]],
+  [W('Heavy strength','قوة تقيلة'),[W('Back squat 5 × 5',`${B('Back squat')}: ٥ × ٥`),W('Deadlift 5 × 5',`${B('Deadlift')}: ٥ × ٥`),W('Heavy sled push and pull 6 × 20 m',`${B('Sled push')} و ${B('Sled pull')} تقيل: ٦ × ٢٠ متر`),W('Farmers carry 4 × 40 m',`${B('Farmers carry')}: ٤ × ٤٠ متر`)]]]]
+};
+
+/* journal */
+const JT=[
+ [['Know yourself','اعرفي نفسك'],[W('When do I feel most like myself, and what am I doing in those moments?','إمتى بحس إني على طبيعتي، وبكون بعمل إيه ساعتها؟'),W("What do I keep doing even though I know it doesn't serve me? Why?",'إيه الحاجة اللي بفضل أعملها مع إني عارفة إنها مش في مصلحتي؟ وليه؟'),W('What do people often come to me for? What does that say about my gifts?','الناس دايماً بتيجي لي في إيه؟ وده بيقول إيه عن مواهبي؟'),W('What am I afraid people would think if they really knew me?','خايفة الناس تفكر إيه لو عرفوني بجد؟'),W('Which feeling did I avoid this week, and what was it trying to tell me?','أنهي إحساس هربت منه الأسبوع ده، وكان عايز يقولي إيه؟')]],
+ [['Me and my deen','أنا وربنا'],[W('Which act of worship makes my heart feel closest to Allah, and why?','أنهي عبادة بتحسسني إني قريبة من ربنا أكتر، وليه؟'),W('If I could ask Allah for one thing with full certainty, what would it be?','لو هطلب من ربنا حاجة واحدة وأنا متيقنة إنه هيستجيب، هطلب إيه؟'),W('What is one habit I want to leave before Ramadan? What makes it hard?','إيه عادة عايزة أسيبها قبل رمضان؟ وإيه اللي مصعّبها عليّ؟'),W("When did I last feel Allah's care in a small detail of my day?",'آخر مرة حسيت فيها بلطف ربنا في تفصيلة صغيرة في يومي كانت إمتى؟'),W('How do I want to be remembered by the people I love?','عايزة الناس اللي بحبهم يفتكروني بإيه؟')]],
+ [['My dreams','أحلامي'],[W("If fear wasn't a factor, what would I start this year?",'لو الخوف مش موجود، كنت هبدأ إيه السنة دي؟'),W('What does my ideal ordinary day look like in five years?','شكل يومي العادي المثالي بعد خمس سنين عامل إزاي؟'),W('Which skill would change everything for me if I mastered it?','أنهي مهارة لو اتقنتها هتغيّر كل حاجة؟'),W('Whose life inspires me, and what exactly about it?','حياة مين بتلهمني، وإيه بالظبط فيها؟'),W('What is one small step I can take this week toward my dream?','إيه خطوة صغيرة أقدر أعملها الأسبوع ده ناحية حلمي؟')]],
+ [['Gratitude','الحمد'],[W('Three blessings I usually forget to thank Allah for','تلات نعم بنسى أحمد ربنا عليهم'),W('Who made my life easier recently, and have I told them?','مين سهّل عليّ حياتي الفترة اللي فاتت، وقلتله ولا لأ؟'),W('Which hardship turned out to be a mercy?','إيه الحاجة الصعبة اللي طلعت رحمة؟'),W('What about my body am I grateful for today?','إيه في جسمي أنا ممتنة له النهارده؟'),W('What made me smile today?','إيه اللي ضحّكني النهارده؟')]],
+ [['Hard days','الأيام الصعبة'],[W('What is weighing on my heart right now? Name it honestly.','إيه اللي تاقل على قلبي دلوقتي؟ سمّيه بصراحة.'),W('What would I say to my best friend if she felt this way?','كنت هقول إيه لصاحبتي لو حست كده؟'),W('What part of this is in my control, and what can I leave to Allah?','إيه الجزء اللي في إيدي، وإيه اللي أسيبه لربنا؟'),W('What do I need right now: rest, company, help or dua?','محتاجة إيه دلوقتي: راحة، ونس، مساعدة، ولا دعاء؟'),W('What is one kind thing I can do for myself today?','إيه حاجة حلوة أقدر أعملها لنفسي النهارده؟')]]
+];
+let jT=doy%JT.length,jQ=Math.floor(doy/JT.length)%5,jDraft='';
+
+/* ---------- colour helpers ---------- */
+const hex2rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const rgb2hex=a=>'#'+a.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');
+function rgb2hsl([r,g,b]){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;const l=(mx+mn)/2;if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}return[h,s*100,l*100]}
+function hsl2hex(h,s,l){h=((h%360)+360)%360;s=Math.max(0,Math.min(100,s))/100;l=Math.max(0,Math.min(100,l))/100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,9-k(n),1));return rgb2hex([f(0)*255,f(8)*255,f(4)*255])}
+const dist=(a,b)=>{const x=hex2rgb(a),y=hex2rgb(b);return Math.hypot(x[0]-y[0],(x[1]-y[1])*1.2,x[2]-y[2])};
+const nearest=h=>NAMED.reduce((b,c)=>dist(h,c[2])<dist(h,b[2])?c:b,NAMED[0]);
+const cname=h=>{const n=nearest(h);return A()?n[1]:n[0]};
+const safeHex=h=>/^#[0-9a-f]{6}$/i.test(h)?h:'#1b1b1b';
+function suggestions(base){
+  const [h,s,l]=rgb2hsl(hex2rgb(base));let out;
+  if(s<12)out=[['#7a1f3a',['A rich pop of colour','لمسة لون حلوة']],['#c19a6b',['Warm and soft','دافي وناعم']],['#e8c8c0',['Gentle contrast','تباين لطيف']],[l>50?'#1b1b1b':'#e9dcc3',['Clean and classic','كلاسيك ونضيف']]];
+  else out=[[hsl2hex(h,s*.7,l>55?l-28:l+28),['Tonal, same family','من نفس العيلة']],[l>55?'#4a2c20':'#e9dcc3',['Neutral that always works','لون محايد بيمشي مع كل حاجة']],[hsl2hex(h+30,s*.8,l),['A neighbouring shade','درجة قريبة']],[hsl2hex(h+180,Math.min(s,45),Math.max(30,Math.min(70,l))),['Soft contrast','تباين هادي']]];
+  const seen=new Set();return out.filter(x=>{const k=nearest(x[0])[0];return !seen.has(k)&&seen.add(k)});
+}
+let tryOn=null,tryPrev=null;
+function defaultLook(base){const [,,l]=rgb2hsl(hex2rgb(base));return{h:suggestions(base)[0][0],t:base,b:l>60?'#3b3b3b':(l<30?'#d9c4a5':'#1b1b1b'),g:'#c19a6b'}}
+const LOOK={
+ style:[['classic',['Classic wrap','اللفة العادية']],['loose',['Loose hijab','الطرحة اللوس']],['drape',['Long drape','طرحة منسدلة']],['turban',['Turban','تربون']],['full',['Full khimar','الخمار الفُل']],['amira',['Al-Amira','طرحة أميرة']],['sporty',['Sporty','سبور']]],
+ fit:[['trousers',['Top and trousers','بلوزة وبنطلون']],['skirt',['Top and skirt','بلوزة وجيبة']],['abaya',['Open abaya','عباية مفتوحة']],['dress',['Maxi dress','فستان ماكسي']]],
+ body:[['s',['Fitted','مظبوطة'],.9],['m',['Relaxed','مريحة'],1],['c',['Oversized','أوفر سايز'],1.15]],
+ skin:['#F1C9A8','#D9A47E','#B47A55','#7A4E35'],
+ acc:[['tote',['Tote bag','شنطة توت']],['cross',['Crossbody bag','شنطة كروس']],['watch',['Watch','ساعة']],['bracelet',['Bracelet','انسيال']],['glasses',['Sunglasses','نضارة شمس']],['pin',['Hijab pin','دبوس طرحة']],['belt',['Belt','حزام']],['necklace',['Long necklace','سلسلة طويلة']]]
+};
+function lookState(){
+  const d={style:'classic',fit:'trousers',body:'m',skin:1,acc:{tote:true}};
+  if(!S.look||typeof S.look!=='object')S.look=d;
+  const k=S.look;
+  if(!LOOK.style.some(x=>x[0]===k.style))k.style=d.style;
+  if(!LOOK.fit.some(x=>x[0]===k.fit))k.fit=d.fit;
+  if(!LOOK.body.some(x=>x[0]===k.body))k.body=d.body;
+  if(!(k.skin>=0&&k.skin<4))k.skin=1;
+  if(!k.acc||typeof k.acc!=='object')k.acc={};
+  return k;
+}
+function girlSVG(o){
+  const k=lookState(),sk=LOOK.skin[k.skin],bw=LOOK.body.find(x=>x[0]===k.body)[2],a=k.acc,st=k.style,fit=k.fit;
+  const T=`class="c-t" fill="${o.t}"`,Bt=`class="c-b" fill="${o.b}"`,Hh=`class="c-h" fill="${o.h}"`,G=`class="c-g" fill="${o.g}"`,sh='fill="#000" opacity=".1"';
+  const gold='#D8B46A';
+  let body='';
+  // bottoms + long garments
+  if(fit==='trousers')body+=`<path ${Bt} d="M70 228 L100 228 L97 336 L60 336 Z M100 228 L130 228 L140 336 L103 336 Z"/><path d="M100 232 L100 330" stroke="#000" stroke-opacity=".12" stroke-width="2"/>`;
+  if(fit==='skirt')body+=`<path ${Bt} d="M66 198 L134 198 L152 334 Q100 344 48 334 Z"/><path d="M100 200 L104 340 Q128 338 152 334 L134 198 Z" ${sh}/>`;
+  if(fit==='abaya')body+=`<path ${T} d="M68 104 Q100 96 132 104 L154 334 Q100 344 46 334 Z"/><path ${Bt} d="M91 112 L109 112 L116 338 L84 338 Z"/><path d="M109 112 L132 104 L154 334 Q134 338 116 338 Z" ${sh}/>`;
+  if(fit==='dress')body+=`<path ${T} d="M68 104 Q100 96 132 104 L142 198 L158 334 Q100 346 42 334 L58 198 Z"/><path d="M100 104 Q104 220 104 342 Q132 340 158 334 L142 198 L132 104 Z" ${sh}/>`;
+  // shoes
+  body+=`<ellipse cx="78" cy="340" rx="19" ry="7" fill="#f4f0ea"/><ellipse cx="122" cy="340" rx="19" ry="7" fill="#f4f0ea"/>`;
+  // tops
+  if(fit==='trousers')body+=`<path ${T} d="M68 104 Q100 96 132 104 L150 246 Q100 260 50 246 Z"/><path d="M100 110 Q96 180 104 255 Q120 252 150 246 L132 104 Q118 100 108 100 Z" ${sh}/>`;
+  if(fit==='skirt')body+=`<path ${T} d="M68 104 Q100 96 132 104 L138 204 Q100 212 62 204 Z"/><path d="M100 108 Q98 160 102 210 Q120 208 138 204 L132 104 Z" ${sh}/>`;
+  // sleeves + hands
+  body+=`<path ${T} d="M70 108 Q50 150 46 210 L60 212 Q64 164 80 126 Z"/><path ${T} d="M130 108 Q150 150 154 210 L140 212 Q136 164 120 126 Z"/><path d="M130 108 Q150 150 154 210 L148 211 Q144 160 128 118 Z" ${sh}/>`;
+  body+=`<circle cx="53" cy="217" r="7" fill="${sk}"/><circle cx="147" cy="217" r="7" fill="${sk}"/>`;
+  // belt
+  if(a.belt){const y=fit==='trousers'?170:197;body+=`<rect x="60" y="${y}" width="80" height="7" rx="3" fill="#3b2a20"/><rect x="95" y="${y-1}" width="10" height="9" rx="2" fill="none" stroke="${gold}" stroke-width="2"/>`}
+  // watch / bracelet
+  if(a.watch)body+=`<rect x="46" y="203" width="14" height="7" rx="2" fill="#2b2b2b"/><circle cx="53" cy="206.5" r="3" fill="${gold}"/>`;
+  if(a.bracelet)body+=`<circle cx="147" cy="206" r="6.5" fill="none" stroke="${gold}" stroke-width="2.2"/>`;
+  // bags
+  if(a.cross)body+=`<path class="s-g" d="M76 112 L132 198" stroke="${o.g}" stroke-width="3" fill="none"/><rect ${G} x="120" y="192" width="30" height="22" rx="5"/><rect x="132" y="199" width="6" height="4" rx="1" fill="${gold}"/>`;
+  if(a.tote&&!a.cross)body+=`<path ${G} d="M142 196 h22 a4 4 0 0 1 4 4 v26 a4 4 0 0 1 -4 4 h-22 a4 4 0 0 1 -4 -4 v-26 a4 4 0 0 1 4 -4 z"/><path class="s-g" d="M146 196 q7 -14 14 0" fill="none" stroke="${o.g}" stroke-width="3"/>`;
+  // head
+  let back='',head='';
+  const face=`<ellipse cx="100" cy="73" rx="22.5" ry="26.5" ${sh}/><ellipse cx="100" cy="72" rx="19" ry="23" fill="${sk}"/><circle cx="91" cy="80" r="4" fill="#E58C95" opacity=".3"/><circle cx="109" cy="80" r="4" fill="#E58C95" opacity=".3"/>`;
+  const plainFace=`<ellipse cx="100" cy="72" rx="19" ry="23" fill="${sk}"/><circle cx="91" cy="80" r="4" fill="#E58C95" opacity=".3"/><circle cx="109" cy="80" r="4" fill="#E58C95" opacity=".3"/>`;
+  if(st==='classic')head=`<path ${Hh} d="M100 26 C68 26 60 54 62 78 C56 100 54 122 64 144 Q100 162 136 144 C146 122 144 100 138 78 C140 54 132 26 100 26 Z"/><path d="M100 26 C122 26 136 46 138 78 C144 100 146 122 136 144 Q120 152 104 155 Q126 120 124 80 C122 50 112 34 100 26 Z" ${sh}/>${face}`;
+  if(st==='drape')head=`<path ${Hh} d="M100 26 C68 26 60 54 62 78 C56 98 58 118 66 132 Q90 146 112 140 L120 100 Z"/><path ${Hh} d="M100 26 C132 26 140 54 138 80 C146 110 150 160 150 214 L130 218 Q128 160 116 126 Q104 140 100 142 Z"/><path d="M128 90 C140 120 148 160 150 214 L142 215 Q138 150 122 112 Z" ${sh}/>${face}`;
+  if(st==='turban'){back=`<circle ${Hh} cx="118" cy="40" r="15"/><path ${T} d="M88 88 L112 88 L114 112 Q100 118 86 112 Z"/>`;head=`${plainFace}<path ${Hh} d="M75 84 C68 50 84 26 104 26 C128 26 138 50 128 84 L122 84 C122 66 116 54 100 54 C84 54 78 66 78 84 Z"/><path d="M82 46 Q100 36 120 46 M80 58 Q100 46 124 58" stroke="#000" stroke-opacity=".14" stroke-width="2" fill="none"/>`}
+  if(st==='loose')head=`<path ${Hh} d="M100 30 C70 30 62 56 64 80 C58 100 58 118 66 132 Q84 150 100 146 Q118 150 134 132 C142 118 142 100 136 80 C138 56 130 30 100 30 Z"/><path d="M100 30 C124 30 136 52 136 80 C142 100 142 118 134 132 Q120 146 106 147 Q124 112 122 80 C120 52 112 36 100 30 Z" ${sh}/>${face}<path d="M81 63 Q100 40 119 63 Q100 51 81 63 Z" fill="#2b2b2b" opacity=".85"/><path d="M74 112 Q100 128 126 112 M70 124 Q100 141 130 124" stroke="#000" stroke-opacity=".14" stroke-width="3" fill="none"/><path ${Hh} d="M70 118 Q62 158 70 198 L86 194 Q80 156 86 124 Z"/><path d="M70 118 Q62 158 70 198 L76 197 Q70 158 76 121 Z" ${sh}/>`;
+  if(st==='full'){head=`<path ${Hh} d="M100 22 C64 22 58 56 60 80 C50 112 46 152 52 192 Q100 202 148 192 C154 152 150 112 140 80 C142 56 136 22 100 22 Z"/><path d="M100 22 C124 22 140 48 140 80 C150 112 154 152 148 192 Q128 198 110 199 Q132 140 124 80 C122 46 112 28 100 22 Z" ${sh}/>${face}`}
+  if(st==='amira')head=`<path ${Hh} d="M66 102 Q100 88 134 102 L144 134 Q100 150 56 134 Z"/><path d="M100 94 Q120 96 134 102 L144 134 Q124 141 104 143 Z" ${sh}/><path ${Hh} d="M100 34 C76 34 70 56 72 80 C70 96 74 106 82 112 Q100 120 118 112 C126 106 130 96 128 80 C130 56 124 34 100 34 Z"/>${face}`;
+  if(st==='sporty')head=`<path ${Hh} d="M76 96 Q100 110 124 96 L128 116 Q100 128 72 116 Z"/><path ${Hh} d="M100 34 C76 34 70 56 72 80 C70 96 74 106 82 112 Q100 120 118 112 C126 106 130 96 128 80 C130 56 124 34 100 34 Z"/>${face}`;
+  // face accessories
+  let fx='';
+  if(a.glasses)fx+=`<rect x="83" y="63" width="15" height="10" rx="4" fill="#2b2b2b"/><rect x="102" y="63" width="15" height="10" rx="4" fill="#2b2b2b"/><path d="M98 67 h4" stroke="${gold}" stroke-width="1.6"/>`;
+  if(a.pin){const pp=st==='turban'?[126,64]:st==='amira'||st==='sporty'?[124,100]:[124,98];fx+=`<circle cx="${pp[0]}" cy="${pp[1]}" r="4.5" fill="${gold}"/><circle cx="${pp[0]-1.5}" cy="${pp[1]-1.5}" r="1.5" fill="#fff" opacity=".8"/>`}
+  if(a.necklace)fx+=`<path d="M86 ${st==='full'?150:148} Q100 ${st==='full'?188:184} 114 ${st==='full'?150:148}" stroke="${gold}" stroke-width="1.6" fill="none"/><circle cx="100" cy="${st==='full'?186:182}" r="4" fill="${gold}"/>`;
+  return `<svg class="girl" viewBox="0 0 200 360" role="img" aria-label="${L(['Illustration of a hijabi girl wearing your colours','رسمة بنت محجبة لابسة ألوانك'])}">
+  <ellipse cx="100" cy="346" rx="${58*bw}" ry="7" fill="#000" opacity=".08"/>
+  <g transform="translate(100 0) scale(${bw} 1) translate(-100 0)">${back}${body}</g>${head}<g transform="translate(100 0) scale(${bw} 1) translate(-100 0)">${a.necklace?fx.slice(fx.indexOf('<path d="M86')):''}</g>${a.necklace?fx.slice(0,fx.indexOf('<path d="M86')):fx}</svg>`;
+}
+function paintGirl(o){
+  const sv=document.querySelector('.girl');
+  if(sv){for(const [c,v] of [['h',o.h],['t',o.t],['b',o.b],['g',o.g]])sv.querySelectorAll('.c-'+c).forEach(e=>e.style.fill=v);sv.querySelectorAll('.s-g').forEach(e=>e.style.stroke=o.g)}
+  const lab=$('girlKey');if(lab)lab.innerHTML=[[['Hijab','الطرحة'],o.h],[['Top','البلوزة'],o.t],[['Bottom','البنطلون'],o.b],[['Bag','الشنطة'],o.g]].map(x=>`<span class="sg" style="padding:8px"><i style="background:${x[1]};width:26px;height:26px"></i><span>${L(x[0])}<small>${cname(x[1])}</small></span></span>`).join('');
+  tryPrev=o;
+}
+function lookControls(){
+  const k=lookState();
+  const row=(title,key,list)=>`<div class="lkrow"><p class="lkt">${L(title)}</p><div class="scroller">${list.map(x=>`<button class="opt sm" type="button" data-lk="${key}:${x[0]}" aria-pressed="${k[key]===x[0]}">${L(x[1])}</button>`).join('')}</div></div>`;
+  return `<div class="lk">
+   ${row(['Hijab style','ربطة الطرحة'],'style',LOOK.style)}
+   <p class="note">${L(['From Cairo to the Gulf to London, every girl ties it her own way.','من مصر للخليج للندن، كل بنت بتربطها على طريقتها.'])}</p>
+   ${row(['Outfit','الستايل'],'fit',LOOK.fit)}
+   ${row(['Clothing fit','قصّة اللبس'],'body',LOOK.body)}
+   <div class="lkrow"><p class="lkt">${L(['Skin tone','لون البشرة'])}</p><div class="row">${LOOK.skin.map((c,i)=>`<button class="swb" type="button" style="width:38px;background:${c}" data-lk="skin:${i}" aria-pressed="${k.skin===i}" aria-label="${L(['Skin tone','لون البشرة'])} ${i+1}"></button>`).join('')}</div></div>
+   <div class="lkrow"><p class="lkt">${L(['Accessories','الإكسسوارات'])}</p><div class="row">${LOOK.acc.map(x=>`<button class="opt sm" type="button" data-acc="${x[0]}" aria-pressed="${!!k.acc[x[0]]}">${L(x[1])}</button>`).join('')}</div></div>
+  </div>`;
+}
+function redrawGirl(){const gb=document.querySelector('.girlbox');if(gb){gb.innerHTML=girlSVG(tryOn);paintGirl(tryOn)}}
+function genCombo(){
+  const [h,s]=rgb2hsl(hex2rgb(safeHex(S.colour)));const r=Math.random();const hh=s<12?Math.random()*360:h+(Math.random()*30-15);
+  const cols=r<.33?[hsl2hex(hh,55,40),hsl2hex(hh+150,35,55),hsl2hex(hh+210,35,55),'#efe6d6']:r<.66?[hsl2hex(hh,45,30),hsl2hex(hh+25,45,50),hsl2hex(hh+50,40,70),'#1b1b1b']:[hsl2hex(hh,50,45),hsl2hex(hh,30,75),hsl2hex(hh+180,30,40),'#e9dcc3'];
+  return [['Your generated combo','تنسيقك الجديد'],'g',cols];
+}
+
+/* ---------- moon ---------- */
+let moonPrev=0;
+function moonSVG(f){
+  const r=50,cx=60,cy=60;
+  return `<svg class="moonw" data-f="${f}" viewBox="0 0 120 120" role="img" aria-label="${L(["Today's moon",'قمر النهارده'])}"><defs><clipPath id="mc"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath><radialGradient id="mg" cx="40%" cy="35%"><stop offset="0" stop-color="#F6E2B0"/><stop offset="1" stop-color="#D8B46A"/></radialGradient></defs>
+  <circle class="glow" cx="${cx}" cy="${cy}" r="${r+6}" fill="#D8B46A" opacity="${.08+.22*moonPrev}"/>
+  <g clip-path="url(#mc)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#mg)"/><circle class="sh" cx="${cx}" cy="${cy}" r="${r}" fill="#3E1022" style="transform:translateX(${moonPrev>=1?130:2*r*moonPrev}px)"/></g>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#D8B46A" stroke-opacity=".5"/></svg>`;
+}
+
+/* ---------- reveal ---------- */
+const RV='.intro,.hero,.card,.qcard';
+const io='IntersectionObserver' in window?new IntersectionObserver(es=>{for(const e of es){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}},{threshold:.1,rootMargin:'0px 0px -30px 0px'}):null;
+function reveal(el,fresh){
+  const items=[...el.querySelectorAll(RV)];
+  items.forEach((x,i)=>{x.classList.add('rv');
+    if(!fresh){x.classList.add('in','instant');return}
+    x.classList.remove('in','instant');x.style.transitionDelay=Math.min(i,4)*80+'ms';
+    if(io)io.observe(x);else x.classList.add('in')});
+}
+function setView(id,html){
+  const el=$(id),fresh=!el.classList.contains('on')||!el._shown;
+  el.innerHTML=html;reveal(el,fresh&&el.classList.contains('on'));
+  if(!el.classList.contains('on'))el._shown=false;
+  if(id==='v-today')animateMoon();
+}
+function resetMoon(el){const sh=el.querySelector('.sh');if(sh){sh.style.transition='none';sh.style.transform='translateX(0px)';void sh.getBoundingClientRect();sh.style.transition=''}}
+function replay(){const id=curView(),el=$('v-'+id);el._shown=true;reveal(el,true);if(id==='today'){moonPrev=0;resetMoon(el);animateMoon()}}
+function animateMoon(){
+  const sv=document.querySelector('#v-today .moonw');if(!sv)return;
+  const f=+sv.dataset.f;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const sh=sv.querySelector('.sh'),gl=sv.querySelector('.glow');if(sh)sh.style.transform=`translateX(${f>=1?130:100*f}px)`;if(gl)gl.setAttribute('opacity',.08+.22*f);moonPrev=f}));
+}
+
+/* ---------- views ---------- */
+const dhDone=()=>(day().dh['g-'+dayDh]||0)>=GEN[dayDh][3];
+function score(){const d=day();return{n:d.p.filter(Boolean).length+TODO.filter(t=>d[t[0]]).length+(dhDone()?1:0),t:10}}
+function prayersHTML(){const d=day();return `<div class="prayers">${PR.map((p,i)=>`<button class="pr" type="button" data-p="${i}" aria-pressed="${d.p[i]}">${A()?`<span class="ar">${p[0]}</span>`:`<b style="font-size:13px">${p[1]}</b>`}</button>`).join('')}</div>`}
+function streak(){let s=0;const d=new Date(today);for(let i=0;i<365;i++){const x=S.days[key(d)];if(x&&Array.isArray(x.p)&&x.p.every(Boolean))s++;else if(i>0)break;d.setDate(d.getDate()-1)}return s}
+
+function renderToday(){
+  const {n,t}=score(),f=n/t;
+  const lines=A()?['قمرك مستنيكي','الهلال بدأ يطلع','هلالك بيكبر','نص قمرك نوّر','قمرك قرّب يكمل','قمرك كامل النهارده، ما شاء الله']:['Your moon is waiting','A crescent is rising','Your crescent is growing','Half your moon is lit','Your moon is nearly full','A full moon today, ma sha Allah'];
+  const line=lines[n===0?0:n>=t?5:Math.min(4,1+Math.floor(f*4))];
+  const m=H?H.m:0,d=day(),cs=S.challenge[chKey]||[];
+  const steps=[[6,['Prepare','تجهيز']],[7,['Plant','الزرع']],[8,['Water','السقي']],[9,['Harvest','الحصاد']]];
+  const ram=(H&&H.m===9)?L(['Ramadan Mubarak','رمضان كريم']):daysToRam!=null?L([`${daysToRam} days to Ramadan`,`فاضل ${toAr(daysToRam)} يوم على رمضان`]):'';
+  setView('v-today',`
+  <div class="intro"><p class="hi">${S.name?L([`Hey ${esc(S.name)}`,`أهلاً يا ${esc(S.name)}`]):L(['Hey lovely','أهلاً يا قمر'])}</p><p class="muted">${L(INTRO)}</p>
+   <button class="namebtn" type="button" id="nameBtn">${L(['Change your name','غيّري اسمك'])}</button>
+   <div class="row pillars">${PILL.map(p=>`<a href="#${p[0]}">${L(p[1])}</a>`).join('')}</div></div>
+  <div class="hero"><div style="display:flex;flex-direction:column;gap:8px"><h2>${line}</h2><p>${L([`${n} of ${t} done today. Every good deed lights it up a little more.`,`خلصتي ${toAr(n)} من ${toAr(t)} النهارده. كل حاجة حلوة بتعمليها بتنوّره أكتر.`])}</p></div>${moonSVG(f)}</div>
+  <div class="card">${ttl(['Road to Ramadan','الطريق لرمضان'])}<div><span class="chip">${ram}</span></div>
+   <div class="ladder">${steps.map(s=>`<div class="rung ${s[0]===m?'now':(m>s[0]&&m<=9?'done':'')}">${A()?`<span class="ar">${MAR[s[0]-1]}</span>`:`<b style="color:inherit;font-size:13px">${MSH[s[0]-1]}</b>`}${L(s[1])}</div>`).join('')}</div>
+   <p class="note">${L(["The early scholars called Rajab the month of planting, Sha'ban the month of watering, and Ramadan the harvest. Dates may differ by a day with your local moon sighting.",'العلماء قالوا: رجب شهر الزرع، وشعبان شهر السقي، ورمضان شهر الحصاد. المواعيد ممكن تفرق يوم حسب رؤية الهلال عندك.'])}</p></div>
+  <div class="card"><div><span class="chip">${H?L([`${MEN[H.m-1]} challenge`,`تحدي ${MAR[H.m-1]}`]):L(['This month','الشهر ده'])}</span></div><h3>${L(C[0])}</h3><p class="muted">${L(C[1])}</p>
+   <div>${C[2].map((x,i)=>chk(`data-c="${i}"`,cs[i],L(x))).join('')}</div></div>
+  <div class="card">${ttl(['Today','النهارده'])}${prayersHTML()}
+   <div>${TODO.map(x=>chk(`data-t="${x[0]}"`,d[x[0]],L(x[1]))).join('')}${chk(`data-go="deen"`,dhDone(),A()?`<span class="ar" style="font-size:18px">${GEN[dayDh][0]}</span>`:GEN[dayDh][1],L([`Dhikr of the day: ${d.dh['g-'+dayDh]||0} of ${GEN[dayDh][3]}`,`ذكر اليوم: ${toAr(d.dh['g-'+dayDh]||0)} من ${toAr(GEN[dayDh][3])}`]))}</div></div>
+  ${installHTML()}`);
+}
+
+function renderDeen(){
+  const s=streak();
+  setView('v-deen',`
+  <div style="margin-top:8px">${ttl(['Deen','الدين'],'h1')}</div>
+  <p class="muted" style="margin-top:6px">${L(['Small, steady steps. The most beloved deeds to Allah are the consistent ones, even if small.','خطوات صغيرة بس ثابتة. أحب الأعمال إلى الله أدومها وإن قلّ.'])}</p>
+  <div class="card">${ttl(['Adhkar','الأذكار'])}
+   <div class="row">${Object.entries(SETS).map(([k,v])=>`<button class="opt" type="button" data-set="${k}" aria-pressed="${k===dSet}">${L(v[0])}</button>`).join('')}</div>
+   <div class="dhikr"><span class="chip" id="dhBadge"></span><p class="ar" id="dhAr"></p><p style="font-weight:600" id="dhTr"></p><p class="muted" id="dhMean"></p></div>
+   <button class="tap" id="tap" type="button" aria-label="${L(['Count one','عدّي واحدة'])}"><span id="tapN">0</span><small id="tapGoal"></small></button>
+   <div class="bar" aria-hidden="true"><i id="tapBar" style="width:0%"></i></div>
+   <div class="row" style="justify-content:center"><button class="btn ghost" id="dhPrev" type="button">${L(['Previous','اللي قبله'])}</button><button class="btn ghost" id="dhReset" type="button">${L(['Reset','من الأول'])}</button><button class="btn" id="dhNext" type="button">${L(['Next','اللي بعده'])}</button></div>
+   <p class="note">${L(['From the well-known adhkar of the Sunnah, as collected in Hisn al-Muslim.','من أذكار السنة المعروفة، زي ما هي في حصن المسلم.'])}</p></div>
+  <div class="card">${ttl(['Prayers today','صلوات النهارده'])}${prayersHTML()}
+   <p class="note">${s?L([`All five prayers: ${s} day streak`,`صلّيتي الخمسة ${toAr(s)} يوم ورا بعض`]):L(['Pray all five today to start a streak.','صلّي الخمسة النهارده عشان تبدأي السلسلة.'])}</p></div>
+  <div class="card">${ttl(['Hifz','الحفظ'])}
+   <p class="muted">${L(["The whole Quran, one surah at a time. Tick each surah you've memorised.",'القرآن كله، سورة سورة. علّمي على كل سورة حفظتيها.'])}</p>
+   <div class="bar" aria-hidden="true"><i id="hifzBar"></i></div><p class="note" id="hifzCount"></p>
+   <div class="row">${[['30',['Juz Amma','جزء عمّ']],['29',['Juz Tabarak','جزء تبارك']],['all',['All 114','كل السور']],['done',['Memorised','اللي حفظتيه']]].map(o=>`<button class="opt" type="button" data-hf="${o[0]}" aria-pressed="${o[0]===hf}">${L(o[1])}</button>`).join('')}</div>
+   <input type="search" id="hq" placeholder="${L(['Search a surah','دوّري على سورة'])}" aria-label="${L(['Search a surah','دوّري على سورة'])}" value="${esc(hq)}">
+   <div id="surahs"></div></div>
+  <div class="card">${ttl(['A simple hifz method','طريقة الحفظ'])}
+   <ul>${[['Listen to the surah a few times from a reciter you love.','اسمعي السورة كذا مرة من قارئ بتحبيه.'],['Learn one ayah at a time, repeating it until you can say it without looking.','احفظي آية آية، وكرريها لحد ما تقوليها من غير ما تبصي.'],['Join it to the ayah before, then recite the whole part together.','اربطي كل آية باللي قبلها، وبعدين اقري الجزء كله مع بعض.'],["Revise yesterday's portion before starting something new.",'راجعي حفظ امبارح قبل ما تبدأي جديد.'],["Recite what you've learned in your prayers that day.",'صلّي باللي حفظتيه في نفس اليوم.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul></div>`);
+  updateTap();renderSurahs();
+  $('hq').addEventListener('input',e=>{hq=e.target.value;renderSurahs()});
+}
+function updateTap(){
+  const set=SETS[dSet][1],x=set[dIdx],k=dSet+'-'+dIdx,n=day().dh[k]||0;
+  $('dhBadge').textContent=dSet==='g'&&dIdx===dayDh?L(['Dhikr of the day','ذكر اليوم']):`${L(SETS[dSet][0])} · ${N(dIdx+1)} / ${N(set.length)}`;
+  $('dhAr').textContent=x[0];$('dhTr').textContent=A()?'':x[1];$('dhMean').textContent=A()?'':x[2];
+  $('tapN').textContent=N(n);$('tapGoal').textContent=n>=x[3]?L(['Done, may Allah accept','خلصتي، ربنا يتقبّل']):L([`of ${x[3]}`,`من ${toAr(x[3])}`]);
+  $('tapBar').style.width=Math.min(100,n/x[3]*100)+'%';
+}
+function renderSurahs(){
+  const done=Object.keys(S.surahs).filter(k=>S.surahs[k]&&/^\d+$/.test(k)).map(Number);
+  const ay=done.reduce((a,i)=>a+(AY[i-1]||0),0);
+  $('hifzBar').style.width=(ay/TOTAL_AY*100)+'%';
+  $('hifzCount').textContent=L([`${done.length} of 114 surahs · ${(ay/TOTAL_AY*100).toFixed(1)}% of the Quran's ayat`,`حفظتي ${toAr(done.length)} من ${toAr(114)} سورة · ${toAr((ay/TOTAL_AY*100).toFixed(1))}٪ من آيات القرآن`]);
+  const q=hq.trim().toLowerCase();
+  let ids=SAR.map((_,i)=>i+1);
+  if(hf==='30')ids=ids.filter(i=>i>=78);else if(hf==='29')ids=ids.filter(i=>i>=67&&i<=77);else if(hf==='done')ids=ids.filter(i=>S.surahs[i]);
+  if(q)ids=ids.filter(i=>SAR[i-1].includes(q)||SEN[i-1].toLowerCase().includes(q)||String(i)===q);
+  $('surahs').innerHTML=ids.length?ids.map(i=>chk(`data-s="${i}"`,S.surahs[i],A()?`<span class="ar" style="font-size:19px">${N(i)}. سورة ${SAR[i-1]}</span>`:`${i}. Surah ${SEN[i-1]}`,L([`${AY[i-1]} ayat`,`${toAr(AY[i-1])} آية`]))).join(''):`<p class="note">${L(['No surahs here yet.','مفيش سور هنا لسه.'])}</p>`;
+}
+
+function renderStyle(){
+  const base=safeHex(S.colour);
+  if(!tryOn||tryOn.base!==base){tryOn=Object.assign(defaultLook(base),{base})}
+  let list=pf==='all'?[...PAL].sort((a,b)=>Math.min(...a[2].map(c=>dist(c,base)))-Math.min(...b[2].map(c=>dist(c,base)))).slice(0,3):PAL.filter(p=>p[1]===pf);
+  if(genPal)list=[genPal,...list];
+  const x=F[fCur];
+  setView('v-style',`
+  <div style="margin-top:8px">${ttl(['Style','الأناقة'],'h1')}</div>
+  <p class="muted" style="margin-top:6px">${L(['Modest, confident and kind to your bank account.','محتشمة، واثقة، ومن غير ما تصرفي كتير.'])}</p>
+  <div class="card">${ttl(['Hijab colour matcher','منسّق ألوان الطرحة'])}
+   <p class="muted">${L(['Show us your outfit: upload a photo and we\'ll find your colour and create combos for you, or tap the colour of your main piece.','ورّينا لبسك: حطي صورة وإحنا هنعرف لونك ونعملك تنسيقات، أو دوسي على لون القطعة الأساسية.'])}</p>
+   <label class="upload"><input type="file" accept="image/*" id="photo">${L(['Upload an outfit photo','حطي صورة لبسك'])}</label>
+   <p class="note">${photoMsg||L(["Your photo stays on your phone. It's only used to read its main colour.",'صورتك بتفضل على موبايلك، بنستخدمها بس عشان نعرف اللون الأساسي.'])}</p>
+   <div class="swatches" role="group" aria-label="${L(['Choose your outfit colour','اختاري لون لبسك'])}">${NAMED.map(c=>`<button class="swb" type="button" data-col="${c[2]}" aria-label="${L([c[0],c[1]])}" aria-pressed="${c[2]===base}" style="background:${c[2]}"></button>`).join('')}</div>
+   <div class="picked"><i style="background:${base}"></i><div><b>${cname(base)}</b><p class="note">${L(['Your outfit colour','لون لبسك'])}</p></div></div>
+   <div class="tryon"><div class="girlbox">${girlSVG(tryPrev||tryOn)}</div><div style="display:flex;flex-direction:column;gap:8px"><p style="font-weight:600">${L(['Try it on','جربيه على الموديل'])}</p><div id="girlKey" style="display:flex;flex-direction:column;gap:6px"></div></div></div>
+   <p class="note">${L(['Tap a hijab colour or a combo to see it on her, and make her look like you.','دوسي على لون طرحة أو تنسيق عشان تشوفيه عليها، وخلّيها شبهك.'])}</p>
+   ${lookControls()}
+   <h3 style="font-size:16px">${L(['Hijabs to try','طرح تجربيها'])}</h3>
+   <div class="sugg">${suggestions(base).map(s=>`<button class="sg tryb" type="button" data-th="${s[0]}" aria-pressed="${tryOn&&tryOn.h===s[0]}"><i style="background:${s[0]}"></i><span>${cname(s[0])}<small>${L(s[1])}</small></span></button>`).join('')}</div></div>
+  <div class="card">${ttl(['Colour combos','تنسيقات ألوان'])}
+   <p class="muted">${L(["Palettes from nature and from the looks everyone's loving, matched to your colour.",'ألوان من الطبيعة ومن الستايلات اللي الكل بيحبها، على حسب لونك.'])}</p>
+   <div class="row">${[['all',['For my colour','على لوني']],['n',['Nature','الطبيعة']],['t',['Trending','ترند']]].map(o=>`<button class="opt" type="button" data-pf="${o[0]}" aria-pressed="${o[0]===pf}">${L(o[1])}</button>`).join('')}</div>
+   <div style="display:flex;flex-direction:column;gap:10px">${list.map((p,pi)=>`<button type="button" class="pal tryb" data-tp="${p[2].join(',')}" style="border:0;padding:0;text-align:start;font:inherit;color:inherit;cursor:pointer;width:100%"><div class="strip" style="grid-template-columns:repeat(${p[2].length},1fr)">${p[2].map(c=>`<i style="background:${c}"></i>`).join('')}</div><div class="meta"><b>${L(p[0])}</b><small>${p[2].map(cname).join(A()?'، ':', ')}</small></div></button>`).join('')}</div>
+   <button class="btn ghost" id="shuffle" type="button">${L(['Generate a new combo','اعملي تنسيق جديد'])}</button></div>
+  <div class="card">${ttl(['Outfit ideas','أفكار لبس'])}
+   <p class="muted">${L(["Just ideas to spark some inspiration. Every girl has her own journey and her own style, so take what feels right for you.",'دي مجرد أفكار تلهمك. كل بنت ليها رحلتها وستايلها، فخدي اللي يريّحك.'])}</p>
+   <div class="row">${Object.entries(F).map(([k,v])=>`<button class="opt" type="button" data-f="${k}" aria-pressed="${k===fCur}">${L(v[0])}</button>`).join('')}</div>
+   <div class="week"><h4>${L(x[1])}</h4><ul>${x[2].map(i=>`<li>${L(i)}</li>`).join('')}</ul></div></div>
+  ${capsuleHTML()}
+  <div class="card">${ttl(['The budget ladder','سلّم التوفير'])}
+   <p class="muted">${L(["Start where you are. Tap your step, and climb when you're ready.",'ابدأي من مكانك. دوسي على خطوتك، واطلعي لما تكوني جاهزة.'])}</p>
+   <div style="display:flex;flex-direction:column;gap:8px">${BL.map((b,i)=>`<button class="lvl" type="button" data-bl="${i+1}" aria-pressed="${S.budget===i+1}"><b class="n">${N(i+1)}</b><span><b>${L(b[0])}</b><span class="body">${L(b[1])}</span></span></button>`).join('')}</div></div>`);
+  $('photo').addEventListener('change',onPhoto);
+  $('shuffle').addEventListener('click',()=>{genPal=genCombo();const c=genPal[2];tryOn=Object.assign({},tryOn,{h:c[0],t:c[1],b:c[2],g:c[3]});renderStyle()});
+  const target=tryOn;requestAnimationFrame(()=>requestAnimationFrame(()=>paintGirl(target)));
+}
+function capsuleHTML(){
+  const ck=CAPS[S.cap]?S.cap:'classic',cols=CAPS[ck][1],own=S.capOwn&&typeof S.capOwn==='object'?S.capOwn:{};let n=0,have=0;
+  const sw=c=>c===4?`linear-gradient(135deg,${cols[0]} 0 30%,${cols[3]} 30% 55%,${cols[1]} 55% 80%,${cols[2]} 80%)`:cols[c];
+  const groups=CAPI.map((g,gi)=>`<div class="week"><h4>${L(g[0])}</h4>${g[1].map((it,ii)=>{n++;const k=ck+'-'+gi+'-'+ii;if(own[k])have++;
+    const name=it[0]===4?L(it[1]):(A()?`${it[1][1]} ${cname(cols[it[0]])}`:`${cname(cols[it[0]])} ${it[1][0]}`);
+    return chk(`data-cown="${k}"`,own[k],`<span style="display:flex;align-items:center;gap:8px"><i class="dot" style="background:${sw(it[0])}"></i>${name}</span>`)}).join('')}</div>`).join('');
+  return `<div class="card">${ttl(['Capsule wardrobe','دولاب الكابسول'])}
+   <p class="muted">${L(['A capsule wardrobe is a small set of pieces in a few colours that all go together. Fewer clothes, less stress, more outfits, and much kinder on your wallet.','الكابسول وارد روب يعني دولاب صغير فيه قطع قليلة بألوان معدودة، وكلهم بيتنسقوا مع بعض. هدوم أقل، توتر أقل، لبسات أكتر، وفلوس أقل.'])}</p>
+   <ul>${[['Pick 2 neutrals, 1 light shade and 1 accent colour.','اختاري لونين محايدين، ولون فاتح، ولون مميز واحد.'],['Every top should work with every bottom.','كل بلوزة لازم تمشي مع كل بنطلون أو جيبة.'],['Let your hijabs carry the colour and the prints.','خلّي الطرح هي اللي فيها الألوان والطبعات.'],['Tick what you already own, and only buy the gaps, slowly.','علّمي على اللي عندك، واشتري الناقص بس، بالراحة.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul>
+   <p style="font-weight:600">${L(['Choose your capsule colours','اختاري ألوان الكابسول'])}</p>
+   <div class="row">${Object.entries(CAPS).map(([k,v])=>`<button class="opt" type="button" data-cp="${k}" aria-pressed="${k===ck}"><span style="display:inline-flex;gap:3px;margin-inline-end:8px;vertical-align:middle">${v[1].map(c=>`<i class="dot" style="width:12px;height:12px;background:${c}"></i>`).join('')}</span>${L(v[0])}</button>`).join('')}</div>
+   <div class="sugg">${cols.map((c,i)=>`<div class="sg"><i style="background:${c}"></i><span>${cname(c)}<small>${L([['Main neutral','لون أساسي محايد'],['Second neutral','لون محايد تاني'],['Light shade','لون فاتح'],['Accent','اللون المميز']][i])}</small></span></div>`).join('')}</div>
+   <div class="bar" aria-hidden="true"><i style="width:${have/n*100}%"></i></div>
+   <p class="note">${L([`You own ${have} of ${n} pieces · 4 tops × 3 bottoms + 2 dresses = 14 outfits, × 5 hijabs = 70 looks`,`عندك ${toAr(have)} من ${toAr(n)} قطعة · ٤ بلوزات × ٣ بناطيل وجيب + ٢ فساتين = ١٤ لبسة، × ٥ طرح = ٧٠ لوك`])}</p>
+   <div style="display:flex;flex-direction:column;gap:10px">${groups}</div></div>`;
+}
+function onPhoto(e){
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  const url=URL.createObjectURL(f);const img=new Image();
+  img.onload=()=>{
+    const cx=$('cv').getContext('2d');cx.drawImage(img,0,0,80,80);
+    const px=cx.getImageData(28,24,24,48).data;const bk={};
+    for(let i=0;i<px.length;i+=4){const k=[px[i]>>4,px[i+1]>>4,px[i+2]>>4].join(',');bk[k]=(bk[k]||0)+1}
+    const top=Object.entries(bk).sort((a,b)=>b[1]-a[1])[0][0].split(',').map(v=>v*16+8);
+    S.colour=rgb2hex(top);pf='all';genPal=genCombo();
+    photoMsg=L([`We found ${cname(S.colour).toLowerCase()} as your main colour and made a combo for you. Tap a swatch if we got it wrong.`,`لقينا إن لونك الأساسي ${cname(S.colour)} وعملنالك تنسيق. لو غلطنا دوسي على اللون الصح.`]);
+    URL.revokeObjectURL(url);renderStyle();save();
+  };
+  img.onerror=()=>{photoMsg=L(['That photo could not be read. Try another, or tap a colour below.','مقدرناش نقرا الصورة دي. جربي واحدة تانية، أو دوسي على لون.']);renderStyle()};
+  img.src=url;
+}
+
+function renderDrive(){
+  const cur=P[S.passion]?S.passion:'Fashion';const x=P[cur];
+  const st=(S.drive[cur]&&typeof S.drive[cur]==='object')?S.drive[cur]:{};let total=0,done=0;
+  const weeks=x[2].map((w,wi)=>`<div class="week"><h4>${L(w[0])}</h4>${w[1].map((s,si)=>{total++;const id=wi+'-'+si;if(st[id])done++;return chk(`data-ds="${id}"`,st[id],L(s))}).join('')}</div>`).join('');
+  setView('v-drive',`
+  <div style="margin-top:8px">${ttl(['Drive','الطموح'],'h1')}</div>
+  <p class="muted" style="margin-top:6px">${L(['Bridge what you love with what you could become. Pick your passion for a full four-week walkthrough this month.','اربطي اللي بتحبيه باللي ممكن تبقيه. اختاري شغفك وخدي خطة كاملة لأربع أسابيع الشهر ده.'])}</p>
+  <div class="card"><div class="row">${Object.entries(P).map(([k,v])=>`<button class="opt" type="button" data-pa="${k}" aria-pressed="${k===cur}">${L(v[0])}</button>`).join('')}</div>
+   <p class="muted">${L(x[1])}</p><div class="bar" aria-hidden="true"><i style="width:${done/total*100}%"></i></div>
+   <p class="note">${L([`${done} of ${total} steps done this month`,`خلصتي ${toAr(done)} من ${toAr(total)} خطوة الشهر ده`])}</p>
+   <div style="display:flex;flex-direction:column;gap:10px">${weeks}</div></div>`);
+}
+
+function renderHealth(){
+  const cur=LV[S.level]?S.level:'Beginner';const x=LV[cur];
+  const st=[['SkiErg 1000 m',`${B('SkiErg')} ١٠٠٠ متر`],['Sled push',B('Sled push')],['Sled pull',B('Sled pull')],['Burpee broad jumps',B('Burpee broad jumps')],['Row 1000 m',`${B('Row')} ١٠٠٠ متر`],['Farmers carry',B('Farmers carry')],['Sandbag lunges',B('Sandbag lunges')],['Wall balls',B('Wall balls')]];
+  setView('v-health',`
+  <div style="margin-top:8px">${ttl(['Care for yourself','اهتمي بصحتك'],'h1')}</div>
+  <p class="muted" style="margin-top:6px">${L(["Your body is an amanah. Start wherever you are: nobody is watching as closely as you think, and every girl in the gym had a first day.",'جسمك أمانة. ابدأي من مكانك: محدش مركز معاكي زي ما انتي فاكرة، وكل بنت في الجيم كان ليها أول يوم.'])}</p>
+  <div class="card">${ttl(['Choose your level','اختاري مستواكي'])}
+   <div class="row">${Object.entries(LV).map(([k,v])=>`<button class="opt" type="button" data-lv="${k}" aria-pressed="${k===cur}">${L(v[0])}</button>`).join('')}</div>
+   <p><b>${L(x[1])}</b></p><p class="muted">${L(x[2])}</p>
+   <div style="display:flex;flex-direction:column;gap:10px">${x[3].map((w,i)=>{const id=cur+i+'-'+tk;return `<div class="wk">${chk(`data-wk="${id}"`,S.wk[id],`<b>${L(w[0])}</b>`,S.wk[id]?L(['Done today, well done','خلصتيه النهارده، برافو عليكي']):L(['Tick when you finish it today','علّمي عليه لما تخلّصيه النهارده']))}<ul>${w[1].map(s=>`<li>${L(s)}</li>`).join('')}</ul></div>`}).join('')}</div>
+   <p class="note">${L(['Warm up before every session, go at your own pace, and stop if something hurts. If you have a health condition, check with a professional first.','سخّني قبل كل تمرين، امشي على قد طاقتك، ووقفي لو حاجة وجعتك. لو عندك أي مشكلة صحية، اسألي متخصص الأول.'])}</p></div>
+  <div class="card">${ttl(['What is Hyrox?','يعني إيه هايروكس؟'])}
+   <p class="muted">${L(['A fitness race: 8 rounds of a 1 km run, each followed by one workout station, in this order.','سباق لياقة: ٨ جولات، كل جولة ١ كم جري وبعدها محطة تمرين، بالترتيب ده.'])}</p>
+   <div class="stations">${st.map((s,i)=>`<span>${N(i+1)}. ${L(s)}</span>`).join('')}</div></div>
+  <div class="card">${ttl(['Your first gym visit','أول مرة في الجيم'])}
+   <ul>${[['Go at a quieter time, like mid-morning or early afternoon, or ask about women-only hours.','روحي في وقت هادي، زي الصبح متأخر أو بعد الضهر، أو اسألي لو فيه مواعيد للبنات بس.'],['Write your plan in your notes before you go so you always know your next move.','اكتبي خطتك في النوتس قبل ما تروحي عشان دايماً تعرفي هتعملي إيه بعدها.'],["A water bottle and a small towel are all you need. Headphones can help you feel settled on your first visits, then slowly try training without them and find your own focus and rhythm.",'إزازة مية وفوطة صغيرة، وده كفاية. السماعات ممكن تساعدك تحسي براحة في أول كام مرة، وبعدين جربي بالراحة تتمرني من غيرها وتلاقي تركيزك وإيقاعك الخاص.'],['Start on machines: they guide the movement and feel less exposed than free weights.','ابدأي بالأجهزة: بتوجّه الحركة وبتحسسك براحة أكتر من الأوزان الحرة.'],["Ask the staff for a quick induction. It's usually free and it's their job.",'اطلبي من حد من الجيم يعرّفك على الأجهزة. غالباً ببلاش وده شغلهم.']].map(x=>`<li>${L(x)}</li>`).join('')}</ul></div>
+  <div class="card">${ttl(['What to wear','ألبس إيه؟'])}
+   <ul>${[['Sports or jersey hijab that tucks in, so nothing shifts when you move','طرحة سبور أو جيرسيه بتدخل كويس عشان متتحركش'],['Long, loose long-sleeve top, ideally past the hips','بلوزة واسعة بكم طويل، ويا ريت نازلة تحت الوسط'],['Wide-leg joggers or loose training trousers','بنطلون رياضي واسع'],['Supportive trainers you can walk and lift in','كوتشي مريح تمشي وترفعي بيه']].map(x=>`<li>${L(x)}</li>`).join('')}</ul></div>`);
+}
+
+function renderJournal(){
+  const q=JT[jT][1][jQ];
+  const entries=Array.isArray(S.journal)?S.journal:[];
+  setView('v-journal',`
+  <div style="margin-top:8px">${ttl(['Journal','يومياتي'],'h1')}</div>
+  <p class="muted" style="margin-top:6px">${L(['Writing helps you understand your heart, your patterns and your blessings. Think of it as gentle muhasaba: a few honest minutes with yourself.','الكتابة بتخليكي تفهمي قلبك وعاداتك ونعم ربنا عليكي. اعتبريها محاسبة نفس بس بهدوء: كام دقيقة صادقة مع نفسك.'])}</p>
+  <div class="card">
+   <div class="row">${JT.map((t,i)=>`<button class="opt" type="button" data-jt="${i}" aria-pressed="${i===jT}">${L(t[0])}</button>`).join('')}</div>
+   <div class="qcard"><small>${L(JT[jT][0])} · ${N(jQ+1)} / ${N(5)}</small><p>${L(q)}</p></div>
+   <div class="row"><button class="btn ghost" id="jNext" type="button">${L(['Another question','سؤال تاني'])}</button></div>
+   <label for="jText" class="note">${L(['Your answer','إجابتك'])}</label>
+   <textarea id="jText" placeholder="${L(['Write freely. Nobody else will read this.','اكتبي براحتك. محدش هيقرا ده غيرك.'])}">${esc(jDraft)}</textarea>
+   <button class="btn" id="jSave" type="button">${L(['Save','احفظي'])}</button>
+   ${jT===4?`<p class="note">${L(["If things feel too heavy, please talk to someone you trust or a professional. You don't have to carry it alone.",'لو الدنيا تقيلة أوي، اتكلمي مع حد بتثقي فيه أو مع متخصص. مش لازم تشيلي ده لوحدك.'])}</p>`:''}
+  </div>
+  <div class="card">${ttl(['Your entries','كتاباتك'])}
+   <div id="jList" style="display:flex;flex-direction:column;gap:10px"></div>
+   <p class="note">${L(['Your journal is private to you.','يومياتك ليكي انتي بس.'])}</p></div>`);
+  const list=$('jList');
+  if(!entries.length){list.innerHTML=`<p class="note">${L(['No entries yet. Your first one is waiting.','لسه مفيش كتابات. أول واحدة مستنياكي.'])}</p>`}
+  else entries.slice().reverse().forEach((en,ri)=>{
+    const idx=entries.length-1-ri;const qq=(JT[en.th]&&JT[en.th][1][en.q])||['',''];
+    const box=document.createElement('div');box.className='entry';
+    const dt=document.createElement('span');dt.className='note';
+    try{dt.textContent=new Date(String(en.d)+'T12:00:00').toLocaleDateString(A()?'ar-EG':'en-GB',{day:'numeric',month:'long',year:'numeric'})}catch(e){dt.textContent=String(en.d)}
+    const qe=document.createElement('span');qe.className='q';qe.textContent=L(qq);
+    const te=document.createElement('p');te.className='t';te.textContent=String(en.t||'');
+    const del=document.createElement('button');del.className='del';del.type='button';del.dataset.jdel=idx;del.textContent=L(['Delete','امسحي']);
+    box.append(dt,qe,te,del);list.append(box);
+  });
+  $('jText').addEventListener('input',e=>{jDraft=e.target.value});
+  $('jNext').addEventListener('click',()=>{jQ=(jQ+1)%5;renderJournal()});
+  $('jSave').addEventListener('click',()=>{
+    const t=jDraft.trim();if(!t)return;
+    if(!Array.isArray(S.journal))S.journal=[];
+    S.journal.push({d:tk,th:jT,q:jQ,t:t.slice(0,4000)});if(S.journal.length>300)S.journal=S.journal.slice(-300);
+    day().journal=true;jDraft='';renderJournal();renderToday();save();
+  });
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const ds=b.dataset;let changed=true;
+  if(ds.lang){S.lang=ds.lang;applyLang();showName()}
+  else if(b.id==='nameBtn'){showName(true)}
+  else if(b.id==='installBtn'){if(installEvt){installEvt.prompt();installEvt.userChoice.then(()=>{installEvt=null;renderToday()}).catch(()=>{})}changed=false}
+  else if(b.id==='installHide'){S.installHide=true;renderToday()}
+  else if(b.id==='obGo'){submitName()}
+  else if(b.id==='obBack'){if(S.name){$('ob').hidden=true;replay()}else{$('ob2').hidden=true;$('ob1').hidden=false}changed=false}
+  else if(b.id==='langBtn'){S.lang=A()?'en':'ar';applyLang()}
+  else if(ds.p!==undefined){const d=day();d.p[+ds.p]=!d.p[+ds.p];renderToday();if(curView()==='deen')renderDeen()}
+  else if(ds.t){const d=day();d[ds.t]=!d[ds.t];renderToday()}
+  else if(ds.go){location.hash=ds.go;changed=false}
+  else if(ds.c!==undefined){const a=S.challenge[chKey]=Array.isArray(S.challenge[chKey])?S.challenge[chKey]:[];a[+ds.c]=!a[+ds.c];renderToday()}
+  else if(ds.set){dSet=ds.set;dIdx=dSet==='g'?dayDh:0;renderDeen();changed=false}
+  else if(b.id==='tap'){const d=day(),k=dSet+'-'+dIdx;d.dh[k]=(d.dh[k]||0)+1;updateTap();if(dSet==='g'&&dIdx===dayDh)renderToday()}
+  else if(b.id==='dhReset'){day().dh[dSet+'-'+dIdx]=0;updateTap();renderToday()}
+  else if(b.id==='dhNext'){const n=SETS[dSet][1].length;dIdx=(dIdx+1)%n;updateTap();changed=false}
+  else if(b.id==='dhPrev'){const n=SETS[dSet][1].length;dIdx=(dIdx+n-1)%n;updateTap();changed=false}
+  else if(ds.hf){hf=ds.hf;for(const x of document.querySelectorAll('[data-hf]'))x.setAttribute('aria-pressed',x.dataset.hf===hf);renderSurahs();changed=false}
+  else if(ds.s){S.surahs[ds.s]=!S.surahs[ds.s];renderSurahs()}
+  else if(ds.col){S.colour=ds.col;genPal=null;photoMsg='';renderStyle()}
+  else if(ds.pf){pf=ds.pf;genPal=null;renderStyle();changed=false}
+  else if(ds.f){fCur=ds.f;renderStyle();changed=false}
+  else if(ds.bl){S.budget=+ds.bl;renderStyle()}
+  else if(ds.cp){S.cap=ds.cp;renderStyle()}
+  else if(ds.lk){const [kk,vv]=ds.lk.split(':');const k=lookState();k[kk]=kk==='skin'?+vv:vv;for(const x of document.querySelectorAll('[data-lk^="'+kk+':"]'))x.setAttribute('aria-pressed',x.dataset.lk===ds.lk);redrawGirl()}
+  else if(ds.acc){const k=lookState();k.acc[ds.acc]=!k.acc[ds.acc];if(ds.acc==='tote'&&k.acc.tote)k.acc.cross=false;if(ds.acc==='cross'&&k.acc.cross)k.acc.tote=false;for(const x of document.querySelectorAll('[data-acc]'))x.setAttribute('aria-pressed',!!k.acc[x.dataset.acc]);redrawGirl()}
+  else if(ds.th){tryOn=Object.assign({},tryOn,{h:ds.th});for(const x of document.querySelectorAll('[data-th]'))x.setAttribute('aria-pressed',x.dataset.th===ds.th);paintGirl(tryOn);changed=false}
+  else if(ds.tp){const c=ds.tp.split(',').filter(x=>/^#[0-9a-f]{6}$/i.test(x));if(c.length>=4){tryOn=Object.assign({},tryOn,{h:c[0],t:c[1],b:c[2],g:c[3]});paintGirl(tryOn);const g=document.querySelector('.tryon');if(g&&g.scrollIntoView)g.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}changed=false}
+  else if(ds.cown){if(!S.capOwn||typeof S.capOwn!=='object')S.capOwn={};S.capOwn[ds.cown]=!S.capOwn[ds.cown];renderStyle()}
+  else if(ds.pa){S.passion=ds.pa;renderDrive()}
+  else if(ds.ds){if(!S.drive[S.passion]||typeof S.drive[S.passion]!=='object')S.drive[S.passion]={};const o=S.drive[S.passion];o[ds.ds]=!o[ds.ds];renderDrive()}
+  else if(ds.lv){S.level=ds.lv;renderHealth()}
+  else if(ds.wk){S.wk[ds.wk]=!S.wk[ds.wk];renderHealth()}
+  else if(ds.jt!==undefined){jT=+ds.jt;jQ=0;renderJournal();changed=false}
+  else if(ds.jdel!==undefined){if(Array.isArray(S.journal)){S.journal.splice(+ds.jdel,1);renderJournal()}}
+  else changed=false;
+  if(changed)save();
+  const at=[...b.attributes].find(a=>a.name.startsWith('data-')&&a.name!=='data-go');
+  if(at&&window.CSS&&CSS.escape){const nb=document.querySelector(`[${at.name}="${CSS.escape(at.value)}"]`);if(nb){nb.classList.remove('pop');void nb.offsetWidth;nb.classList.add('pop')}}
+  if(b.id==='tap'){const n=$('tapN');n.classList.remove('bump');void n.offsetWidth;n.classList.add('bump')}
+});
+
+const MARK=`<svg class="mark" viewBox="0 0 512 512" aria-hidden="true"><defs><radialGradient id="lg1" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#F6E2B0"/><stop offset="1" stop-color="#C99A4A"/></radialGradient><mask id="lm1"><rect width="512" height="512" fill="#fff"/><circle cx="318" cy="214" r="132" fill="#000"/></mask><linearGradient id="lb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8E2846"/><stop offset="1" stop-color="#5A1830"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#lb1)"/><circle cx="246" cy="266" r="150" fill="url(#lg1)" mask="url(#lm1)"/><circle cx="352" cy="150" r="10" fill="#F6E2B0"/><circle cx="390" cy="210" r="6" fill="#F6E2B0" opacity=".8"/></svg>`;
+/* ---------- install as app ---------- */
+let installEvt=null;
+const standalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
+const framed=()=>{try{return window.self!==window.top}catch(e){return true}};
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent||'')||(/Macintosh/.test(navigator.userAgent||'')&&navigator.maxTouchPoints>1);
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if(curView()==='today')renderToday()});
+window.addEventListener('appinstalled',()=>{installEvt=null;S.installDone=true;save();renderToday()});
+function installHTML(){
+  if(standalone()||framed()||S.installDone||S.installHide)return '';
+  const how=installEvt?`<button class="btn" type="button" id="installBtn">${L(['Add to home screen','ضيفيه على الشاشة الرئيسية'])}</button>`
+   :isIOS?`<p class="muted">${L(['In Safari, tap the Share button (on iPad it is at the top), then "Add to Home Screen".','في Safari دوسي على زرار المشاركة (في الآيباد بيبقى فوق)، وبعدين "Add to Home Screen".'])}</p>`
+   :`<p class="muted">${L(['Open your browser menu and tap "Add to Home screen" or "Install app".','افتحي قايمة المتصفح ودوسي على "Add to Home screen" أو "Install app".'])}</p>`;
+  return `<div class="card install"><div style="display:flex;gap:12px;align-items:center">${MARK.replace('class="mark"','class="mark big"')}<div><h3>${L(['Keep Hilal on your phone','خلّي هلال على موبايلك'])}</h3><p class="note">${L(['It opens like an app, full screen, even with weak internet.','بيفتح زي الأبلكيشن، فول سكرين، وحتى لو النت ضعيف.'])}</p></div></div>${how}<button class="namebtn" type="button" id="installHide">${L(['Not now','مش دلوقتي'])}</button></div>`;
+}
+if('serviceWorker' in navigator&&location.protocol==='https:'&&!framed()){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
+
+/* ---------- welcome ---------- */
+function showName(edit){
+  $('ob').hidden=false;$('ob1').hidden=true;$('ob2').hidden=false;
+  $('ob2t').textContent=edit?L(['Change your name','غيّري اسمك']):L(['Welcome to Hilal','أهلاً بيكي في هلال']);
+  $('ob2p').textContent=L(['What should we call you?','نناديكي بإيه؟']);
+  $('ob2l').textContent=L(['Your name','اسمك']);
+  $('obName').placeholder=L(['Your name','اسمك']);$('obName').value=S.name||'';
+  $('obGo').textContent=edit?L(['Save','احفظي']):L(["Let's start",'يلا نبدأ']);
+  $('obBack').textContent=edit?L(['Cancel','إلغاء']):L(['Change language','غيّري اللغة']);
+  $('obErr').textContent='';
+  setTimeout(()=>{try{$('obName').focus()}catch(e){}},50);
+}
+function submitName(){
+  const n=$('obName').value.replace(/\s+/g,' ').trim().slice(0,30);
+  if(!n){$('obErr').textContent=L(['Write your name first','اكتبي اسمك الأول']);return}
+  S.name=n;$('ob').hidden=true;renderToday();replay();save();
+}
+$('obName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitName()}});
+
+/* ---------- tabs + language ---------- */
+const ICON={today:'<circle cx="12" cy="12" r="8"/><path d="M15 6a7 7 0 1 0 0 12 6 6 0 0 1 0-12z" fill="currentColor"/>',deen:'<path d="M4 19V8l8-4 8 4v11"/><path d="M4 19h16M12 4v3"/>',style:'<path d="M9 4l3 2 3-2 5 3-2 4-3-1v10H9V10l-3 1-2-4z"/>',drive:'<path d="M5 19 19 5M9 5h10v10"/>',health:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',journal:'<path d="M6 4h11a1 1 0 0 1 1 1v15H7a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1z"/><path d="M9 9h6M9 13h4"/>'};
+const curView=()=>{const h=(location.hash||'#today').slice(1);return TABS.some(t=>t[0]===h)?h:'today'};
+function route(){
+  const v=curView();
+  for(const t of TABS){const el=$('v-'+t[0]),on=t[0]===v;const was=el.classList.contains('on');el.classList.toggle('on',on);if(on&&!was){el._shown=true;reveal(el,true);if(t[0]==='today'){moonPrev=0;resetMoon(el);animateMoon()}}}
+  for(const a of document.querySelectorAll('[data-tab]')){if(a.dataset.tab===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')}
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+function applyLang(){
+  const ar=A();document.documentElement.lang=ar?'ar':'en';document.documentElement.dir=ar?'rtl':'ltr';
+  $('langBtn').textContent=ar?'English':'عربي';
+  $('logo').innerHTML=MARK+(ar?'<span class="ar" style="font-size:30px">هلال</span>':'<span>Hilal</span>');
+  $('dateLine').innerHTML=(H?(ar?`<span class="ar">${toAr(H.d)} ${MAR[H.m-1]} ${toAr(H.y)}</span><br>`:`${H.d} ${MEN[H.m-1]} ${H.y} AH<br>`):'')+today.toLocaleDateString(ar?'ar-EG':'en-GB',{weekday:'long',day:'numeric',month:'long'});
+  document.title=ar?'هلال':'Hilal';
+  $('tabs').innerHTML=TABS.map(t=>`<a href="#${t[0]}" data-tab="${t[0]}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[t[0]]}</svg>${ar?t[1][1]:t[1][0]}</a>`).join('');
+  $('saveNote').textContent=ref?L(['Progress saved to your account.','تقدّمك محفوظ في حسابك.']):L(['Your progress is kept while this page is open.','تقدّمك محفوظ طول ما الصفحة مفتوحة.']);
+  renderAll();route();replay();
+}
+function renderAll(){renderToday();renderDeen();renderStyle();renderDrive();renderHealth();renderJournal()}
+
+/* ---------- saving ---------- */
+let ref=null,timer=null;
+function save(){
+  try{localStorage.setItem('hilal',JSON.stringify(S))}catch(e){}
+  if(!ref)return;clearTimeout(timer);
+  timer=setTimeout(()=>{ref.set(S).then(()=>{$('saveNote').textContent=L(['Progress saved to your account.','تقدّمك محفوظ في حسابك.'])}).catch(()=>{$('saveNote').textContent=L(['Could not save just now. Your progress is still here on this page.','مقدرناش نحفظ دلوقتي، بس تقدّمك لسه هنا.'])})},700);
+}
+function merge(x){
+  if(!x||typeof x!=='object')return;
+  S=Object.assign(S,x);S.colour=safeHex(S.colour);
+  if(S.surahs&&typeof S.surahs==='object'){for(const k of Object.keys(S.surahs)){if(!/^\d+$/.test(k)){const norm=k.toLowerCase().replace(/[^a-z]/g,'');const i=SEN.findIndex(n=>n.toLowerCase().replace(/[^a-z]/g,'')===norm);if(i>=0&&S.surahs[k])S.surahs[i+1]=true;delete S.surahs[k]}}}else S.surahs={};
+  if(!Array.isArray(S.journal))S.journal=[];
+  if(!P[S.passion])S.passion='Fashion';
+  if(typeof S.name!=='string')S.name='';
+  if((S.lang==='ar'||S.lang==='en')&&S.name)$('ob').hidden=true;
+}
+try{const l=localStorage.getItem('hilal');if(l)merge(JSON.parse(l))}catch(e){}
+applyLang();
+if(!(S.lang==='ar'||S.lang==='en')){$('ob').hidden=false;$('ob1').hidden=false;$('ob2').hidden=true}
+else if(!S.name)showName();
+if(window.claude&&typeof window.claude.use==='function'){
+  Promise.all([window.claude.use('db'),window.claude.use('user')]).then(async([db,user])=>{
+    if(!db||!user)return;const id=await user.id();if(!id)return;
+    ref=db.collection('data/users/'+id).doc('hilal');
+    const snap=await ref.get();const data=snap&&typeof snap.data==='function'?snap.data():snap;
+    if(data&&data.days){const keepLang=S.lang,keepName=S.name;merge(data);if(!S.lang)S.lang=keepLang;if(!S.name)S.name=keepName}
+    applyLang();if((S.lang==='ar'||S.lang==='en')&&S.name)$('ob').hidden=true;
+  }).catch(()=>{});
+}
+}
+</script>
+</body>
+</html>
