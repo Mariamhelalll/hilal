@@ -130,6 +130,7 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .track{display:grid;grid-template-columns:1fr 1fr;gap:10px}.trk{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:start;padding:14px;border-radius:18px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer;transition:transform .15s ease,background .2s ease,border-color .2s ease}.trk .ti{font-size:26px}.trk b{font-size:16px}.trk small{font-size:12.5px;color:var(--muted);line-height:1.45}.trk[aria-pressed=true]{border-color:var(--wine);background:var(--soft);box-shadow:inset 0 0 0 1px var(--wine)}.trk:active{transform:scale(.97)}
 .ilist{display:flex;flex-direction:column;gap:10px;text-align:start}.ilist div{background:#ffffff12;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column}.ilist b{color:var(--gold)}.ilist span{color:#D9D6F2}
 .slidein{animation:rise .5s cubic-bezier(.2,.75,.2,1)}
+.opt:disabled{opacity:.4;cursor:not-allowed}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -828,9 +829,12 @@ const GSTR={
  me:[['Write down why this matters to you','اكتبي ليه الحاجة دي مهمة ليكي'],['Do the first small step and repeat it','اعملي أول خطوة صغيرة وكرريها'],['Keep going and notice what helps','كمّلي ولاحظي إيه اللي بيساعدك'],['Look back in your journal and celebrate','بصي ورا في يومياتك واحتفلي بنفسك']]
 };
 const MCLINK={deen:'deen',style:'style',drive:'drive',health:'health',me:'journal'};
-const mKey=()=>H?H.y+'-'+H.m:today.getFullYear()+'-g'+(today.getMonth()+1);
-const mWeek=()=>Math.min(3,Math.floor(((H?H.d:today.getDate())-1)/7));
-const mName=()=>H?(A()?MAR[H.m-1]:MEN[H.m-1]):today.toLocaleDateString(A()?'ar-EG':'en-GB',{month:'long'});
+const hijOK=()=>!!H&&H.m!==9;
+const mHij=()=>S.mcal==='h'&&hijOK();
+const mKey=()=>mHij()?H.y+'-'+H.m:today.getFullYear()+'-g'+(today.getMonth()+1);
+const mWeek=()=>Math.min(3,Math.floor(((mHij()?H.d:today.getDate())-1)/7));
+const mName=()=>mHij()?(A()?MAR[H.m-1]:MEN[H.m-1]):today.toLocaleDateString(A()?'ar-EG':'en-GB',{month:'long'});
+const mLeft=()=>{if(mHij())return Math.max(0,(H.d<=29?29:30)-H.d);const e=new Date(today.getFullYear(),today.getMonth()+1,0).getDate();return e-today.getDate()};
 let hCat='deen',hEdit=false,mOpen=new Set(),mEdit=null;
 function habits(){
   if(!Array.isArray(S.habits))S.habits=[{k:'quran'},{k:'adhkar'},{k:'dhikr'},{k:'move'},{k:'journal'}];
@@ -839,6 +843,7 @@ function habits(){
 function hDone(h){const d=day();if(h.k==='dhikr')return dhDone();if(h.k)return !!d[h.k];return !!(d.h&&d.h[h.id])}
 function mg(){
   if(!S.mg||typeof S.mg!=='object'||!Array.isArray(S.mg.goals))S.mg={k:mKey(),goals:[]};
+  if(S.mcal!=='g'&&S.mcal!=='h'){S.mcal='g';S.mg.k=mKey()}
   if(Array.isArray(S.goals)&&S.goals.length){for(const g of S.goals)S.mg.goals.push(newGoal(g.t,g.c,null,g.d));}
   delete S.goals;
   if(S.mg.k!==mKey()){const left=S.mg.goals.filter(g=>!g.sd.every(Boolean));S.mgPrev=left.length?left:null;S.mg={k:mKey(),goals:[]}}
@@ -885,9 +890,11 @@ function monthHTML(){
       :g.st.map((s,i)=>chk(`data-mst="${g.id}-${i}"`,g.sd[i],esc(L(s)),L([`Week ${i+1}`+(i===w?' · this week':''),`الأسبوع ${toAr(i+1)}`+(i===w?' · الأسبوع ده':'')]))).join('')+
       `<div class="row">${lk?`<button class="opt sm" type="button" data-mlink="${g.link}">${L(lk[0])} ${A()?'←':'→'}</button>`:''}<button class="opt sm" type="button" data-medit="${g.id}">✎ ${L(['Edit plan','عدّلي الخطة'])}</button><button class="opt sm" type="button" data-mdel="${g.id}">${L(['Remove','امسحي'])}</button></div>`}</div>`:''}</div>`};
   return `<div class="card">${ttl([`My moon this month · ${mName()}`,`قمر الشهر · ${mName()}`])}
+   <div class="row" style="gap:6px">${[['g',['Calendar month','الشهر الميلادي']],['h',['Hijri month','الشهر الهجري']]].map(c=>`<button class="opt sm" type="button" data-mcal="${c[0]}" aria-pressed="${(mHij()?'h':'g')===c[0]}"${c[0]==='h'&&!hijOK()?' disabled':''}>${L(c[1])}</button>`).join('')}</div>
+   ${H&&H.m===9?`<p class="note">${L(['Ramadan Mubarak! Ramadan has its own special space coming soon, so the month here follows the calendar month for now.','رمضان كريم! رمضان ليه مساحة خاصة جاية قريب، فالشهر هنا ماشي بالميلادي دلوقتي.'])}</p>`:mHij()?`<p class="note">${L(['The Hijri option runs until Ramadan, which will have its own space.','الهجري موجود لحد رمضان، ورمضان هيبقى ليه مساحة لوحده.'])}</p>`:''}
    <p class="muted">${L(['What do you want to reach by the end of this month? Add as many goals as you like, and Hilal turns each one into a 4-week plan.','عايزة توصلي لإيه لحد آخر الشهر؟ ضيفي أهداف من غير عدد، وهلال يحوّل كل هدف لخطة على ٤ أسابيع.'])}</p>
    ${S.mgPrev&&S.mgPrev.length?`<div class="week"><p>${L([`${S.mgPrev.length} goal(s) from last month are not finished yet. Carry them into this month?`,`فيه ${toAr(S.mgPrev.length)} هدف من الشهر اللي فات لسه مخلصوش. تكمّليهم الشهر ده؟`])}</p><div class="row" style="margin-top:8px"><button class="btn" type="button" id="mCarry">${L(['Yes, carry them','أيوه، كمّليهم'])}</button><button class="btn ghost" type="button" id="mCarryNo">${L(['Start fresh','ابدأي من جديد'])}</button></div></div>`:''}
-   ${gs.length?`<div class="bar" aria-hidden="true"><i style="width:${tot?dn/tot*100:0}%"></i></div><p class="note">${L([`Week ${w+1} of 4 · ${dn} of ${tot} steps done`,`الأسبوع ${toAr(w+1)} من ${toAr(4)} · خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة`])}</p><div class="mgl">${gs.map(goal).join('')}</div>`:`<p class="note">${L(['No goals yet this month. Pick an idea below or write your own.','لسه مفيش أهداف الشهر ده. اختاري فكرة من تحت أو اكتبي هدفك.'])}</p>`}
+   ${gs.length?`<div class="bar" aria-hidden="true"><i style="width:${tot?dn/tot*100:0}%"></i></div><p class="note">${L([`Week ${w+1} of 4 · ${dn} of ${tot} steps done · ${mLeft()} days left`,`الأسبوع ${toAr(w+1)} من ${toAr(4)} · خلصتي ${toAr(dn)} من ${toAr(tot)} خطوة · فاضل ${toAr(mLeft())} يوم`])}</p><div class="mgl">${gs.map(goal).join('')}</div>`:`<p class="note">${L(['No goals yet this month. Pick an idea below or write your own.','لسه مفيش أهداف الشهر ده. اختاري فكرة من تحت أو اكتبي هدفك.'])}</p>`}
    <p class="lkt">${L(['Add a goal','ضيفي هدف'])}</p>${catChips('data-gc',gCat)}
    <div class="row">${sugs.map(([x,i])=>`<button class="opt sm" type="button" data-ms="${i}">+ ${L(x[1])}</button>`).join('')}</div>
    <div class="row" style="flex-wrap:nowrap"><input type="search" id="gIn" maxlength="120" placeholder="${L(['Or write your own goal','أو اكتبي هدفك انتي'])}" aria-label="${L(['New goal','هدف جديد'])}"><button class="btn" type="button" id="gAdd">${L(['Add','ضيفي'])}</button></div>
@@ -1310,6 +1317,7 @@ document.addEventListener('click',e=>{
   else if(ds.medit!==undefined){mEdit=ds.medit||null;renderToday();changed=false}
   else if(ds.msave){const g=mg().goals.find(x=>x.id===ds.msave);if(g){const box=b.closest('.mgin');box.querySelectorAll('[data-msi]').forEach(inp=>{const v=inp.value.replace(/\s+/g,' ').trim();if(v)g.st[+inp.dataset.msi]=v})}mEdit=null;renderToday()}
   else if(ds.mlink){const l=MLINK[ds.mlink];if(ds.mlink==='mushaf')openMushaf();else if(l)location.hash=l[1].slice(1);changed=false}
+  else if(ds.mcal){if(ds.mcal!=='h'||hijOK()){const m=mg();S.mcal=ds.mcal;m.k=mKey();renderToday()}else changed=false}
   else if(b.id==='mCarry'){const m=mg();for(const g of S.mgPrev||[]){g.sd=[false,false,false,false];m.goals.push(g)}S.mgPrev=null;renderToday()}
   else if(b.id==='mCarryNo'){S.mgPrev=null;renderToday()}
   else if(b.id==='hEdit'){hEdit=!hEdit;renderToday();changed=false}
