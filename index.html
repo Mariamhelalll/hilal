@@ -2281,14 +2281,14 @@ async function fbInit(){
   try{const base=`https://www.gstatic.com/firebasejs/${FBV}/`;
     const [app,auth,fs]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
     const a=app.initializeApp(FB_CONFIG);fb={auth:auth.getAuth(a),A:auth,db:fs.getFirestore(a),fs};
-    fb.auth.languageCode=S.lang==='en'?'en':'ar';
+    fb.auth.languageCode='en';
     auth.onAuthStateChanged(fb.auth,u=>{fbUser=u;if(u&&u.emailVerified)fbStart();else{fbUnsubs.forEach(x=>{try{x()}catch(e){}});fbUnsubs=[]}if(!$('sheet').hidden)openSettings()});
   }catch(e){fb=null;fbFail=true;if(!$('sheet').hidden)openSettings()}
 }
 function acErr(e){const c=(e&&e.code)||'';return ({'auth/email-already-in-use':['This email already has an account. Log in instead.','الإيميل ده عليه حساب بالفعل. سجّلي دخول.'],'auth/invalid-email':['That email does not look right.','الإيميل ده شكله مش مظبوط.'],'auth/weak-password':['Use at least 6 characters for the password.','الباسورد لازم ٦ حروف أو أرقام على الأقل.'],'auth/invalid-credential':['Wrong email or password.','الإيميل أو الباسورد غلط.'],'auth/wrong-password':['Wrong email or password.','الإيميل أو الباسورد غلط.'],'auth/user-not-found':['No account with this email. Create one instead.','مفيش حساب بالإيميل ده. اعملي حساب جديد.'],'auth/too-many-requests':['Too many tries. Wait a few minutes and try again.','محاولات كتير. استني كام دقيقة وجربي تاني.'],'auth/network-request-failed':['No internet connection. Try again.','مفيش نت. جربي تاني.']}[c])||['Something went wrong. Try again.','حصلت مشكلة. جربي تاني.']}
 async function acDo(kind){
   if(!fb||acBusy)return;const A=fb.A,em=($('acEm')&&$('acEm').value.trim())||acEmail,pw=$('acPw')?$('acPw').value:'';acEmail=em;acBusy=true;acMsg='';
-  try{fb.auth.languageCode=S.lang==='en'?'en':'ar';
+  try{fb.auth.languageCode='en';
     if(kind==='up'){const c=await A.createUserWithEmailAndPassword(fb.auth,em,pw);await A.sendEmailVerification(c.user,{url:location.origin+location.pathname});acMsg=L([`We sent a confirmation email to ${em}. Open it and tap the link.`,`بعتنالك إيميل تأكيد على ${em}. افتحيه ودوسي على اللينك.`])}
     else if(kind==='in'){await A.signInWithEmailAndPassword(fb.auth,em,pw)}
     else if(kind==='reset'){if(!em)throw{code:'auth/invalid-email'};await A.sendPasswordResetEmail(fb.auth,em);acMsg=L([`We sent a reset link to ${em}.`,`بعتنالك لينك تغيّري بيه الباسورد على ${em}.`])}
