@@ -1868,6 +1868,9 @@ document.addEventListener('click',e=>{
   else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else if(S.name)welcomeBack();else showName()}}
   else if(b.id==='obIback'){if(introI>0){introI--;drawIntro()}else if(introAgain){$('obI').hidden=true;$('ob').hidden=true}else{$('obI').hidden=true;$('ob1').hidden=false}changed=false}
   else if(b.id==='setLoc'){if(S.loc&&!S.locOff){S.locOff=true;S.loc=null;save();openSettings();renderToday();if(curView()==='deen')renderDeen();ntLater()}else{S.locOff=false;$('sheet').hidden=true;location.hash='deen';setTimeout(useMyLoc,300)}changed=false}
+  else if(b.id==='setAdhan'){S.adhanOn=S.adhanOn===false;save();openSettings();adhanArm();changed=false}
+  else if(ds.adv){S.adhv=ds.adv;save();openSettings();playAdhan();changed=false}
+  else if(b.id==='adhTry'){playAdhan();changed=false}
   else if(b.id==='setChime'){S.chime=S.chime===false;save();openSettings();if(S.chime!==false)chime();changed=false}
   else if(b.id==='chimeTry'){const o=S.chime;S.chime=true;chime();S.chime=o;changed=false}
   else if(b.id==='setNt'){ntToggle();changed=false}
@@ -2011,7 +2014,20 @@ function chime(kind){
       g.gain.setValueAtTime(0,st);g.gain.linearRampToValueAtTime(v*0.6,st+0.015);g.gain.exponentialRampToValueAtTime(0.0008,st+(m===1?2.4:1.1));o.connect(g);g.connect(out);o.start(st);o.stop(st+2.5)})});
   }catch(e){}
 }
-if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{if(e.data&&e.data.type==='hilal-push'&&document.visibilityState==='visible')chime()});
+if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{if(e.data&&e.data.type==='hilal-push'&&document.visibilityState==='visible'){if(/^prayer-/.test(e.data.tag||'')&&S.adhanOn!==false)playAdhan(tk+'-'+e.data.tag);else chime()}});
+/* ---------- adhan opening (Egyptian reciters) at prayer time ---------- */
+const ADV=[['refaat',['Sheikh Mohamed Refaat','الشيخ محمد رفعت'],'audio/adhan-refaat.mp3'],['minshawi',['Sheikh Mohamed Siddiq Al-Minshawi','الشيخ محمد صديق المنشاوي'],'audio/adhan-minshawi.mp3']];
+let adhAudio=null,adhLast='';
+function playAdhan(key){
+  if(key){if(adhLast===key)return;adhLast=key}
+  const v=ADV.find(x=>x[0]===S.adhv)||ADV[0];
+  try{if(adhAudio){adhAudio.pause()}adhAudio=new Audio(v[2]);adhAudio.volume=0.9;const pr=adhAudio.play();if(pr&&pr.catch)pr.catch(()=>{chime()})}catch(e){chime()}
+}
+function adhanArm(){
+  clearTimeout(adhanArm.t);if(S.adhanOn===false)return;const n=nextPrayer();if(!n)return;const ms=n.at-new Date();
+  if(ms>0&&ms<864e5)adhanArm.t=setTimeout(()=>{if(document.visibilityState==='visible'&&S.adhanOn!==false){playAdhan(tk+'-'+n.i);try{mToast&&$('mtoast')&&mToast('🕌 '+(A()?PR[n.i][0]:PR[n.i][1]))}catch(e){}}adhanArm()},Math.min(ms,2147483000));
+}
+setTimeout(adhanArm,3000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')adhanArm()});
 /* ---------- notifications (Web Push via Netlify functions) ---------- */
 const NOTE=[['prayer',['Prayer times','مواعيد الصلاة'],null],['morning',['Morning adhkar','أذكار الصباح'],'07:30'],['evening',['Evening adhkar (after Asr)','أذكار المسا (بعد العصر)'],null],['quran',['Quran page','صفحة القرآن'],'20:00'],['moon',["Today's moon step",'خطوة قمرك النهارده'],'09:00'],['move',['Time to move','وقت الحركة'],'18:00'],['journal',['Journal','يومياتي'],'21:30']];
 let ntMsg='';
@@ -2044,6 +2060,8 @@ function settingsExtraHTML(){
    <div class="card"><h3>${L(['Notifications','الإشعارات'])}</h3>
     <button class="check" type="button" id="setNt" aria-pressed="${on}"><span class="box"></span><span class="lbl">${L(['Send me reminders on my phone','ابعتيلي تنبيهات على الموبايل'])}</span></button>
     ${ntMsg?`<p class="note" role="status">${ntMsg}</p>`:''}
+    <div class="ntr"><button class="check" type="button" id="setAdhan" aria-pressed="${S.adhanOn!==false}"><span class="box"></span><span class="lbl">${L(['Adhan at prayer time: Allahu Akbar, Allahu Akbar','الأذان وقت الصلاة: الله أكبر، الله أكبر'])}<small>${L(['Plays when the prayer comes in while Hilal is open.','بيشتغل لما ييجي وقت الصلاة وهلال مفتوح.'])}</small></span></button></div>
+    ${S.adhanOn!==false?`<div class="row" style="padding-inline-start:36px">${ADV.map(v=>`<button class="opt sm" type="button" data-adv="${v[0]}" aria-pressed="${(S.adhv||'refaat')===v[0]}">${L(v[1])}</button>`).join('')}<button class="opt sm" type="button" id="adhTry">▶ ${L(['Listen','اسمعي'])}</button></div>`:''}
     <div class="ntr"><button class="check" type="button" id="setChime" aria-pressed="${S.chime!==false}"><span class="box"></span><span class="lbl">${L(['Gentle Hilal chime','نغمة هلال الهادية'])}<small>${L(['Plays in the app when a reminder arrives, and when you finish your adhkar or your Quran portion.','بتشتغل في الأبلكيشن لما يوصل تنبيه، ولما تخلّصي أذكارك أو ورد القرآن.'])}</small></span></button><button class="opt sm" type="button" id="chimeTry">▶ ${L(['Listen','اسمعي'])}</button></div>
     ${on?`<div class="ntl">${NOTE.map(n=>{const v=P[n[0]],act=n[2]?!!v:!!v,dis=n[0]==='prayer'&&!locOn;
       return `<div class="ntr"><button class="check" type="button" data-nt="${n[0]}" aria-pressed="${act&&!dis}"${dis?' disabled':''}><span class="box"></span><span class="lbl">${L(n[1])}${dis?`<small>${L(['Turn on location first','شغّلي اللوكيشن الأول'])}</small>`:''}</span></button>${n[2]&&act?`<input type="time" data-ntt="${n[0]}" value="${v}" aria-label="${L(n[1])}">`:''}</div>`}).join('')}</div>
