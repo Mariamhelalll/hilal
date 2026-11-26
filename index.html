@@ -2292,18 +2292,18 @@ async function fbInit(){
     const [app,auth,fs]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
     const a=app.initializeApp(FB_CONFIG);fb={auth:auth.getAuth(a),A:auth,db:fs.getFirestore(a),fs};
     fb.auth.languageCode='en';
-    auth.onAuthStateChanged(fb.auth,u=>{fbUser=u;if(u&&u.emailVerified)fbStart().then(()=>{if(obAccOpen())obAfterAcc()});else{fbUnsubs.forEach(x=>{try{x()}catch(e){}});fbUnsubs=[]}acRefresh()});
+    auth.onAuthStateChanged(fb.auth,u=>{fbUser=u;clearInterval(acPoll.t);if(u&&!u.emailVerified){acPoll();acPoll.t=setInterval(acPoll,4000)}if(u&&u.emailVerified)fbStart().then(()=>{if(obAccOpen())obAfterAcc()});else{fbUnsubs.forEach(x=>{try{x()}catch(e){}});fbUnsubs=[]}acRefresh()});
   }catch(e){fb=null;fbFail=true;acRefresh()}
 }
 function acErr(e){const c=(e&&e.code)||'';return ({'auth/email-already-in-use':['This email already has an account. Log in instead.','الإيميل ده عليه حساب بالفعل. سجّلي دخول.'],'auth/invalid-email':['That email does not look right.','الإيميل ده شكله مش مظبوط.'],'auth/weak-password':['Use at least 6 characters for the password.','الباسورد لازم ٦ حروف أو أرقام على الأقل.'],'auth/invalid-credential':['Wrong email or password.','الإيميل أو الباسورد غلط.'],'auth/wrong-password':['Wrong email or password.','الإيميل أو الباسورد غلط.'],'auth/user-not-found':['No account with this email. Create one instead.','مفيش حساب بالإيميل ده. اعملي حساب جديد.'],'auth/too-many-requests':['Too many tries. Wait a few minutes and try again.','محاولات كتير. استني كام دقيقة وجربي تاني.'],'auth/network-request-failed':['No internet connection. Try again.','مفيش نت. جربي تاني.']}[c])||['Something went wrong. Try again.','حصلت مشكلة. جربي تاني.']}
 async function acDo(kind){
   if(!fb||acBusy)return;const A=fb.A,emEl=$('obEm')&&obAccOpen()?$('obEm'):$('acEm'),pwEl=$('obPw')&&obAccOpen()?$('obPw'):$('acPw'),em=(emEl&&emEl.value.trim())||acEmail,pw=pwEl?pwEl.value:'';acEmail=em;acBusy=true;acMsg='';
   try{fb.auth.languageCode='en';
-    if(kind==='up'){const c=await A.createUserWithEmailAndPassword(fb.auth,em,pw);await A.sendEmailVerification(c.user,{url:location.origin+location.pathname});acMsg=L([`We sent a confirmation email to ${em}. Open it and tap the link.`,`بعتنالك إيميل تأكيد على ${em}. افتحيه ودوسي على اللينك.`])}
+    if(kind==='up'){const c=await A.createUserWithEmailAndPassword(fb.auth,em,pw);clearInterval(acPoll.t);acPoll.t=setInterval(acPoll,4000);await A.sendEmailVerification(c.user,{url:location.origin+location.pathname+'#today'});acMsg=L([`We sent a confirmation email to ${em}. Open it and tap the link.`,`بعتنالك إيميل تأكيد على ${em}. افتحيه ودوسي على اللينك.`])}
     else if(kind==='in'){await A.signInWithEmailAndPassword(fb.auth,em,pw)}
     else if(kind==='reset'){if(!em)throw{code:'auth/invalid-email'};await A.sendPasswordResetEmail(fb.auth,em);acMsg=L([`We sent a reset link to ${em}.`,`بعتنالك لينك تغيّري بيه الباسورد على ${em}.`])}
-    else if(kind==='resend'){await A.sendEmailVerification(fbUser,{url:location.origin+location.pathname});acMsg=L(['Sent again. Check your inbox and spam.','اتبعت تاني. شوفي الإنبوكس والسبام.'])}
-    else if(kind==='check'){await fbUser.reload();fbUser=fb.auth.currentUser;if(fbUser.emailVerified){await fbUser.getIdToken(true);fbStart();acMsg=L(['Email confirmed ✓ Your progress now syncs across your devices.','الإيميل اتأكد ✓ حاجتك بقت بتتزامن على كل أجهزتك.'])}else acMsg=L(['Not confirmed yet. Tap the link in the email first.','لسه متأكدش. دوسي على اللينك اللي في الإيميل الأول.'])}
+    else if(kind==='resend'){await A.sendEmailVerification(fbUser,{url:location.origin+location.pathname+'#today'});acMsg=L(['Sent again. Check your inbox and spam.','اتبعت تاني. شوفي الإنبوكس والسبام.'])}
+    else if(kind==='check'){await fbUser.reload();fbUser=fb.auth.currentUser;if(fbUser.emailVerified){await fbUser.getIdToken(true);await fbStart();if(obAccOpen()){acBusy=false;obAfterAcc();return}acMsg=L(['Email confirmed ✓ Your progress now syncs across your devices.','الإيميل اتأكد ✓ حاجتك بقت بتتزامن على كل أجهزتك.'])}else acMsg=L(['Not confirmed yet. Tap the link in the email first.','لسه متأكدش. دوسي على اللينك اللي في الإيميل الأول.'])}
     else if(kind==='out'){await A.signOut(fb.auth);acMsg=L(['Logged out. Your progress stays on this device.','خرجتي من الحساب. حاجتك فاضلة على الجهاز ده.'])}
   }catch(e){acMsg=L(acErr(e))}
   acBusy=false;acRefresh();
@@ -2325,7 +2325,9 @@ function obAccHTML(){
 function showAccount(){$('ob').hidden=false;['ob1','obI','ob2'].forEach(i=>$(i).hidden=true);const a=$('obA');a.hidden=false;a.innerHTML=obAccHTML();a.classList.remove('rv');void a.offsetWidth}
 function obAccOpen(){return $('ob')&&!$('ob').hidden&&$('obA')&&!$('obA').hidden}
 function acRefresh(){if(obAccOpen()){if(fbUser&&fbUser.emailVerified){obAfterAcc();return}showAccount()}if(!$('sheet').hidden)openSettings()}
-function obAfterAcc(){$('obA').hidden=true;acMsg='';if(!S.name)showName();else{$('ob').hidden=true;replay()}}
+function obAfterAcc(){$('obA').hidden=true;acMsg='';clearInterval(acPoll.t);if(location.hash!=='#today')location.hash='today';if(!S.name)showName();else{$('ob').hidden=true;replay()}}
+async function acPoll(){if(!fb||!fbUser||fbUser.emailVerified)return;try{await fbUser.reload();fbUser=fb.auth.currentUser;if(fbUser&&fbUser.emailVerified){clearInterval(acPoll.t);await fbUser.getIdToken(true);acMsg=L(['Email confirmed ✓','الإيميل اتأكد ✓']);await fbStart();if(obAccOpen())obAfterAcc();else acRefresh()}}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')acPoll()});
 $('obA').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   const em=$('obEm');if(em)acEmail=em.value.trim();
   if(b.dataset.obl){S.lang=b.dataset.obl;save();applyLang();acMsg='';showAccount()}
