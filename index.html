@@ -2234,8 +2234,8 @@ function applyLang(){
 function renderAll(){renderToday();renderDeen();renderStyle();renderDrive();renderHealth();renderJournal()}
 
 /* ---------- accounts and sync across devices (Firebase) ---------- */
-const FB_CONFIG=null; /* paste the firebaseConfig object here */
-const FBV='10.12.2';
+const FB_CONFIG={apiKey:"AIzaSyCDlvrO00PnFTtKsQcXrbHOLNgn0utYuf0",authDomain:"hilal-girls.firebaseapp.com",projectId:"hilal-girls",storageBucket:"hilal-girls.firebasestorage.app",messagingSenderId:"462652629429",appId:"1:462652629429:web:c6cb1133cae33e5a8e39fc"};
+const FBV='13.4.0';
 let fbFail=false,fb=null,fbUser=null,fbUnsubs=[],fbPushT=null,fbLastPush=0,fbSyncAt=0,acMode='in',acMsg='',acBusy=false,acEmail='';
 const DEV=(()=>{try{let d=localStorage.getItem('hilal-dev');if(!d){d=Math.random().toString(36).slice(2,10);localStorage.setItem('hilal-dev',d)}return d}catch(e){return 'x'}})();
 const LOCAL_ONLY=['installHide','installDone','askName','ntOn','adFs','mfit','mspread','qsize','_ts'];
