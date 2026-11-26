@@ -1911,6 +1911,7 @@ document.addEventListener('click',e=>{
   else if(b.id==='acResend'){acDo('resend');changed=false}
   else if(b.id==='acCheck'){acDo('check');changed=false}
   else if(b.id==='acOut'){acDo('out');changed=false}
+  else if(b.id==='acRetry'){acMsg=L(['Syncing…','بنزامن…']);acSyncErr='';acRefresh();fbStart();changed=false}
   else if(b.id==='setAdhan'){S.adhanOn=S.adhanOn===false;save();openSettings();adhanArm();changed=false}
   else if(ds.adv){S.adhv=ds.adv;save();openSettings();playAdhan();changed=false}
   else if(b.id==='adhTry'){playAdhan();changed=false}
@@ -2260,7 +2261,7 @@ function renderAll(){renderToday();renderDeen();renderStyle();renderDrive();rend
 /* ---------- accounts and sync across devices (Firebase) ---------- */
 const FB_CONFIG={apiKey:"AIzaSyCDlvrO00PnFTtKsQcXrbHOLNgn0utYuf0",authDomain:"hilal-girls.firebaseapp.com",projectId:"hilal-girls",storageBucket:"hilal-girls.firebasestorage.app",messagingSenderId:"462652629429",appId:"1:462652629429:web:c6cb1133cae33e5a8e39fc"};
 const FBV='13.4.0';
-let fbFail=false,fb=null,fbUser=null,fbUnsubs=[],fbPushT=null,fbLastPush=0,fbSyncAt=0,acMode='in',acMsg='',acBusy=false,acEmail='';
+let acSyncErr='',fbFail=false,fb=null,fbUser=null,fbUnsubs=[],fbPushT=null,fbLastPush=0,fbSyncAt=0,acMode='in',acMsg='',acBusy=false,acEmail='';
 const DEV=(()=>{try{let d=localStorage.getItem('hilal-dev');if(!d){d=Math.random().toString(36).slice(2,10);localStorage.setItem('hilal-dev',d)}return d}catch(e){return 'x'}})();
 const LOCAL_ONLY=['installHide','installDone','askName','ntOn','adFs','mfit','mspread','qsize','_ts'];
 function fbOn(){return !!(fb&&fbUser&&fbUser.emailVerified)}
@@ -2288,17 +2289,20 @@ function fbPush(){if(!fbOn())return;clearTimeout(fbPushT);fbPushT=setTimeout(asy
     const m=cloudMain();m._t=S._ts||ts;
     await setDoc(doc(fb.db,'users',fbUser.uid),{s:JSON.stringify(m),ts,dev:DEV});
     await setDoc(doc(fb.db,'users',fbUser.uid,'data','journal'),{j:JSON.stringify(cloudJournal()),ts,dev:DEV});
-    fbSyncAt=ts;const n=$('acSync');if(n)n.textContent=acSyncText()}catch(e){}},1800)}
+    fbSyncAt=ts;const n=$('acSync');if(n)n.textContent=acSyncText()}catch(e){acSyncErr=(e&&(e.code||e.message))||'unknown'}},1800)}
 function acSyncText(){return fbSyncAt?L([`Synced ${new Date(fbSyncAt).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`,`اتزامن الساعة ${new Date(fbSyncAt).toLocaleTimeString('ar-EG',{hour:'numeric',minute:'2-digit'})}`]):L(['Syncing…','بنزامن…'])}
 async function fbStart(){
   const {doc,getDoc,onSnapshot}=fb.fs;fbUnsubs.forEach(u=>{try{u()}catch(e){}});fbUnsubs=[];
-  try{const [a,b]=await Promise.all([getDoc(doc(fb.db,'users',fbUser.uid)),getDoc(doc(fb.db,'users',fbUser.uid,'data','journal'))]);
+  try{try{await fbUser.getIdToken(true)}catch(e){}
+    const [a,b]=await Promise.all([getDoc(doc(fb.db,'users',fbUser.uid)),getDoc(doc(fb.db,'users',fbUser.uid,'data','journal'))]);
     const r=a.exists()?JSON.parse(a.data().s||'{}'):null,rj=b.exists()?JSON.parse(b.data().j||'[]'):null;
     if(r||rj){mergeCloud(r,rj);applyLang()}
     fbSyncAt=Date.now();save();
     fbUnsubs.push(onSnapshot(doc(fb.db,'users',fbUser.uid),sn=>{if(!sn.exists())return;const d=sn.data();if(d.dev===DEV||d.ts<=fbLastPush)return;try{mergeCloud(JSON.parse(d.s||'{}'),null);fbSyncAt=Date.now();renderAll()}catch(e){}}));
     fbUnsubs.push(onSnapshot(doc(fb.db,'users',fbUser.uid,'data','journal'),sn=>{if(!sn.exists())return;const d=sn.data();if(d.dev===DEV||d.ts<=fbLastPush)return;try{mergeCloud({},JSON.parse(d.j||'[]'));renderJournal()}catch(e){}}));
-  }catch(e){acMsg=L(["Couldn't sync just now. Your progress is safe on this device.",'مقدرناش نزامن دلوقتي. حاجتك محفوظة على الجهاز ده.'])}
+    acMsg='';acSyncErr='';
+  }catch(e){acSyncErr=(e&&(e.code||e.message))||'unknown';acMsg=L(["Couldn't sync just now. Your progress is safe on this device.",'مقدرناش نزامن دلوقتي. حاجتك محفوظة على الجهاز ده.'])+` <small class="errc">(${esc(String(acSyncErr).slice(0,80))})</small>`}
+  acRefresh();
 }
 async function fbInit(){
   if(!FB_CONFIG||fb)return;
@@ -2356,7 +2360,7 @@ function accountHTML(){
   if(!FB_CONFIG)return '';
   if(!fb)return `<div class="card"><h3>${L(['Account','الحساب'])}</h3><p class="note">${fbFail?L(["Accounts need an internet connection. Try again when you're online.",'الحساب محتاج نت. جربي تاني لما تكوني أونلاين.']):L(['Loading…','بنحمّل…'])}</p></div>`;
   const msg=acMsg?`<p class="note" role="status">${acMsg}</p>`:'';
-  if(fbUser&&fbUser.emailVerified)return `<div class="card"><h3>${L(['Account','الحساب'])}</h3><p>✓ <b>${esc(fbUser.email)}</b></p><p class="muted">${L(['Your progress is saved to your account and shows on every device you log in to.','تقدّمك محفوظ في حسابك وبيظهر على أي جهاز تسجّلي دخول منه.'])}</p><p class="note" id="acSync">${acSyncText()}</p>${msg}<button class="btn ghost" type="button" id="acOut">${L(['Log out','اطلعي من الحساب'])}</button></div>`;
+  if(fbUser&&fbUser.emailVerified)return `<div class="card"><h3>${L(['Account','الحساب'])}</h3><p>✓ <b>${esc(fbUser.email)}</b></p><p class="muted">${L(['Your progress is saved to your account and shows on every device you log in to.','تقدّمك محفوظ في حسابك وبيظهر على أي جهاز تسجّلي دخول منه.'])}</p><p class="note" id="acSync">${acSyncErr?'':acSyncText()}</p>${msg}${acSyncErr?`<button class="btn" type="button" id="acRetry">${L(['Try syncing again','جربي المزامنة تاني'])}</button>`:''}<button class="btn ghost" type="button" id="acOut">${L(['Log out','اطلعي من الحساب'])}</button></div>`;
   if(fbUser)return `<div class="card"><h3>${L(['Confirm your email','أكّدي الإيميل'])}</h3><p class="muted">${L([`We sent a confirmation link to ${fbUser.email}. Open it, tap the link, then come back here.`,`بعتنالك لينك تأكيد على ${fbUser.email}. افتحي الإيميل، دوسي على اللينك، وارجعي هنا.`])}</p>${msg}<div class="row"><button class="btn" type="button" id="acCheck">${L(["I've confirmed",'أكّدت ✓'])}</button><button class="btn ghost" type="button" id="acResend">${L(['Send again','ابعتي تاني'])}</button><button class="btn ghost" type="button" id="acOut">${L(['Log out','اطلعي'])}</button></div></div>`;
   return `<div class="card"><h3>${L(['Account','الحساب'])}</h3><p class="muted">${L(['Create a free account to keep your progress on all your devices: phone, iPad and laptop. Optional, Hilal works without it too.','اعملي حساب مجاني عشان حاجتك تبقى على كل أجهزتك: الموبايل والآيباد واللابتوب. اختياري، وهلال شغال من غيره عادي.'])}</p>
    <div class="mtabs" role="tablist">${[['in',['Log in','تسجيل دخول']],['up',['New account','حساب جديد']]].map(t=>`<button type="button" role="tab" data-acm="${t[0]}" aria-selected="${acMode===t[0]}">${L(t[1])}</button>`).join('')}</div>
