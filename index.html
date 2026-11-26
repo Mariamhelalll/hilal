@@ -246,6 +246,8 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .qsheet.mp quran-madina-html-line:has(.quran-madina-html-sura-start)::before,.qsheet.mp quran-madina-html-line:has(.quran-madina-html-sura-start)::after{content:'۞';position:absolute;top:50%;transform:translateY(-50%);color:#b8893a;font-size:.8em}
 .qsheet.mp quran-madina-html-line:has(.quran-madina-html-sura-start)::before{right:.55em}.qsheet.mp quran-madina-html-line:has(.quran-madina-html-sura-start)::after{left:.55em}
 .qsheet.mp .quran-madina-html-sura-start{color:#7a1f3d}
+#acEm,#acPw{width:100%;font:16px 'DM Sans',sans-serif;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);box-sizing:border-box}
+#acEm:focus,#acPw:focus{outline:2px solid var(--wine);outline-offset:1px}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -1802,12 +1804,10 @@ function renderJournal(){
    <div class="row"><button class="btn ghost" id="jNext" type="button">${L(['Another question','سؤال تاني'])}</button></div>
    <label for="jText" class="note">${L(['Your answer','إجابتك'])}</label>
    <textarea id="jText" placeholder="${L(['Write freely, or tap Speak and just talk. Nobody else will read this.','اكتبي براحتك، أو دوسي «اتكلمي» واتكلمي عادي. محدش هيقرا ده غيرك.'])}">${esc(jDraft)}</textarea>
-   <div class="row jtools"><button class="opt sm" type="button" id="jRec">🎤 ${L(['Voice note','ريكورد صوتي'])}</button><button class="opt sm${recOn?' rec':''}" type="button" id="jVoice">🎙 ${L(['Speak to type','اتكلمي واتكتب'])}</button><label class="opt sm jup">📷 ${L(['Add photos','ضيفي صور'])}<input type="file" id="jFile" accept="image/*" multiple></label></div>
+   <div class="row jtools"><button class="opt sm" type="button" id="jRec">🎤 ${L(['Voice note','ريكورد صوتي'])}</button><button class="opt sm${recOn?' rec':''}" type="button" id="jVoice">🎙 ${L(['Speak to type','اتكلمي واتكتب'])}</button></div>
    <div class="row vlang"><span class="note">${L(['I speak in:','باتكلم:'])}</span>${VL.map(v=>`<button class="opt sm" type="button" data-vl="${v[0]}" aria-pressed="${vLang()===v[0]}">${L(v[1])}</button>`).join('')}</div>
    <p class="note" id="jVoiceMsg" role="status"></p>
    <div class="jauds" id="jAuds"></div>
-   <div class="jthumbs" id="jThumbs"></div><p class="note" id="jPhotoMsg" role="status"></p>
-   <p class="note">${L(['Photos of paper notes, pages from your notebook or moments from your day. They stay on this phone only.','صور ورق كتبتيه، أو صفحات من النوتبوك، أو لحظات من يومك. بيتحفظوا على الموبايل ده بس.'])}</p>
    <div class="lkrow"><p class="lkt">${L(['Save to day','احفظيها ليوم'])}</p><input type="date" id="jDate" value="${jDate||tk}" max="${tk}"></div>
    <button class="btn" id="jSave" type="button">${L(['Save','احفظي'])}</button>
    ${jT===4?`<p class="note">${L(["If things feel too heavy, please talk to someone you trust or a professional. You don't have to carry it alone.",'لو الدنيا تقيلة أوي، اتكلمي مع حد بتثقي فيه أو مع متخصص. مش لازم تشيلي ده لوحدك.'])}</p>`:''}
@@ -1833,13 +1833,11 @@ function renderJournal(){
   });
   $('jText').addEventListener('input',e=>{jDraft=e.target.value});
   $('jNext').addEventListener('click',()=>{jQ=(jQ+1)%5;renderJournal()});
-  drawJThumbs();drawJAud();
+  drawJAud();
   $('jVoice').addEventListener('click',toggleVoice);
   $('jRec').addEventListener('click',toggleRec);
   $('jAuds').addEventListener('click',e=>{const r=e.target.closest('[data-jarm]');if(r){const x=jAuds.splice(+r.dataset.jarm,1)[0];if(x)URL.revokeObjectURL(x.url);drawJAud()}});
   document.querySelectorAll('[data-vl]').forEach(b=>b.addEventListener('click',()=>{S.vlang=b.dataset.vl;save();document.querySelectorAll('[data-vl]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.vl===S.vlang))}));
-  $('jFile').addEventListener('change',e=>{if(e.target.files&&e.target.files.length)addJPhotos(e.target.files);e.target.value=''});
-  $('jThumbs').addEventListener('click',e=>{const r=e.target.closest('[data-jrm]');if(r){const x=jImgs.splice(+r.dataset.jrm,1)[0];if(x)URL.revokeObjectURL(x.url);drawJThumbs()}});
   $('jDate').addEventListener('change',e=>{jDate=/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)&&e.target.value<=tk?e.target.value:null});
   $('jSave').addEventListener('click',async()=>{
     if(recOn&&recog)recog.stop();if(mrec&&mrec.state==='recording'){mrec.stop();setTimeout(()=>$('jSave')&&$('jSave').click(),400);return}
@@ -1894,6 +1892,12 @@ document.addEventListener('click',e=>{
   else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else if(S.name)welcomeBack();else showName()}}
   else if(b.id==='obIback'){if(introI>0){introI--;drawIntro()}else if(introAgain){$('obI').hidden=true;$('ob').hidden=true}else{$('obI').hidden=true;$('ob1').hidden=false}changed=false}
   else if(b.id==='setLoc'){if(S.loc&&!S.locOff){S.locOff=true;S.loc=null;save();openSettings();renderToday();if(curView()==='deen')renderDeen();ntLater()}else{S.locOff=false;$('sheet').hidden=true;location.hash='deen';setTimeout(useMyLoc,300)}changed=false}
+  else if(ds.acm){acMode=ds.acm;acMsg='';const e=$('acEm');if(e)acEmail=e.value;openSettings();changed=false}
+  else if(b.id==='acGo'){acDo(acMode);changed=false}
+  else if(b.id==='acReset'){acDo('reset');changed=false}
+  else if(b.id==='acResend'){acDo('resend');changed=false}
+  else if(b.id==='acCheck'){acDo('check');changed=false}
+  else if(b.id==='acOut'){acDo('out');changed=false}
   else if(b.id==='setAdhan'){S.adhanOn=S.adhanOn===false;save();openSettings();adhanArm();changed=false}
   else if(ds.adv){S.adhv=ds.adv;save();openSettings();playAdhan();changed=false}
   else if(b.id==='adhTry'){playAdhan();changed=false}
@@ -2102,6 +2106,7 @@ function openSettings(){
     <div class="row" style="flex-wrap:nowrap"><input type="search" id="setNameIn" maxlength="30" value="${esc(S.name||'')}" aria-label="${L(['Your name','اسمك'])}"><button class="btn" type="button" id="setName">${L(['Save','احفظي'])}</button></div><p class="note" id="setMsg" role="status"></p>
     <button class="check" type="button" id="setAsk" aria-pressed="${ask}"><span class="box"></span><span class="lbl">${L(['Ask my name every time I open Hilal','اسأليني على اسمي كل ما أفتح هلال'])}</span></button></div>
    <div class="card"><h3>${L(['Language','اللغة'])}</h3><div class="row"><button class="opt" type="button" data-setlang="en" aria-pressed="${!A()}">English</button><button class="opt" type="button" data-setlang="ar" aria-pressed="${A()}">العربية</button></div></div>
+   ${accountHTML()}
    ${settingsExtraHTML()}
    <div class="card"><h3>${L(['Your progress','تقدّمك'])}</h3><p class="note">${L(['Your progress and journal are saved on this phone only.','تقدّمك ويومياتك محفوظين على الموبايل ده بس.'])}</p>
     <button class="btn ghost" type="button" id="setReset">${L(['Start fresh','ابدأي من جديد'])}</button>
@@ -2228,10 +2233,89 @@ function applyLang(){
 }
 function renderAll(){renderToday();renderDeen();renderStyle();renderDrive();renderHealth();renderJournal()}
 
+/* ---------- accounts and sync across devices (Firebase) ---------- */
+const FB_CONFIG=null; /* paste the firebaseConfig object here */
+const FBV='10.12.2';
+let fbFail=false,fb=null,fbUser=null,fbUnsubs=[],fbPushT=null,fbLastPush=0,fbSyncAt=0,acMode='in',acMsg='',acBusy=false,acEmail='';
+const DEV=(()=>{try{let d=localStorage.getItem('hilal-dev');if(!d){d=Math.random().toString(36).slice(2,10);localStorage.setItem('hilal-dev',d)}return d}catch(e){return 'x'}})();
+const LOCAL_ONLY=['installHide','installDone','askName','ntOn','adFs','mfit','mspread','qsize','_ts'];
+function fbOn(){return !!(fb&&fbUser&&fbUser.emailVerified)}
+function cloudMain(){const o={};for(const k of Object.keys(S))if(!LOCAL_ONLY.includes(k)&&k!=='journal')o[k]=S[k];return o}
+function cloudJournal(){return (S.journal||[]).map(e=>{const x={};for(const k of ['d','th','q','t'])if(e[k]!==undefined)x[k]=e[k];return x})}
+function deepOr(a,b){if(Array.isArray(a)&&Array.isArray(b))return a.map((v,i)=>deepOr(v,b[i])).concat(b.slice(a.length));
+  if(a&&b&&typeof a==='object'&&typeof b==='object'){const o=Object.assign({},a);for(const k of Object.keys(b))o[k]=k in a?deepOr(a[k],b[k]):b[k];return o}
+  if(typeof a==='boolean'||typeof b==='boolean')return !!(a||b);
+  if(typeof a==='number'&&typeof b==='number')return Math.max(a,b);
+  return b===undefined?a:b}
+function mergeCloud(r,rj){
+  if(!r||typeof r!=='object')r={};
+  const keep={};for(const k of LOCAL_ONLY)if(k in S)keep[k]=S[k];
+  const newer=(r._t||0)>(S._ts||0);
+  const days=Object.assign({},r.days||{});for(const [k,v] of Object.entries(S.days||{}))days[k]=days[k]?deepOr(days[k],v):v;
+  const base=newer?Object.assign({},S,r):Object.assign({},r,S);
+  base.days=days;base.surahs=Object.assign({},r.surahs||{},S.surahs||{});
+  const jm=new Map();for(const e of [...(Array.isArray(rj)?rj:[]),...(S.journal||[])]){const k=(e.d||'')+'|'+(e.q||'')+'|'+String(e.t||'').slice(0,80);jm.set(k,Object.assign({},jm.get(k)||{},e))}
+  base.journal=[...jm.values()].sort((a,b)=>String(a.d)<String(b.d)?-1:String(a.d)>String(b.d)?1:0).slice(-300);
+  delete base._t;Object.assign(base,keep);
+  merge(base);try{localStorage.setItem('hilal',JSON.stringify(S))}catch(e){}
+}
+function fbPush(){if(!fbOn())return;clearTimeout(fbPushT);fbPushT=setTimeout(async()=>{
+  try{const {doc,setDoc}=fb.fs,ts=Date.now();fbLastPush=ts;
+    const m=cloudMain();m._t=S._ts||ts;
+    await setDoc(doc(fb.db,'users',fbUser.uid),{s:JSON.stringify(m),ts,dev:DEV});
+    await setDoc(doc(fb.db,'users',fbUser.uid,'data','journal'),{j:JSON.stringify(cloudJournal()),ts,dev:DEV});
+    fbSyncAt=ts;const n=$('acSync');if(n)n.textContent=acSyncText()}catch(e){}},1800)}
+function acSyncText(){return fbSyncAt?L([`Synced ${new Date(fbSyncAt).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`,`اتزامن الساعة ${new Date(fbSyncAt).toLocaleTimeString('ar-EG',{hour:'numeric',minute:'2-digit'})}`]):L(['Syncing…','بنزامن…'])}
+async function fbStart(){
+  const {doc,getDoc,onSnapshot}=fb.fs;fbUnsubs.forEach(u=>{try{u()}catch(e){}});fbUnsubs=[];
+  try{const [a,b]=await Promise.all([getDoc(doc(fb.db,'users',fbUser.uid)),getDoc(doc(fb.db,'users',fbUser.uid,'data','journal'))]);
+    const r=a.exists()?JSON.parse(a.data().s||'{}'):null,rj=b.exists()?JSON.parse(b.data().j||'[]'):null;
+    if(r||rj){mergeCloud(r,rj);applyLang()}
+    fbSyncAt=Date.now();save();
+    fbUnsubs.push(onSnapshot(doc(fb.db,'users',fbUser.uid),sn=>{if(!sn.exists())return;const d=sn.data();if(d.dev===DEV||d.ts<=fbLastPush)return;try{mergeCloud(JSON.parse(d.s||'{}'),null);fbSyncAt=Date.now();renderAll()}catch(e){}}));
+    fbUnsubs.push(onSnapshot(doc(fb.db,'users',fbUser.uid,'data','journal'),sn=>{if(!sn.exists())return;const d=sn.data();if(d.dev===DEV||d.ts<=fbLastPush)return;try{mergeCloud({},JSON.parse(d.j||'[]'));renderJournal()}catch(e){}}));
+  }catch(e){acMsg=L(["Couldn't sync just now. Your progress is safe on this device.",'مقدرناش نزامن دلوقتي. حاجتك محفوظة على الجهاز ده.'])}
+}
+async function fbInit(){
+  if(!FB_CONFIG||fb)return;
+  try{const base=`https://www.gstatic.com/firebasejs/${FBV}/`;
+    const [app,auth,fs]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
+    const a=app.initializeApp(FB_CONFIG);fb={auth:auth.getAuth(a),A:auth,db:fs.getFirestore(a),fs};
+    fb.auth.languageCode=S.lang==='en'?'en':'ar';
+    auth.onAuthStateChanged(fb.auth,u=>{fbUser=u;if(u&&u.emailVerified)fbStart();else{fbUnsubs.forEach(x=>{try{x()}catch(e){}});fbUnsubs=[]}if(!$('sheet').hidden)openSettings()});
+  }catch(e){fb=null;fbFail=true;if(!$('sheet').hidden)openSettings()}
+}
+function acErr(e){const c=(e&&e.code)||'';return ({'auth/email-already-in-use':['This email already has an account. Log in instead.','الإيميل ده عليه حساب بالفعل. سجّلي دخول.'],'auth/invalid-email':['That email does not look right.','الإيميل ده شكله مش مظبوط.'],'auth/weak-password':['Use at least 6 characters for the password.','الباسورد لازم ٦ حروف أو أرقام على الأقل.'],'auth/invalid-credential':['Wrong email or password.','الإيميل أو الباسورد غلط.'],'auth/wrong-password':['Wrong email or password.','الإيميل أو الباسورد غلط.'],'auth/user-not-found':['No account with this email. Create one instead.','مفيش حساب بالإيميل ده. اعملي حساب جديد.'],'auth/too-many-requests':['Too many tries. Wait a few minutes and try again.','محاولات كتير. استني كام دقيقة وجربي تاني.'],'auth/network-request-failed':['No internet connection. Try again.','مفيش نت. جربي تاني.']}[c])||['Something went wrong. Try again.','حصلت مشكلة. جربي تاني.']}
+async function acDo(kind){
+  if(!fb||acBusy)return;const A=fb.A,em=($('acEm')&&$('acEm').value.trim())||acEmail,pw=$('acPw')?$('acPw').value:'';acEmail=em;acBusy=true;acMsg='';
+  try{fb.auth.languageCode=S.lang==='en'?'en':'ar';
+    if(kind==='up'){const c=await A.createUserWithEmailAndPassword(fb.auth,em,pw);await A.sendEmailVerification(c.user,{url:location.origin+location.pathname});acMsg=L([`We sent a confirmation email to ${em}. Open it and tap the link.`,`بعتنالك إيميل تأكيد على ${em}. افتحيه ودوسي على اللينك.`])}
+    else if(kind==='in'){await A.signInWithEmailAndPassword(fb.auth,em,pw)}
+    else if(kind==='reset'){if(!em)throw{code:'auth/invalid-email'};await A.sendPasswordResetEmail(fb.auth,em);acMsg=L([`We sent a reset link to ${em}.`,`بعتنالك لينك تغيّري بيه الباسورد على ${em}.`])}
+    else if(kind==='resend'){await A.sendEmailVerification(fbUser,{url:location.origin+location.pathname});acMsg=L(['Sent again. Check your inbox and spam.','اتبعت تاني. شوفي الإنبوكس والسبام.'])}
+    else if(kind==='check'){await fbUser.reload();fbUser=fb.auth.currentUser;if(fbUser.emailVerified){await fbUser.getIdToken(true);fbStart();acMsg=L(['Email confirmed ✓ Your progress now syncs across your devices.','الإيميل اتأكد ✓ حاجتك بقت بتتزامن على كل أجهزتك.'])}else acMsg=L(['Not confirmed yet. Tap the link in the email first.','لسه متأكدش. دوسي على اللينك اللي في الإيميل الأول.'])}
+    else if(kind==='out'){await A.signOut(fb.auth);acMsg=L(['Logged out. Your progress stays on this device.','خرجتي من الحساب. حاجتك فاضلة على الجهاز ده.'])}
+  }catch(e){acMsg=L(acErr(e))}
+  acBusy=false;openSettings();
+}
+function accountHTML(){
+  if(!FB_CONFIG)return '';
+  if(!fb)return `<div class="card"><h3>${L(['Account','الحساب'])}</h3><p class="note">${fbFail?L(["Accounts need an internet connection. Try again when you're online.",'الحساب محتاج نت. جربي تاني لما تكوني أونلاين.']):L(['Loading…','بنحمّل…'])}</p></div>`;
+  const msg=acMsg?`<p class="note" role="status">${acMsg}</p>`:'';
+  if(fbUser&&fbUser.emailVerified)return `<div class="card"><h3>${L(['Account','الحساب'])}</h3><p>✓ <b>${esc(fbUser.email)}</b></p><p class="muted">${L(['Your progress is saved to your account and shows on every device you log in to.','تقدّمك محفوظ في حسابك وبيظهر على أي جهاز تسجّلي دخول منه.'])}</p><p class="note" id="acSync">${acSyncText()}</p>${msg}<button class="btn ghost" type="button" id="acOut">${L(['Log out','اطلعي من الحساب'])}</button></div>`;
+  if(fbUser)return `<div class="card"><h3>${L(['Confirm your email','أكّدي الإيميل'])}</h3><p class="muted">${L([`We sent a confirmation link to ${fbUser.email}. Open it, tap the link, then come back here.`,`بعتنالك لينك تأكيد على ${fbUser.email}. افتحي الإيميل، دوسي على اللينك، وارجعي هنا.`])}</p>${msg}<div class="row"><button class="btn" type="button" id="acCheck">${L(["I've confirmed",'أكّدت ✓'])}</button><button class="btn ghost" type="button" id="acResend">${L(['Send again','ابعتي تاني'])}</button><button class="btn ghost" type="button" id="acOut">${L(['Log out','اطلعي'])}</button></div></div>`;
+  return `<div class="card"><h3>${L(['Account','الحساب'])}</h3><p class="muted">${L(['Create a free account to keep your progress on all your devices: phone, iPad and laptop. Optional, Hilal works without it too.','اعملي حساب مجاني عشان حاجتك تبقى على كل أجهزتك: الموبايل والآيباد واللابتوب. اختياري، وهلال شغال من غيره عادي.'])}</p>
+   <div class="mtabs" role="tablist">${[['in',['Log in','تسجيل دخول']],['up',['New account','حساب جديد']]].map(t=>`<button type="button" role="tab" data-acm="${t[0]}" aria-selected="${acMode===t[0]}">${L(t[1])}</button>`).join('')}</div>
+   <input type="email" id="acEm" autocomplete="email" inputmode="email" placeholder="${L(['Email','الإيميل'])}" value="${esc(acEmail)}" dir="ltr">
+   <input type="password" id="acPw" autocomplete="${acMode==='up'?'new-password':'current-password'}" placeholder="${L(['Password (6+ characters)','الباسورد (٦ حروف على الأقل)'])}" dir="ltr">
+   ${msg}<button class="btn" type="button" id="acGo"${acBusy?' disabled':''}>${acMode==='up'?L(['Create my account','اعملي الحساب']):L(['Log in','ادخلي'])}</button>
+   ${acMode==='in'?`<button class="btn ghost" type="button" id="acReset">${L(['Forgot password?','نسيتي الباسورد؟'])}</button>`:`<p class="note">${L(['We will send you an email to confirm it is you. Your journal text syncs too; voice notes stay on the device they were recorded on.','هنبعتلك إيميل نتأكد إنه إنتي. كتابات يومياتك بتتزامن كمان، والريكوردات بتفضل على الجهاز اللي اتسجلت عليه.'])}</p>`}</div>`;
+}
 /* ---------- saving ---------- */
 let ref=null,timer=null;
 function save(){
-  try{localStorage.setItem('hilal',JSON.stringify(S))}catch(e){}
+  S._ts=Date.now();try{localStorage.setItem('hilal',JSON.stringify(S))}catch(e){}
+  fbPush();
   if(!ref)return;clearTimeout(timer);
   timer=setTimeout(()=>{ref.set(S).then(()=>{$('saveNote').textContent=L(['Progress saved to your account.','تقدّمك محفوظ في حسابك.'])}).catch(()=>{$('saveNote').textContent=L(['Could not save just now. Your progress is still here on this page.','مقدرناش نحفظ دلوقتي، بس تقدّمك لسه هنا.'])})},700);
 }
@@ -2250,6 +2334,7 @@ if(!(S.lang==='ar'||S.lang==='en')){$('ob').hidden=false;$('ob1').hidden=false;$
 else if(!S.storySeen)showStory();
 else if(!S.name)showName();
 else if(S.askName!==false&&!framed())welcomeBack();
+fbInit();
 if(window.claude&&typeof window.claude.use==='function'){
   Promise.all([window.claude.use('db'),window.claude.use('user')]).then(async([db,user])=>{
     if(!db||!user)return;const id=await user.id();if(!id)return;
