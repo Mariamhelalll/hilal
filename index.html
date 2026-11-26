@@ -248,6 +248,7 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .qsheet.mp .quran-madina-html-sura-start{color:#7a1f3d}
 #acEm,#acPw{width:100%;font:16px 'DM Sans',sans-serif;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);box-sizing:border-box}
 #acEm:focus,#acPw:focus{outline:2px solid var(--wine);outline-offset:1px}
+.mestats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mestats div{display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:16px;background:var(--soft)}.mestats b{font:700 26px 'DM Sans',Tajawal,sans-serif;color:var(--wine)}.mestats small{color:var(--muted);font-size:13px}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -356,10 +357,10 @@ quran-madina-html-aya-popup button.quran-madina-html-action{color:#fff!important
 .entry .t{white-space:pre-wrap;overflow-wrap:anywhere}
 .entry .del{align-self:flex-end;border:0;background:none;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;min-height:36px;text-decoration:underline}
 nav.tabs{position:sticky;top:0;z-index:5;margin:4px -18px 6px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:calc(6px + env(safe-area-inset-top)) 10px 6px}
-nav.tabs div{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px}
+nav.tabs div{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px}
 nav.tabs a{display:flex;flex-direction:column;align-items:center;min-height:56px;justify-content:center;font-size:10.5px;font-weight:600;color:var(--muted);text-decoration:none;border-radius:14px;line-height:1.2;text-align:center}
 nav.tabs a .ar{font-size:13px}
-html[lang=ar] nav.tabs a{font-size:13px;font-family:Tajawal,sans-serif}
+html[lang=ar] nav.tabs a{font-size:12px;font-family:Tajawal,sans-serif;letter-spacing:-.2px}
 nav.tabs a svg{width:21px;height:21px;margin-bottom:2px}
 nav.tabs a[aria-current=page]{color:var(--wine);background:var(--soft)}
 button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,label:focus-within{outline:3px solid var(--gold);outline-offset:2px}
@@ -564,6 +565,7 @@ nav.tabs a[aria-current=page] svg{animation:pop .4s ease}
   <section class="view" id="v-drive"></section>
   <section class="view" id="v-health"></section>
   <section class="view" id="v-journal"></section>
+  <section class="view" id="v-me"></section>
   <p class="toast" id="saveNote" role="status"></p>
 </div>
 <form name="goal-suggestions" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="goal"><input name="category"><input name="lang"><input name="bot-field"></form>
@@ -611,7 +613,7 @@ if(H){for(let i=0;i<400;i++){const t=new Date(today);t.setDate(t.getDate()+i);co
 
 /* ---------- content ---------- */
 const INTRO=['Hilal is our little space to help each other become a bit better every day, in our deen, our style, our dreams and our health. Small steps, together, from a crescent to a full moon.','هلال مساحتنا الصغيرة عشان نساعد بعض نبقى أحسن كل يوم شوية، في ديننا، وأناقتنا، وطموحنا، وصحتنا. خطوة صغيرة كل يوم، مع بعض، من هلال لحد ما يبقى قمر.'];
-const TABS=[['today',['Today','النهارده']],['deen',['Deen','الدين']],['style',['Style','الأناقة']],['drive',['Drive','الطموح']],['health',['Health','صحتك']],['journal',['Journal','يومياتي']]];
+const TABS=[['today',['Today','النهارده']],['deen',['Deen','الدين']],['style',['Style','الأناقة']],['drive',['Drive','الطموح']],['health',['Health','صحتك']],['journal',['Journal','يومياتي']],['me',['Account','حسابي']]];
 const PILL=[['deen',['Deen','الدين']],['style',['Style','الأناقة']],['drive',['Drive','الطموح']],['health',['Health','اهتمي بصحتك']],['journal',['Journal','يومياتي']]];
 const MSH=['Muharram','Safar',"Rabi' I","Rabi' II",'Jumada I','Jumada II','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhul Qa'dah",'Dhul Hijjah'];
 const CH={
@@ -1901,7 +1903,9 @@ document.addEventListener('click',e=>{
   else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else if(S.name)welcomeBack();else showName()}}
   else if(b.id==='obIback'){if(introI>0){introI--;drawIntro()}else if(introAgain){$('obI').hidden=true;$('ob').hidden=true}else{$('obI').hidden=true;$('ob1').hidden=false}changed=false}
   else if(b.id==='setLoc'){if(S.loc&&!S.locOff){S.locOff=true;S.loc=null;save();openSettings();renderToday();if(curView()==='deen')renderDeen();ntLater()}else{S.locOff=false;$('sheet').hidden=true;location.hash='deen';setTimeout(useMyLoc,300)}changed=false}
-  else if(ds.acm){acMode=ds.acm;acMsg='';const e=$('acEm');if(e)acEmail=e.value;openSettings();changed=false}
+  else if(b.id==='meName'){showName(true);changed=false}
+  else if(b.id==='meSet'){openSettings();changed=false}
+  else if(ds.acm){acMode=ds.acm;acMsg='';const e=$('acEm');if(e)acEmail=e.value;acRefresh();changed=false}
   else if(b.id==='acGo'){acDo(acMode);changed=false}
   else if(b.id==='acReset'){acDo('reset');changed=false}
   else if(b.id==='acResend'){acDo('resend');changed=false}
@@ -1959,7 +1963,7 @@ document.addEventListener('click',e=>{
   else if(b.id==='obChange'){$('obName').hidden=false;$('obGo').hidden=false;$('obKeep').hidden=true;$('obChange').hidden=true;$('obName').value='';$('obName').focus();changed=false}
   else if(ds.p!==undefined){const d=day();d.p[+ds.p]=!d.p[+ds.p];renderToday();if(curView()==='deen')renderDeen()}
   else if(ds.t){const d=day();d[ds.t]=!d[ds.t];renderToday()}
-  else if(ds.go){const [v,t]=ds.go.split(':');if(t)VT['v-'+v]=t;const r={deen:renderDeen,today:renderToday,style:renderStyle,health:renderHealth,journal:renderJournal}[v];if(t&&r)r();if(curView()===v)window.scrollTo(0,0);else location.hash=v;changed=false}
+  else if(ds.go){$('sheet').hidden=true;const [v,t]=ds.go.split(':');if(t)VT['v-'+v]=t;const r={deen:renderDeen,today:renderToday,style:renderStyle,health:renderHealth,journal:renderJournal}[v];if(t&&r)r();if(curView()===v)window.scrollTo(0,0);else location.hash=v;changed=false}
   else if(ds.js!==undefined){const j=journey(),k=jKey(j);if(!Array.isArray(j.done[k]))j.done[k]=[];j.done[k][+ds.js]=!j.done[k][+ds.js];
     if(STG[j.stage]&&STG[j.stage][3].every((_,i)=>j.done[k][i])){j.stage++;renderToday();replay()}else renderToday()}
   else if(b.id==='newMoon'){const j=journey();j.cycle++;j.stage=0;renderToday();replay()}
@@ -2115,7 +2119,7 @@ function openSettings(){
     <div class="row" style="flex-wrap:nowrap"><input type="search" id="setNameIn" maxlength="30" value="${esc(S.name||'')}" aria-label="${L(['Your name','اسمك'])}"><button class="btn" type="button" id="setName">${L(['Save','احفظي'])}</button></div><p class="note" id="setMsg" role="status"></p>
     <button class="check" type="button" id="setAsk" aria-pressed="${ask}"><span class="box"></span><span class="lbl">${L(['Ask my name every time I open Hilal','اسأليني على اسمي كل ما أفتح هلال'])}</span></button></div>
    <div class="card"><h3>${L(['Language','اللغة'])}</h3><div class="row"><button class="opt" type="button" data-setlang="en" aria-pressed="${!A()}">English</button><button class="opt" type="button" data-setlang="ar" aria-pressed="${A()}">العربية</button></div></div>
-   ${accountHTML()}
+   ${FB_CONFIG?`<div class="card"><h3>${L(['Account','الحساب'])}</h3><p class="muted">${fbUser&&fbUser.emailVerified?'✓ '+esc(fbUser.email):L(['Log in or create an account in the Account tab.','سجّلي دخول أو اعملي حساب من تاب حسابي.'])}</p><button class="btn ghost" type="button" data-go="me">${L(['Open Account','افتحي حسابي'])}</button></div>`:''}
    ${settingsExtraHTML()}
    <div class="card"><h3>${L(['Your progress','تقدّمك'])}</h3><p class="note">${L(['Your progress and journal are saved on this phone only.','تقدّمك ويومياتك محفوظين على الموبايل ده بس.'])}</p>
     <button class="btn ghost" type="button" id="setReset">${L(['Start fresh','ابدأي من جديد'])}</button>
@@ -2222,7 +2226,7 @@ function submitName(){
 $('obName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitName()}});
 
 /* ---------- tabs + language ---------- */
-const ICON={today:'<circle cx="12" cy="12" r="8"/><path d="M15 6a7 7 0 1 0 0 12 6 6 0 0 1 0-12z" fill="currentColor"/>',deen:'<path d="M4 19V8l8-4 8 4v11"/><path d="M4 19h16M12 4v3"/>',style:'<path d="M9 4l3 2 3-2 5 3-2 4-3-1v10H9V10l-3 1-2-4z"/>',drive:'<path d="M5 19 19 5M9 5h10v10"/>',health:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',journal:'<path d="M6 4h11a1 1 0 0 1 1 1v15H7a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1z"/><path d="M9 9h6M9 13h4"/>'};
+const ICON={today:'<circle cx="12" cy="12" r="8"/><path d="M15 6a7 7 0 1 0 0 12 6 6 0 0 1 0-12z" fill="currentColor"/>',deen:'<path d="M4 19V8l8-4 8 4v11"/><path d="M4 19h16M12 4v3"/>',style:'<path d="M9 4l3 2 3-2 5 3-2 4-3-1v10H9V10l-3 1-2-4z"/>',drive:'<path d="M5 19 19 5M9 5h10v10"/>',health:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',journal:'<path d="M6 4h11a1 1 0 0 1 1 1v15H7a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1z"/><path d="M9 9h6M9 13h4"/>',me:'<circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'};
 const curView=()=>{const h=(location.hash||'#today').slice(1);return TABS.some(t=>t[0]===h)?h:'today'};
 function route(){
   const v=curView();
@@ -2241,7 +2245,17 @@ function applyLang(){
   $('saveNote').textContent=ref?L(['Progress saved to your account.','تقدّمك محفوظ في حسابك.']):L(['Your progress is kept while this page is open.','تقدّمك محفوظ طول ما الصفحة مفتوحة.']);
   renderAll();route();replay();
 }
-function renderAll(){renderToday();renderDeen();renderStyle();renderDrive();renderHealth();renderJournal()}
+function renderMe(){
+  const days=Object.keys(S.days||{}).filter(k=>{const d=S.days[k];return d&&Array.isArray(d.p)&&d.p.some(Boolean)}).length;
+  const hz=Object.keys(S.surahs||{}).filter(k=>S.surahs[k]).length,kh=S.khN||0,mn=(S.mg&&S.mg.cycle)||1;
+  const stats=[[N(days),['days with prayers ticked','يوم علّمتي فيه صلواتك']],[N(hz),['surahs memorised','سورة حفظتيها']],[N(kh),['khatmas completed','ختمة خلّصتيها']],[N(mn),['moons started','قمر بدأتيه']]];
+  setView('v-me',`<div><h1>${S.name?L([`Hi ${esc(S.name)}`,`أهلاً يا ${esc(S.name)}`]):L(['Your account','حسابك'])}</h1></div>
+  <p class="muted">${L(['Log in to keep your progress on all your devices.','سجّلي دخول عشان حاجتك تفضل معاكي على كل أجهزتك.'])}</p>
+  ${accountHTML()||`<div class="card"><p class="note">${L(['Accounts are not available yet.','الحسابات مش متاحة دلوقتي.'])}</p></div>`}
+  <div class="card">${ttl(['Your journey so far','رحلتك لحد دلوقتي'])}<div class="mestats">${stats.map(x=>`<div><b>${x[0]}</b><small>${L(x[1])}</small></div>`).join('')}</div></div>
+  <div class="card"><div class="row"><button class="btn ghost" type="button" id="meName">${L(['Change my name','غيّري اسمي'])}</button><button class="btn ghost" type="button" id="meSet">⚙ ${L(['Settings','الإعدادات'])}</button></div></div>`);
+}
+function renderAll(){renderToday();renderDeen();renderStyle();renderDrive();renderHealth();renderJournal();renderMe()}
 
 /* ---------- accounts and sync across devices (Firebase) ---------- */
 const FB_CONFIG={apiKey:"AIzaSyCDlvrO00PnFTtKsQcXrbHOLNgn0utYuf0",authDomain:"hilal-girls.firebaseapp.com",projectId:"hilal-girls",storageBucket:"hilal-girls.firebasestorage.app",messagingSenderId:"462652629429",appId:"1:462652629429:web:c6cb1133cae33e5a8e39fc"};
@@ -2324,7 +2338,7 @@ function obAccHTML(){
 }
 function showAccount(){$('ob').hidden=false;['ob1','obI','ob2'].forEach(i=>$(i).hidden=true);const a=$('obA');a.hidden=false;a.innerHTML=obAccHTML();a.classList.remove('rv');void a.offsetWidth}
 function obAccOpen(){return $('ob')&&!$('ob').hidden&&$('obA')&&!$('obA').hidden}
-function acRefresh(){if(obAccOpen()){if(fbUser&&fbUser.emailVerified){obAfterAcc();return}showAccount()}if(!$('sheet').hidden)openSettings()}
+function acRefresh(){try{renderMe()}catch(e){}if(obAccOpen()){if(fbUser&&fbUser.emailVerified){obAfterAcc();return}showAccount()}if(!$('sheet').hidden)openSettings()}
 function obAfterAcc(){$('obA').hidden=true;acMsg='';clearInterval(acPoll.t);if(location.hash!=='#today')location.hash='today';if(!S.name)showName();else{$('ob').hidden=true;replay()}}
 async function acPoll(){if(!fb||!fbUser||fbUser.emailVerified)return;try{await fbUser.reload();fbUser=fb.auth.currentUser;if(fbUser&&fbUser.emailVerified){clearInterval(acPoll.t);await fbUser.getIdToken(true);acMsg=L(['Email confirmed ✓','الإيميل اتأكد ✓']);await fbStart();if(obAccOpen())obAfterAcc();else acRefresh()}}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')acPoll()});
