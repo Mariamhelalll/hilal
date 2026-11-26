@@ -255,6 +255,21 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 #acEm,#acPw{width:100%;font:16px 'DM Sans',sans-serif;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);box-sizing:border-box}
 #acEm:focus,#acPw:focus{outline:2px solid var(--wine);outline-offset:1px}
 .mestats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mestats div{display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:16px;background:var(--soft)}.mestats b{font:700 26px 'DM Sans',Tajawal,sans-serif;color:var(--wine)}.mestats small{color:var(--muted);font-size:13px}
+@media (min-width:900px) and (orientation:landscape),(min-width:1200px){
+ .app{max-width:none;padding:0 clamp(24px,3.5vw,56px) calc(40px + env(safe-area-inset-bottom))}
+ .top{padding-top:24px}
+ nav.tabs{margin:4px 0 10px;border:1px solid var(--line);border-radius:22px;padding:6px 10px}
+ nav.tabs a{flex-direction:row;gap:8px;min-height:50px;font-size:14px}
+ html[lang=ar] nav.tabs a{font-size:15px}
+ nav.tabs a svg{margin-bottom:0}
+ .app .view.on{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:18px;align-items:start}
+ .app .view.on>:not(.card),.app .view.on.solo>.card{grid-column:1/-1}
+ .view.on>.card{margin-top:0}
+ .view.on>.vtabs{justify-self:start;min-width:min(720px,100%)}
+ #v-today.on>.hero{max-width:none}
+ h1{font-size:38px}
+ .card{padding:22px}
+}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -951,6 +966,7 @@ const VTM=[
 ];
 const VT={};
 function cardTitle(c){if(c.querySelector('#jText'))return'#jText';const t=c.querySelector(':scope>.ttl, :scope>summary');return t?t.textContent.trim():''}
+function markSolo(el){if(!el)return;const n=[...el.children].filter(c=>c.matches('.card')&&!c.classList.contains('vthide')).length;el.classList.toggle('solo',n<=1)}
 function autoTabs(id){
   const el=$(id);if(!el)return;const defs=VTM.filter(d=>d[0]===id);if(!defs.length)return;
   const blocks=[...el.children].filter(c=>c.matches('.card,details.fold'));
@@ -965,14 +981,14 @@ function autoTabs(id){
   blocks[0].before(bar);
   const show=()=>{for(const x of groups)for(const c of x.els){const on=x.g===VT[id];c.classList.toggle('vthide',!on);if(on){c.classList.add('in');if(c.matches('details.fold'))c.open=true}}
     for(const b of bar.children)b.setAttribute('aria-selected',b.dataset.vtab===VT[id]);
-    const s=bar.querySelector('[aria-selected=true]');if(s&&s.scrollIntoView)s.scrollIntoView({block:'nearest',inline:'center'})};
+    markSolo(el);const s=bar.querySelector('[aria-selected=true]');if(s&&s.scrollIntoView)s.scrollIntoView({block:'nearest',inline:'center'})};
   show();
   bar.addEventListener('click',e=>{const b=e.target.closest('[data-vtab]');if(!b)return;VT[id]=b.dataset.vtab;show();
     const r=bar.getBoundingClientRect();if(r.top<70||r.top>innerHeight*.6)window.scrollTo({top:window.scrollY+r.top-80,behavior:'smooth'})});
 }
 function setView(id,html){
   const el=$(id),fresh=!el.classList.contains('on')||!el._shown;
-  el.innerHTML=html;autoTabs(id);reveal(el,fresh&&el.classList.contains('on'));
+  el.innerHTML=html;autoTabs(id);markSolo(el);reveal(el,fresh&&el.classList.contains('on'));
   if(!el.classList.contains('on'))el._shown=false;
   if(id==='v-today')animateMoon();
 }
