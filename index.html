@@ -210,6 +210,31 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .adnav{display:flex;justify-content:space-between;direction:ltr}.adnav .btn{min-width:64px;font-size:22px}.adnav .btn:disabled{opacity:.3}
 .addone{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;animation:rise .5s ease}.addone h3{font-size:24px;color:var(--wine);margin:6px 0 0}.addone p{margin:0}
 .admoon{width:140px;height:140px;filter:drop-shadow(0 0 24px #D8B46A99);animation:float 5s ease-in-out infinite}.adst{font-weight:700;color:var(--wine)}
+.qsheet.mp{background:#fff;color:#2a1a14}
+.qsheet.mp .qin{max-width:700px;padding:calc(6px + env(safe-area-inset-top)) 6px calc(8px + env(safe-area-inset-bottom))}
+.mtop{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 6px}
+.mtop .qtitle{font:600 14px 'DM Sans',Tajawal,sans-serif;color:#8a6a3a;text-align:center;flex:1}
+.mic{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:#6b5a4e;font-size:20px;cursor:pointer;display:grid;place-items:center}
+.mic:active{background:#f4efe6}.mic:disabled{opacity:.25}
+.mphd{display:flex;justify-content:space-between;padding:4px 14px 6px;margin:0 6px;border-bottom:1px solid #eadfc8;font-family:Amiri,'Amiri Quran',serif;font-size:15px;color:#7a6a5c;direction:rtl}
+.qsheet.mp .mstage{background:#fff}
+.qsheet.mp .mpaper quran-madina-html{background:#fff;color:#1a1210;box-shadow:none;border-radius:0;padding:4px 2px}
+.mkh{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:6px 8px 0;font:500 13px 'DM Sans',Tajawal,sans-serif;color:#7a5a2a}
+.mkh[hidden]{display:none}
+.mkh button{border:1px solid #d8b46a;background:#fffaf0;color:#7a5a2a;border-radius:999px;padding:6px 12px;font:600 13px 'DM Sans',Tajawal,sans-serif;cursor:pointer;min-height:34px}
+.mkh button.on{background:#d8b46a;color:#fff}
+.qsheet.mp .mfoot{padding-top:4px}
+.qsheet.mp .mpgb{flex:0 0 auto;min-width:64px;min-height:40px;background:transparent;color:#7a5a2a;border-radius:0;display:grid;place-items:center}
+.mpgb span{display:inline-grid;place-items:center;min-width:46px;height:30px;padding:0 10px;border:1.5px solid #d8b46a;border-radius:15px;font:600 15px Amiri,'Amiri Quran',serif;background:#fffaf0}
+.khbox{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:18px;background:var(--soft)}
+.khbox h3{margin:0;font-size:17px}.khh{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.khper{margin:0;font-weight:700;color:var(--wine)}
+.khw{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;background:var(--card);border:1.5px solid var(--line)}
+.khw b{font-size:17px;color:var(--wine)}.khw small{color:var(--muted)}.khw.ok{border-color:var(--gold)}
+#khIn{font:16px 'DM Sans',sans-serif;padding:8px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.khdone{position:absolute;inset:0;z-index:8;background:#fffdf7f2;display:grid;place-items:center;text-align:center;padding:24px;animation:rise .5s ease}
+.khdone>div{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:340px}.khdone h3{margin:0;font-size:26px;color:#7a1f3d}
+.khmoon{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 38% 34%,#FBEBC4,#D8B46A);box-shadow:0 0 40px #D8B46Aaa;animation:float 5s ease-in-out infinite}
 .mgl{display:flex;flex-direction:column;gap:8px}
 .mgoal{border:1.5px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .mgoal.done{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
@@ -1267,12 +1292,43 @@ function renderDeen(){
 /* ---------- mushaf ---------- */
 let QD=null,QE=null,qCur=1;
 function loadQ(tr){const p=[];if(!QD)p.push(fetch('quran.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{QD=d}));if(tr&&!QE)p.push(fetch('quran_en.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{QE=d}));return Promise.all(p)}
+/* ---------- khatma planner ---------- */
+const KHD=[[10,['10 days','١٠ أيام']],[15,['15 days','١٥ يوم']],[30,['1 month','شهر']],[60,['2 months','شهرين']],[90,['3 months','٣ شهور']],[120,['4 months','٤ شهور']]];
+let khDays=30,khFrom='1',khSure=false;
+function khInfo(){const k=S.kh;if(!k||!k.start||!(k.days>0))return null;const st=pdk(k.start);const di=Math.max(0,Math.round((t0-st)/864e5));const tot=605-k.p0,per=tot/k.days;
+  const at=d=>Math.min(604,k.p0-1+Math.ceil(per*Math.min(k.days,d)));const tgt=at(di+1),exp0=at(di);
+  return{di,tot,per,tgt,exp0,done:k.done,left:Math.max(0,tgt-k.done),behind:exp0-k.done,read:Math.max(0,k.done-k.p0+1),over:di>=k.days}}
+function khPerLabel(days,p0){const per=Math.ceil((605-p0)/days);return L([`${per} pages a day${per>=20?` (about ${Math.round(per/20*10)/10} juz)`:''}`,`${toAr(per)} صفحة في اليوم${per>=20?` (حوالي ${toAr(Math.round(per/20*10)/10)} جزء)`:''}`])}
+function khatmaHTML(){
+  const k=khInfo(),n=S.khN||0;
+  if(!k){const p0=khFrom==='cur'&&S.qpage>1?S.qpage:1;
+    return `<div class="khbox"><h3>📿 ${L(['Plan a khatma','ابدأي ختمة'])}</h3>
+     <p class="muted">${L(['Choose how long you want your khatma to take, and Hilal gives you your daily portion.','اختاري الختمة هتاخد قد إيه، وهلال يقسّمها لورد كل يوم.'])}</p>
+     <div class="row">${KHD.map(d=>`<button class="opt sm" type="button" data-khd="${d[0]}" aria-pressed="${khDays===d[0]}">${L(d[1])}</button>`).join('')}</div>
+     <div class="row" style="flex-wrap:nowrap;align-items:center"><span class="note">${L(['Or days:','أو عدد أيام:'])}</span><input type="number" id="khIn" min="3" max="365" inputmode="numeric" value="${khDays}" style="max-width:90px"></div>
+     ${S.qpage>1?`<div class="row">${[['1',['From the start','من الأول']],['cur',[`From page ${S.qpage}`,`من صفحة ${toAr(S.qpage)}`]]].map(x=>`<button class="opt sm" type="button" data-khf="${x[0]}" aria-pressed="${khFrom===x[0]}">${L(x[1])}</button>`).join('')}</div>`:''}
+     <p class="khper">${khPerLabel(khDays,p0)}</p>
+     <button class="btn" type="button" id="khGo">${L(['Start my khatma','ابدأي الختمة'])}</button>
+     ${n?`<p class="note">🌕 ${L([`You have completed ${n} khatma${n>1?'s':''} with Hilal.`,`ختمتي ${toAr(n)} ${n>2&&n<11?'ختمات':'ختمة'} مع هلال.`])}</p>`:''}</div>`}
+  const pc=k.read/k.tot*100,today=k.left===0;
+  const st=k.behind>0?L([`${k.behind} pages behind, take it gently`,`متأخرة ${toAr(k.behind)} صفحة، براحتك`]):k.done>k.exp0+0&&k.done>=k.tgt?L(['Ahead of plan, ma sha Allah','سابقة الخطة، ما شاء الله']):L(['On track','ماشية مظبوط']);
+  return `<div class="khbox on"><div class="khh"><h3>📿 ${L(['My khatma','ختمتي'])}</h3><span class="chip">${L([`Day ${Math.min(k.di+1,S.kh.days)} of ${S.kh.days}`,`اليوم ${toAr(Math.min(k.di+1,S.kh.days))} من ${toAr(S.kh.days)}`])}</span></div>
+   <div class="bar" aria-hidden="true"><i style="width:${pc}%"></i></div>
+   <p class="note">${L([`${k.read} of ${k.tot} pages · ${Math.round(pc)}%`,`قريتي ${toAr(k.read)} من ${toAr(k.tot)} صفحة · ${toAr(Math.round(pc))}٪`])} · ${st}</p>
+   <div class="khw${today?' ok':''}"><small>${L(["Today's portion","ورد النهارده"])}</small><b>${today?L(['Done for today ✓','خلصتيه ✓']):L([`Page ${k.done+1} to ${k.tgt}`,`من صفحة ${toAr(k.done+1)} لـ ${toAr(k.tgt)}`])}</b>${today?'':`<small>${L([`${k.left} pages`,`${toAr(k.left)} صفحة`])}</small>`}</div>
+   <button class="btn" type="button" data-mopen="${Math.min(604,k.done+1)}">${today?L(['Keep reading','كمّلي قراءة']):L(["Read today's portion","اقري ورد النهارده"])}</button>
+   <div class="row">${today?'':`<button class="opt sm" type="button" id="khMark">✓ ${L(["I read today's portion","قريت ورد النهارده"])}</button>`}${khSure?`<button class="opt sm" type="button" id="khStop2">${L(['Yes, end it','أيوه، الغيها'])}</button>`:`<button class="opt sm" type="button" id="khStop">${L(['End this khatma','الغي الختمة'])}</button>`}</div></div>`;
+}
+function khAdvance(p){const k=S.kh;if(!k||p<=k.done)return;k.done=Math.min(604,p);const i=khInfo();if(i&&i.left===0)day().quran=true;
+  if(k.done>=604){S.khN=(S.khN||0)+1;S.khLast=tk;S.kh=null;save();mCelebrate();return}save()}
+function mCelebrate(){const q=$('qin');if(!q)return;const d=document.createElement('div');d.className='khdone';d.innerHTML=`<div><div class="khmoon" aria-hidden="true"></div><h3>${L(['You completed the Quran!','ختمتي القرآن!'])}</h3><p>${L(['May Allah accept it from you and make it a light for you 🤍','تقبّل الله منكِ، وجعله نور ليكي 🤍'])}</p><button class="btn" type="button" id="khEnd">${L(['Alhamdulillah','الحمد لله'])}</button></div>`;q.append(d)}
 function quranCardHTML(){
   const last=S.qlast&&S.qlast.s>=1&&S.qlast.s<=114?S.qlast:null,pg=S.qpage>=1&&S.qpage<=604?S.qpage:0;
   return `<div class="card">${ttl(['The Holy Quran','المصحف الشريف'])}
    <p class="muted">${L(['The Madina Mushaf, page by page like the printed one. Swipe to turn the page, and jump to any surah, juz or page.','مصحف المدينة صفحة صفحة زي المطبوع بالظبط. اسحبي عشان تقلبي الصفحة، وتقدري تروحي لأي سورة أو جزء أو صفحة.'])}</p>
    <button class="btn" type="button" data-mopen="${pg||1}">${pg?L([`Continue from page ${pg}`,`كمّلي من صفحة ${toAr(pg)}`]):L(['Open the Mushaf','افتحي المصحف'])}</button>
    <div class="row" style="gap:8px"><button class="opt sm" type="button" data-mopen="${pg||1}" data-mtab0="s">${L(['Surahs','السور'])}</button><button class="opt sm" type="button" data-mopen="${pg||1}" data-mtab0="j">${L(['Juz','الأجزاء'])}</button><button class="opt sm" type="button" data-mopen="${pg||1}" data-mtab0="p">${L(['Go to page','روحي لصفحة'])}</button></div>
+   ${khatmaHTML()}
    <details class="sub"><summary>${L(['Ayah view with English translation','عرض بالآيات مع الترجمة الإنجليزي'])}</summary><p class="muted" style="margin:0 0 10px">${L(['Bigger text, one ayah at a time, with an optional translation.','خط أكبر، آية آية، ومعاها ترجمة لو حبيتي.'])}</p>${last?`<button class="btn ghost" type="button" data-qopen="${last.s}" data-qa0="${last.a}">${L([`Surah ${SEN[last.s-1]}, ayah ${last.a}`,`سورة ${SAR[last.s-1]}، آية ${toAr(last.a)}`])}</button>`:''}<div class="qgrid">${SAR.map((n,i)=>`<button type="button" class="qs" data-qopen="${i+1}" data-qa0="1"><b>${N(i+1)}</b><span class="ar">${n}</span>${A()?'':`<small>${SEN[i]}</small>`}</button>`).join('')}</div></details>
    <p class="note">${L(['Mushaf pages: Madina Mushaf 1441H layout via quran-madina-html (Waqf GPL).','صفحات المصحف: مصحف المدينة طبعة ١٤٤١هـ عن طريق quran-madina-html (رخصة Waqf GPL).'])}</p></div>`;
 }
@@ -1302,7 +1358,7 @@ const mnorm=t=>String(t).toLowerCase().replace(/[أإآٱ]/g,'ا').replace(/ة/g
 let mReady=null,mPg=1,mTab='s',mq='';
 const mSurahs=p=>MSP.map((s,i)=>s<=p&&p<=MEP[i]?i:-1).filter(i=>i>=0);
 const mJuz=p=>{let j=0;for(let i=0;i<30;i++)if(MJP[i]<=p)j=i;return j+1};
-function mFont(){const w=Math.min(innerWidth,620)-28,h=innerHeight-200;return Math.max(12,Math.min(30,Math.floor(Math.min(w/16.2,h/28.6)*10)/10))}
+function mFont(){const w=Math.min(innerWidth,680)-10,h=innerHeight-176;return Math.max(12,Math.min(30,Math.floor(Math.min(w/16.2,h/28.6)*10)/10))}
 function loadMushaf(){
   if(mReady)return mReady;
   mReady=new Promise((res,rej)=>{
@@ -1322,21 +1378,25 @@ function mToast(t){const el=$('mtoast');if(!el)return;el.textContent=t;el.classL
 function openMushaf(p,tab){
   mPg=Math.max(1,Math.min(604,p||S.qpage||1));
   const sh=$('qsheet');sh.hidden=false;sh.classList.add('mp');document.body.style.overflow='hidden';
-  $('qin').innerHTML=`<div class="mhead"><button class="btn ghost" type="button" id="mclose">${L(['Close','قفلي'])}</button><div class="qtitle" id="mtitle"></div><button class="qb" type="button" id="mjumpb" aria-label="${L(['Index','الفهرس'])}">☰</button></div>
-   <div class="mstage" id="mstage"><p class="muted" style="text-align:center;padding:40px 0">${L(['Opening the Mushaf…','بنفتح المصحف…'])}</p></div>
-   <div class="mfoot"><button class="qb mnav" type="button" id="mnext" aria-label="${L(['Next page','الصفحة اللي بعدها'])}">‹</button><button class="mpgb" type="button" id="mpgb"></button><button class="qb mnav" type="button" id="mprev" aria-label="${L(['Previous page','الصفحة اللي قبلها'])}">›</button></div>
-   <button class="mdone" type="button" id="mdone"></button>
+  $('qin').innerHTML=`<div class="mtop"><button class="mic" type="button" id="mclose" aria-label="${L(['Close','قفلي'])}">✕</button><div class="qtitle" id="mtitle"></div><button class="mic" type="button" id="mjumpb" aria-label="${L(['Index','الفهرس'])}">☰</button></div>
+   <div class="mphd" aria-hidden="true"><span id="mhs"></span><span id="mhj"></span></div>
+   <div class="mstage" id="mstage"><p style="text-align:center;padding:40px 0;color:#8a7d74">${L(['Opening the Mushaf…','بنفتح المصحف…'])}</p></div>
+   <div class="mkh" id="mkh"></div>
+   <div class="mfoot"><button class="mic mnav" type="button" id="mnext" aria-label="${L(['Next page','الصفحة اللي بعدها'])}">‹</button><button class="mpgb" type="button" id="mpgb"></button><button class="mic mnav" type="button" id="mprev" aria-label="${L(['Previous page','الصفحة اللي قبلها'])}">›</button></div>
    <div class="mjump" id="mjump" hidden></div><div class="mtoast" id="mtoast" role="status"></div>`;
   loadMushaf().then(()=>{mShow(0);if(tab)mJump(tab)}).catch(()=>{$('mstage').innerHTML=`<p class="muted" style="text-align:center;padding:40px 16px">${L(['The Mushaf could not load. Check your internet and try again.','مقدرناش نفتح المصحف. اتأكدي من النت وجربي تاني.'])}</p>`});
   mMeta();
 }
 function mMeta(){
   const ss=mSurahs(mPg);
-  $('mtitle').innerHTML=`<span class="ar">${ss.length>1?ss.slice(0,3).map(i=>SAR[i]).join(' · '):'سورة '+SAR[ss[0]]}</span><small>${A()?`الجزء ${toAr(mJuz(mPg))}`:`Juz ${mJuz(mPg)} · ${ss.map(i=>SEN[i]).slice(0,2).join(' · ')}`}</small>`;
-  $('mpgb').innerHTML=`${L([`Page ${mPg} of 604`,`صفحة ${toAr(mPg)} من ${toAr(604)}`])}<small>${L(['Tap to jump','دوسي عشان تنقلي'])}</small>`;
+  $('mtitle').textContent=A()?'المصحف الشريف':'The Holy Quran';
+  $('mhs').textContent=ss.length>1?ss.slice(0,3).map(i=>SAR[i]).join(' · '):'سورة '+SAR[ss[0]];
+  $('mhj').textContent='الجزء '+toAr(mJuz(mPg));
+  $('mpgb').innerHTML=`<span>${toAr(mPg)}</span>`;$('mpgb').setAttribute('aria-label',L([`Page ${mPg}, tap to jump`,`صفحة ${toAr(mPg)}، دوسي عشان تنقلي`]));
   $('mnext').disabled=mPg>=604;$('mprev').disabled=mPg<=1;
-  $('mdone').textContent=day().quran?L(['Reading done for today ✓','قراءة النهارده خلصت ✓']):L(['I finished my reading today','خلّصت قراءتي النهارده']);
-  $('mdone').classList.toggle('on',!!day().quran);
+  const k=khInfo(),el=$('mkh');
+  if(k){const tod=k.left===0;el.innerHTML=`<span>📿 ${tod?L(["Today's portion done ✓","ورد النهارده خلص ✓"]):L([`Today: page ${k.done+1} to ${k.tgt} · ${k.left} left`,`ورد النهارده: ${toAr(k.done+1)} ← ${toAr(k.tgt)} · فاضل ${toAr(k.left)}`])}</span>${mPg>k.done&&!tod?`<button type="button" id="khHere">✓ ${L(['Read up to here','قريت لحد هنا'])}</button>`:''}`;el.hidden=false}
+  else{el.innerHTML=`<button type="button" id="mdone" class="${day().quran?'on':''}">${day().quran?L(['Reading done for today ✓','قراءة النهارده خلصت ✓']):L(['I finished my reading today','خلّصت قراءتي النهارده'])}</button>`;el.hidden=false}
 }
 function mShow(dir){
   const st=$('mstage');if(!st)return;
@@ -1344,7 +1404,7 @@ function mShow(dir){
   const pp=document.createElement('div');pp.className='mpaper'+(dir>0?' inN':dir<0?' inP':'');
   pp.innerHTML=`<quran-madina-html page="${mPg}" headless="true"></quran-madina-html>`;
   if(old){old.classList.add(dir>0?'outN':'outP');setTimeout(()=>old.remove(),260)}else st.innerHTML='';
-  st.appendChild(pp);S.qpage=mPg;save();mMeta();
+  st.appendChild(pp);if(S.kh&&mPg===S.kh.done+2)khAdvance(mPg-1);S.qpage=mPg;save();mMeta();
 }
 function mGo(p){p=Math.max(1,Math.min(604,p|0));if(p===mPg){mHideJump();return}const d=p>mPg?1:-1;mPg=p;mHideJump();mShow(d)}
 function mJump(tab){
@@ -1828,6 +1888,14 @@ document.addEventListener('click',e=>{
   else if(b.id==='mjx'){mHideJump();changed=false}
   else if(b.id==='mpgo'){mGo(+$('mpin').value||mPg);changed=false}
   else if(b.id==='mdone'){day().quran=!day().quran;mMeta()}
+  else if(ds.khd){khDays=+ds.khd;renderDeen();changed=false}
+  else if(ds.khf){khFrom=ds.khf;renderDeen();changed=false}
+  else if(b.id==='khGo'){const v=+$('khIn').value;const days=v>=3&&v<=365?Math.round(v):khDays;const p0=khFrom==='cur'&&S.qpage>1?S.qpage:1;S.kh={start:tk,days,p0,done:p0-1};khSure=false;renderDeen()}
+  else if(b.id==='khMark'){const i=khInfo();if(i)khAdvance(i.tgt);renderDeen();renderToday()}
+  else if(b.id==='khStop'){khSure=true;renderDeen();changed=false}
+  else if(b.id==='khStop2'){S.kh=null;khSure=false;renderDeen()}
+  else if(b.id==='khHere'){khAdvance(mPg);mMeta();const i=khInfo();if(i&&i.left===0)mToast(L(["Today's portion done ✓ May Allah accept","ورد النهارده خلص ✓ ربنا يتقبّل"]))}
+  else if(b.id==='khEnd'){closeMushaf()}
   else if(b.id==='qclose'){closeQuran();changed=false}
   else if(b.id==='qplus'||b.id==='qminus'){S.qsize=Math.max(20,Math.min(44,(S.qsize||28)+(b.id==='qplus'?3:-3)));const y=$('qin').scrollTop;renderQ(qCur);$('qin').scrollTop=y}
   else if(b.id==='qtr'){S.qtr=S.qtr!==true;const y=$('qin').scrollTop;loadQ(S.qtr).then(()=>{renderQ(qCur);$('qin').scrollTop=y}).catch(()=>{})}
