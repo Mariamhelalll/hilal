@@ -303,13 +303,14 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .gk{border:1px solid #D8B27A;background:#FFF4DF;color:#7A4A12;border-radius:999px;padding:4px 10px;font:600 13px Tajawal,'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}.gk.ok,.gk.on{background:#D8B27A;color:#fff}
 .gkh button#khHere{border:1px solid #D8B27A;background:#FFF4DF;color:#7A4A12;border-radius:50%;width:30px;height:30px;cursor:pointer}
 @font-face{font-family:'HilalMadina';src:url(mushaf/assets/db/v2/madina-qmh.woff2) format('woff2');font-display:block}
-.gbody{flex:1;min-height:0;width:100%;padding:2px 3%;box-sizing:border-box;display:flex}
-.gtx{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;direction:rtl;font-family:'HilalMadina','Amiri Quran',serif;color:#1B140C;line-height:1.5;padding:.15em 0}
-.gtx.short{justify-content:center;gap:.55em}
-.gln{display:flex;justify-content:space-between;align-items:center;white-space:nowrap;gap:.18em}
+.gbody{flex:1;min-height:0;width:100%;padding:2px 3%;box-sizing:border-box;display:flex;justify-content:center;align-items:center}
+.gtx{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;direction:rtl;font-family:'HilalMadina','Amiri Quran',serif;color:#1B140C;line-height:1.5;padding:.15em 0}
+.gtx.short{justify-content:center}
+.gln{display:flex;justify-content:center;align-items:center;white-space:nowrap;gap:.22em;line-height:1.5}
+.gtx.flow .gln{transform:none!important}
 .mam[hidden]{display:none}
-.gln.loose{justify-content:center;gap:.45em}
-.gln.gbism,.gtx.short .gln{justify-content:center;gap:.35em}
+.gln.loose{justify-content:center;gap:.3em}
+.gln.gbism,.gtx.short .gln{justify-content:center;gap:.3em}
 .gtx.meas .gln{width:max-content;justify-content:flex-start;gap:.22em}
 .gw{cursor:pointer;border-radius:.2em;transition:background .2s}
 .gw.hl{background:#F6E2B3}.aym.hl{filter:drop-shadow(0 0 .12em #D99A3A)}
@@ -317,7 +318,7 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 .aym b{font:700 .5em/1 Amiri,'Amiri Quran',serif;color:#9C3B12;transform:translateY(.08em)}
 .gsh{justify-content:center!important}
 .gsh span{display:inline-flex;align-items:center;justify-content:center;min-width:62%;padding:.08em 1.6em;font:700 .82em/1.5 Amiri,serif;color:#7A3F0E;background:#F4E3C1;border:1.5px solid #C9954D;border-radius:999px;box-shadow:inset 0 0 0 3px #FBF0DA,inset 0 0 0 4px #D8B27A}
-.gtx.flow{display:block;white-space:normal;text-align:justify;line-height:2.15;padding:4px 2px 80px}
+.gtx.flow{display:block;white-space:normal;text-align:start;line-height:2;padding:4px 2px 80px}
 .gtx.flow .gln{display:inline;white-space:normal}
 .gtx.flow .gw::after{content:' '}
 .gtx.flow .gsh,.gtx.flow .gbism{display:flex;margin:.3em 0}
@@ -1545,10 +1546,10 @@ function mFit(){
   const flow=!mWide()&&!!S.mflow;let fs=99;
   for(const g of gs){const b=g.parentElement,W=b.clientWidth,H=b.clientHeight;g.classList.toggle('flow',flow);
     if(flow){fs=Math.min(fs,Math.max(25,Math.min(34,W/12)));continue}
-    g.style.fontSize='20px';g.classList.add('meas');const ws=[...g.children].map(ln=>ln.classList.contains('gsh')?0:ln.scrollWidth),mx=Math.max(1,...ws);g.classList.remove('meas');
+    g.style.fontSize='20px';g.classList.add('meas');const ws=[...g.children].map(ln=>ln.classList.contains('gsh')?0:ln.scrollWidth),srt=ws.filter(x=>x).sort((a,b)=>b-a),mx=Math.max(1,srt[Math.min(2,srt.length-1)]||1);g._ws=ws;g.classList.remove('meas');
     [...g.children].forEach((ln,i)=>ln.classList.toggle('loose',ws[i]>0&&ws[i]<mx*.72));
-    const n=g.classList.contains('short')?g.children.length+3:Math.max(15,g.children.length);fs=Math.min(fs,20*W/mx*.97,H/(n*1.62))}
-  fs=Math.min(fs,56);gs.forEach(g=>g.style.fontSize=fs.toFixed(2)+'px');
+    g._mx=mx;g._W=W;g._H=H;const n=g.classList.contains('short')?g.children.length+3:Math.max(15,g.children.length);fs=Math.min(fs,20*W/mx*.98,H/(n*1.55))}
+  fs=Math.min(fs,52);gs.forEach(g=>{g.style.fontSize=fs.toFixed(2)+'px';if(flow){g.style.maxWidth='';g.style.rowGap='';return}const n=g.children.length;g.style.maxWidth=Math.min(g._W,g._mx*fs/20*1.02).toFixed(0)+'px';g.style.rowGap=Math.max(0,Math.min((g._H-n*fs*1.5)/Math.max(1,n-1),fs*.38)).toFixed(1)+'px';const T=g._mx*fs/20;[...g.children].forEach((ln,i)=>{const w=g._ws[i]*fs/20;ln.style.transform=(w&&!ln.classList.contains('loose')&&!ln.classList.contains('gbism')&&!g.classList.contains('short'))?`scaleX(${Math.max(.86,Math.min(1.14,T/w)).toFixed(3)})`:''})});
   st.classList.toggle('scroll',flow);
 }
 function mAyah(s,a,el){
