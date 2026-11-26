@@ -255,6 +255,12 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
 #acEm,#acPw{width:100%;font:16px 'DM Sans',sans-serif;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);box-sizing:border-box}
 #acEm:focus,#acPw:focus{outline:2px solid var(--wine);outline-offset:1px}
 .mestats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mestats div{display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:16px;background:var(--soft)}.mestats b{font:700 26px 'DM Sans',Tajawal,sans-serif;color:var(--wine)}.mestats small{color:var(--muted);font-size:13px}
+
+.closing{animation:softOut .28s cubic-bezier(.4,0,.2,1) forwards!important;pointer-events:none}
+@keyframes softOut{to{opacity:0;transform:translateY(18px) scale(.985)}}
+.app.backin{animation:backIn .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes backIn{from{opacity:.55;transform:scale(.992)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.closing,.app.backin{animation-duration:.01s!important}}
 @media (min-width:900px) and (orientation:landscape),(min-width:1200px){
  .app{max-width:none;padding:0 clamp(24px,3.5vw,56px) calc(40px + env(safe-area-inset-bottom))}
  .top{padding-top:24px}
@@ -265,7 +271,7 @@ html[lang=ar] .ramn{font-family:Tajawal,sans-serif;font-weight:700}
  .app .view.on{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:18px;align-items:start}
  .app .view.on>:not(.card),.app .view.on.solo>.card{grid-column:1/-1}
  .view.on>.card{margin-top:0}
- .view.on>.vtabs{justify-self:start;min-width:min(720px,100%)}
+ .view.on>.vtabs{justify-self:center;min-width:min(720px,100%);margin-inline:auto}
  #v-today.on>.hero{max-width:none}
  h1{font-size:38px}
  .card{padding:22px}
@@ -1082,11 +1088,13 @@ function adhkarSetsHTML(){
   return `<div class="adsets">${ADS.map(([k,ic,nm])=>{const tot=ADK[k].length,dn=adDoneCount(k),full=dn>=tot,st=(k==='M'||k==='E')?adStreak(k):0;
     return `<button type="button" class="adset${full?' full':''}${k===sug?' sug':''}" data-adset="${k}"><span class="adi" aria-hidden="true">${ic}</span><b>${L(nm)}</b><small>${full?L(['Done today ✓','خلصتيها النهارده ✓']):L([`${dn} of ${tot}`,`${toAr(dn)} من ${toAr(tot)}`])}${st?` · 🔥 ${N(st)}`:''}</small><span class="adbar"><i style="width:${dn/tot*100}%"></i></span>${k===sug&&!full?`<em>${L(['Now','وقتها دلوقتي'])}</em>`:''}</button>`}).join('')}</div>`;
 }
-function openAdhkar(set){
+function openAdhkar(set){softOpen($('dsheet'));
   rdSet=ADK[set]?set:'M';const n=ADK[rdSet].length;rdI=0;for(let i=0;i<n;i++)if(!adItemDone(rdSet,i)){rdI=i;break}
   const sh=$('dsheet');sh.hidden=false;document.body.style.overflow='hidden';drawAd(0);
 }
-function closeAdhkar(){$('dsheet').hidden=true;document.body.style.overflow='';if(curView()==='deen')renderDeen();renderToday()}
+function softClose(el,after){if(!el||el.hidden){after&&after();return}el.classList.add('closing');document.body.style.overflow='';clearTimeout(el._ct);el._ct=setTimeout(()=>{if(!el.classList.contains('closing'))return;el.hidden=true;el.classList.remove('closing');after&&after();const a=document.querySelector('.app');if(a){a.classList.remove('backin');void a.offsetWidth;a.classList.add('backin')}},280)}
+function softOpen(el){if(el){clearTimeout(el._ct);el.classList.remove('closing')}}
+function closeAdhkar(){softClose($('dsheet'));if(curView()==='deen')renderDeen();renderToday()}
 function drawAd(dir){
   const set=ADK[rdSet],nm=ADS.find(x=>x[0]===rdSet),fs=S.adFs>=16&&S.adFs<=36?S.adFs:22;
   const allDone=set.every((_,i)=>adItemDone(rdSet,i));
@@ -1446,7 +1454,7 @@ function quranCardHTML(){
    <details class="sub"><summary>${L(['Ayah view with English translation','عرض بالآيات مع الترجمة الإنجليزي'])}</summary><p class="muted" style="margin:0 0 10px">${L(['Bigger text, one ayah at a time, with an optional translation.','خط أكبر، آية آية، ومعاها ترجمة لو حبيتي.'])}</p>${last?`<button class="btn ghost" type="button" data-qopen="${last.s}" data-qa0="${last.a}">${L([`Surah ${SEN[last.s-1]}, ayah ${last.a}`,`سورة ${SAR[last.s-1]}، آية ${toAr(last.a)}`])}</button>`:''}<div class="qgrid">${SAR.map((n,i)=>`<button type="button" class="qs" data-qopen="${i+1}" data-qa0="1"><b>${N(i+1)}</b><span class="ar">${n}</span>${A()?'':`<small>${SEN[i]}</small>`}</button>`).join('')}</div></details>
    <p class="note">${L(['Mushaf pages: Madina Mushaf 1441H layout via quran-madina-html (Waqf GPL).','صفحات المصحف: مصحف المدينة طبعة ١٤٤١هـ عن طريق quran-madina-html (رخصة Waqf GPL).'])}</p></div>`;
 }
-function openQuran(s,a){
+function openQuran(s,a){softOpen($('qsheet'));
   qCur=s;const sh=$('qsheet');sh.classList.remove('mp');sh.hidden=false;document.body.style.overflow='hidden';
   $('qin').innerHTML=`<p class="muted" style="text-align:center;padding:40px 0">${L(['Opening the Mushaf…','بنفتح المصحف…'])}</p>`;
   const tr=S.qtr===true;
@@ -1463,7 +1471,7 @@ function renderQ(s){
    <p class="note">${L(['Uthmani text from the King Fahd Complex via the Noble Quran Encyclopedia (quranenc.com). English translation: Saheeh International. Data: quran-json, CC BY 4.0.','النص العثماني من مجمع الملك فهد عبر موسوعة القرآن الكريم (quranenc.com). الترجمة الإنجليزي: صحيح إنترناشيونال. البيانات: quran-json برخصة CC BY 4.0.'])}</p></div>`;
   $('qin').innerHTML=head+`<div class="qpage">${bas}${body}</div>`+foot;
 }
-function closeQuran(){$('qsheet').hidden=true;document.body.style.overflow='';if(curView()==='deen')renderDeen();renderToday()}
+function closeQuran(){softClose($('qsheet'));if(curView()==='deen')renderDeen();renderToday()}
 /* ---------- page mushaf (Madina 1441H) ---------- */
 const MSP=[1,2,50,77,106,128,151,177,187,208,221,235,249,255,262,267,282,293,305,312,322,332,342,350,359,367,377,385,396,404,411,415,418,428,434,440,446,453,458,467,477,483,489,496,499,502,507,511,515,518,520,523,526,528,531,534,537,542,545,549,551,553,554,556,558,560,562,564,566,568,570,572,574,575,577,578,580,582,583,585,586,587,587,589,590,591,591,592,593,594,595,595,596,596,597,597,598,598,599,599,600,600,601,601,601,602,602,602,603,603,603,604,604,604];
 const MEP=[1,49,76,106,127,150,176,186,207,221,235,248,255,261,267,281,293,304,312,321,331,341,349,359,366,376,385,396,404,410,414,417,427,434,440,445,452,458,467,476,482,489,495,498,502,506,510,515,517,520,523,525,528,531,534,537,541,545,548,551,552,554,555,557,559,561,564,566,568,570,571,573,575,577,578,580,581,583,584,586,586,587,589,590,590,591,592,593,594,595,595,596,596,597,597,598,598,599,599,600,600,600,601,601,601,602,602,602,603,603,603,604,604,604];
@@ -1517,7 +1525,7 @@ function gPage(p,side){
    <div class="gbody"><div class="gtx" data-p="${p}"></div></div>
    <div class="gft"><button type="button" class="gbadge" data-mact="jump">${hz?`<em>${hz}</em>`:''}<b>${toAr(p)}</b></button></div></div>`;
 }
-function openMushaf(p,tab){
+function openMushaf(p,tab){softOpen($('qsheet'));
   mPg=Math.max(1,Math.min(604,p||S.qpage||1));
   const sh=$('qsheet');sh.hidden=false;sh.classList.add('mp');document.body.style.overflow='hidden';
   $('qin').innerHTML=`<div class="mstage gold" id="mstage"><p style="text-align:center;padding:40px 0;color:#9a7a55">${L(['Opening the Mushaf…','بنفتح المصحف…'])}</p></div>
@@ -1589,7 +1597,7 @@ function mJump(tab){
   if(mTab==='p'){$('mrange').addEventListener('input',e=>{$('mpv').textContent=N(+e.target.value)});$('mrange').addEventListener('change',e=>mGo(+e.target.value));$('mpin').addEventListener('keydown',e=>{if(e.key==='Enter')mGo(+e.target.value||mPg)})}
 }
 function mHideJump(){const j=$('mjump');if(j)j.hidden=true}
-function closeMushaf(){mFull(false);const sh=$('qsheet');sh.hidden=true;sh.classList.remove('mp');document.body.style.overflow='';if(curView()==='deen')renderDeen();renderToday()}
+function closeMushaf(){mFull(false);const sh=$('qsheet');softClose(sh,()=>sh.classList.remove('mp'));if(curView()==='deen')renderDeen();renderToday()}
 (function(){let x0=null,y0=0;
   document.addEventListener('touchstart',e=>{if(!e.target.closest||!e.target.closest('#mstage'))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
   document.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3){if(dx>0)mStep(1);else if(dx<0)mStep(-1)}},{passive:true});
@@ -2093,7 +2101,7 @@ document.addEventListener('click',e=>{
   else if(b.id==='qnext'||b.id==='qprev'){const n=qCur+(b.id==='qnext'?1:-1);if(n>=1&&n<=114){renderQ(n);qCur=n;$('qin').scrollTop=0}changed=false}
   else if(b.id==='qdone'){day().quran=true;renderQ(qCur);const el=$('qdone');if(el)el.scrollIntoView({block:'center'})}
   else if(b.id==='setBtn'){openSettings()}
-  else if(b.id==='setClose'){$('sheet').hidden=true;changed=false}
+  else if(b.id==='setClose'){softClose($('sheet'));changed=false}
   else if(ds.setlang){S.lang=ds.setlang;applyLang();openSettings();ntLater()}
   else if(b.id==='setName'){const n=$('setNameIn').value.replace(/\s+/g,' ').trim().slice(0,30);if(n){S.name=n;renderToday();$('setMsg').textContent=L(['Saved','اتحفظ'])}}
   else if(b.id==='setAsk'){S.askName=S.askName===false;openSettings()}
@@ -2253,7 +2261,7 @@ function settingsExtraHTML(){
       return `<div class="ntr"><button class="check" type="button" data-nt="${n[0]}" aria-pressed="${act&&!dis}"${dis?' disabled':''}><span class="box"></span><span class="lbl">${L(n[1])}${dis?`<small>${L(['Turn on location first','شغّلي اللوكيشن الأول'])}</small>`:''}</span></button>${n[2]&&act?`<input type="time" data-ntt="${n[0]}" value="${v}" aria-label="${L(n[1])}">`:''}</div>`}).join('')}</div>
     <p class="note">${L(['On iPhone, notifications only work after you add Hilal to your home screen and open it from there (iOS 16.4 or newer).','على الآيفون، الإشعارات بتشتغل بس لما تضيفي هلال للشاشة الرئيسية وتفتحيه من هناك (iOS 16.4 أو أحدث).'])}</p>`:''}</div>`;
 }
-function openSettings(){
+function openSettings(){softOpen($('sheet'));
   const ask=S.askName!==false;
   $('sheetBody').innerHTML=`<div class="ttl" style="justify-content:space-between"><h2 id="setT">${L(['Settings','الإعدادات'])}</h2><button class="btn ghost" type="button" id="setClose">${L(['Done','تمام'])}</button></div>
    <div class="card" style="margin-top:6px"><h3>${L(['Your name','اسمك'])}</h3>
