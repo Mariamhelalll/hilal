@@ -1002,7 +1002,7 @@ function adTap(){
   d.dh[k]=(d.dh[k]||0)+1;try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}
   const c=$('adCount');c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop');
   if(d.dh[k]>=x[1]){try{navigator.vibrate&&navigator.vibrate([25,40,25])}catch(e){}
-    if(set.every((_,i)=>adItemDone(rdSet,i))){d.ad=d.ad||{};d.ad[rdSet]=true;if(d.ad.M&&d.ad.E)d.adhkar=true}
+    if(set.every((_,i)=>adItemDone(rdSet,i))){d.ad=d.ad||{};d.ad[rdSet]=true;if(d.ad.M&&d.ad.E)d.adhkar=true;chime('done')}
     save();drawAd(0);setTimeout(()=>{if(!$('dsheet').hidden&&ADK[rdSet][rdI]===x)adMove(1)},450);return}
   save();drawAd(0);
 }
@@ -1319,7 +1319,7 @@ function khatmaHTML(){
    <button class="btn" type="button" data-mopen="${Math.min(604,k.done+1)}">${today?L(['Keep reading','كمّلي قراءة']):L(["Read today's portion","اقري ورد النهارده"])}</button>
    <div class="row">${today?'':`<button class="opt sm" type="button" id="khMark">✓ ${L(["I read today's portion","قريت ورد النهارده"])}</button>`}${khSure?`<button class="opt sm" type="button" id="khStop2">${L(['Yes, end it','أيوه، الغيها'])}</button>`:`<button class="opt sm" type="button" id="khStop">${L(['End this khatma','الغي الختمة'])}</button>`}</div></div>`;
 }
-function khAdvance(p){const k=S.kh;if(!k||p<=k.done)return;k.done=Math.min(604,p);const i=khInfo();if(i&&i.left===0)day().quran=true;
+function khAdvance(p){const k=S.kh;if(!k||p<=k.done)return;const was=khInfo();k.done=Math.min(604,p);const i=khInfo();if(i&&i.left===0){day().quran=true;if(was&&was.left>0)chime('done')}
   if(k.done>=604){S.khN=(S.khN||0)+1;S.khLast=tk;S.kh=null;save();mCelebrate();return}save()}
 function mCelebrate(){const q=$('qin');if(!q)return;const d=document.createElement('div');d.className='khdone';d.innerHTML=`<div><div class="khmoon" aria-hidden="true"></div><h3>${L(['You completed the Quran!','ختمتي القرآن!'])}</h3><p>${L(['May Allah accept it from you and make it a light for you 🤍','تقبّل الله منكِ، وجعله نور ليكي 🤍'])}</p><button class="btn" type="button" id="khEnd">${L(['Alhamdulillah','الحمد لله'])}</button></div>`;q.append(d)}
 function quranCardHTML(){
@@ -1868,6 +1868,8 @@ document.addEventListener('click',e=>{
   else if(b.id==='obInext'){if(introI<INTRO_S.length-1){introI++;drawIntro()}else{S.introSeen=true;$('obI').hidden=true;if(introAgain){$('ob').hidden=true;replay()}else if(S.name)welcomeBack();else showName()}}
   else if(b.id==='obIback'){if(introI>0){introI--;drawIntro()}else if(introAgain){$('obI').hidden=true;$('ob').hidden=true}else{$('obI').hidden=true;$('ob1').hidden=false}changed=false}
   else if(b.id==='setLoc'){if(S.loc&&!S.locOff){S.locOff=true;S.loc=null;save();openSettings();renderToday();if(curView()==='deen')renderDeen();ntLater()}else{S.locOff=false;$('sheet').hidden=true;location.hash='deen';setTimeout(useMyLoc,300)}changed=false}
+  else if(b.id==='setChime'){S.chime=S.chime===false;save();openSettings();if(S.chime!==false)chime();changed=false}
+  else if(b.id==='chimeTry'){const o=S.chime;S.chime=true;chime();S.chime=o;changed=false}
   else if(b.id==='setNt'){ntToggle();changed=false}
   else if(ds.nt){const P=ntPrefs(),n=NOTE.find(x=>x[0]===ds.nt);if(n){P[n[0]]=P[n[0]]?(n[2]?null:false):(n[2]||true);save();openSettings();ntLater()}changed=false}
   else if(b.id==='aboutH'){showStory(true);changed=false}
@@ -1995,6 +1997,21 @@ document.addEventListener('click',e=>{const v=e.target.closest('[data-qay]');if(
 document.addEventListener('keydown',e=>{const v=e.target.closest&&e.target.closest('[data-qay]');if(v&&(e.key==='Enter'||e.key===' ')){e.preventDefault();v.click()}});
 
 /* ---------- settings ---------- */
+/* ---------- a soft, warm chime (synthesised, no audio file) ---------- */
+let actx=null;
+function chime(kind){
+  if(S.chime===false)return;
+  try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();
+    const t=actx.currentTime+0.02,out=actx.createGain();out.gain.value=0.55;
+    const rv=actx.createConvolver(),len=actx.sampleRate*2.2,buf=actx.createBuffer(2,len,actx.sampleRate);
+    for(let c=0;c<2;c++){const d=buf.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3)}
+    rv.buffer=buf;const wet=actx.createGain();wet.gain.value=0.35;out.connect(actx.destination);out.connect(rv);rv.connect(wet);wet.connect(actx.destination);
+    const notes=kind==='done'?[523.25,659.25,783.99,1046.5]:[659.25,783.99,987.77];
+    notes.forEach((f,i)=>{const st=t+i*(kind==='done'?0.16:0.22);[[1,0.5],[2.01,0.12],[3,0.05]].forEach(([m,v])=>{const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f*m;
+      g.gain.setValueAtTime(0,st);g.gain.linearRampToValueAtTime(v*0.6,st+0.015);g.gain.exponentialRampToValueAtTime(0.0008,st+(m===1?2.4:1.1));o.connect(g);g.connect(out);o.start(st);o.stop(st+2.5)})});
+  }catch(e){}
+}
+if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{if(e.data&&e.data.type==='hilal-push'&&document.visibilityState==='visible')chime()});
 /* ---------- notifications (Web Push via Netlify functions) ---------- */
 const NOTE=[['prayer',['Prayer times','مواعيد الصلاة'],null],['morning',['Morning adhkar','أذكار الصباح'],'07:30'],['evening',['Evening adhkar (after Asr)','أذكار المسا (بعد العصر)'],null],['quran',['Quran page','صفحة القرآن'],'20:00'],['moon',["Today's moon step",'خطوة قمرك النهارده'],'09:00'],['move',['Time to move','وقت الحركة'],'18:00'],['journal',['Journal','يومياتي'],'21:30']];
 let ntMsg='';
@@ -2027,6 +2044,7 @@ function settingsExtraHTML(){
    <div class="card"><h3>${L(['Notifications','الإشعارات'])}</h3>
     <button class="check" type="button" id="setNt" aria-pressed="${on}"><span class="box"></span><span class="lbl">${L(['Send me reminders on my phone','ابعتيلي تنبيهات على الموبايل'])}</span></button>
     ${ntMsg?`<p class="note" role="status">${ntMsg}</p>`:''}
+    <div class="ntr"><button class="check" type="button" id="setChime" aria-pressed="${S.chime!==false}"><span class="box"></span><span class="lbl">${L(['Gentle Hilal chime','نغمة هلال الهادية'])}<small>${L(['Plays in the app when a reminder arrives, and when you finish your adhkar or your Quran portion.','بتشتغل في الأبلكيشن لما يوصل تنبيه، ولما تخلّصي أذكارك أو ورد القرآن.'])}</small></span></button><button class="opt sm" type="button" id="chimeTry">▶ ${L(['Listen','اسمعي'])}</button></div>
     ${on?`<div class="ntl">${NOTE.map(n=>{const v=P[n[0]],act=n[2]?!!v:!!v,dis=n[0]==='prayer'&&!locOn;
       return `<div class="ntr"><button class="check" type="button" data-nt="${n[0]}" aria-pressed="${act&&!dis}"${dis?' disabled':''}><span class="box"></span><span class="lbl">${L(n[1])}${dis?`<small>${L(['Turn on location first','شغّلي اللوكيشن الأول'])}</small>`:''}</span></button>${n[2]&&act?`<input type="time" data-ntt="${n[0]}" value="${v}" aria-label="${L(n[1])}">`:''}</div>`}).join('')}</div>
     <p class="note">${L(['On iPhone, notifications only work after you add Hilal to your home screen and open it from there (iOS 16.4 or newer).','على الآيفون، الإشعارات بتشتغل بس لما تضيفي هلال للشاشة الرئيسية وتفتحيه من هناك (iOS 16.4 أو أحدث).'])}</p>`:''}</div>`;
